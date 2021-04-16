@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="text-cell-reuse-identifier" id="gTV-IL-0wX" customClass="TextCell" customModule="Social_Messaging" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="210" height="95"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="210" height="95"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar" translatesAutoresizingMaskIntoConstraints="NO" id="0hz-1s-HOy">
+                        <rect key="frame" x="155" y="49.5" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="Qcu-4Z-70R"/>
+                            <constraint firstAttribute="height" constant="40" id="bfv-tD-scP"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <color key="backgroundColor" systemColor="systemRedColor"/>
+            <constraints>
+                <constraint firstItem="0hz-1s-HOy" firstAttribute="centerY" secondItem="ZTg-uK-7eu" secondAttribute="centerY" id="71j-MS-7V1"/>
+                <constraint firstAttribute="trailing" secondItem="0hz-1s-HOy" secondAttribute="trailing" constant="15" id="Sao-jy-lHV"/>
+            </constraints>
+            <size key="customSize" width="210" height="95"/>
+            <connections>
+                <outlet property="icon" destination="0hz-1s-HOy" id="RaN-9s-y3d"/>
+            </connections>
+            <point key="canvasLocation" x="-1163.768115942029" y="45.200892857142854"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="avatar" width="512" height="512"/>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
