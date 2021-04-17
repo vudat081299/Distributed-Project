@@ -1,0 +1,4 @@
+module CURLParser {
+    umbrella "/Users/datvu/Desktop/Social-Messaging-Server/.build/checkouts/vapor/Sources/CURLParser/include"
+    export *
+}

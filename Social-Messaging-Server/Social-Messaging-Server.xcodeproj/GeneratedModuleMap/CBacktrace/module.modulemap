@@ -1,0 +1,4 @@
+module CBacktrace {
+    umbrella "/Users/datvu/Desktop/Social-Messaging-Server/.build/checkouts/swift-backtrace/Sources/CBacktrace/include"
+    export *
+}

@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="inc/style.css" rel="stylesheet">
+        <script src="inc/main.js" type="text/javascript"></script>
+        <title>Social</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-8 content">
+                    <div class="card mt-4">
+                        <div class="card-header">Create a New Post</div>
+                        <form method="POST" enctype="multipart/form-data" action="/post">
+                            <div class="card-body">
+                                <textarea class="form-control mb-4" name="text" rows="4"></textarea>
+                                <input type="file" name="file" accept=".png, .jpg, .jpeg" />
+                                <button type="submit" class="float-right btn btn-primary btn-sm">Make Post</a>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    #if(posts):
+                        #for(post in posts):
+                            <div class="card mt-4">
+                                <div class="card-header">#(post.creator.profile.firstName) #(post.creator.profile.lastName)</div>
+                                <div class="card-body">
+                                    #if(post.fileId):
+                                        <img width="200px" height="200px" class="pr-2 float-left" src="/images/#(post.fileId)" />
+                                    #endif
+                                    <p class="card-text float-left">#(post.text)</p>
+                                </div>
+                            </div>
+                        #endfor
+                    #endif
+                </div>
+
+                <div class="col-4 sidebar">
+                    <div class="card mt-4">
+                        <div class="card-header">Interesting People</div>
+                        <ul class="list-group list-group-flush connect-list">
+                            #if(suggestedUsers):
+                                #for(user in suggestedUsers):
+                                    <li class="list-group-item">
+                                        <div class="person">
+                                            <strong>#(user.profile.firstName) #(user.profile.lastName)</strong>
+                                            <a href="/follow/#(user._id)" class="float-right btn btn-primary btn-sm">Connect</a>
+                                        </div>
+                                    </li>
+                                #endfor
+                            #endif
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
