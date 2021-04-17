@@ -22,6 +22,11 @@
 		6B8FF0692622024500F813C6 /* Social_MessagingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8FF0682622024500F813C6 /* Social_MessagingTests.swift */; };
 		6B8FF0742622024500F813C6 /* Social_MessagingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8FF0732622024500F813C6 /* Social_MessagingUITests.swift */; };
 		6B8FF0892622067A00F813C6 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8FF0882622067A00F813C6 /* TabBarController.swift */; };
+		6BCCA259262B3A250075A2A3 /* Note.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA258262B3A250075A2A3 /* Note.txt */; };
+		6BCCA25E262B3A310075A2A3 /* Note.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA25D262B3A310075A2A3 /* Note.txt */; };
+		6BCCA263262B3A3A0075A2A3 /* Note.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA262262B3A3A0075A2A3 /* Note.txt */; };
+		6BCCA268262B3A420075A2A3 /* Note.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA267262B3A420075A2A3 /* Note.txt */; };
+		6BCCA276262B3A930075A2A3 /* Note.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA275262B3A930075A2A3 /* Note.txt */; };
 		C49176042624510600253070 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49176032624510600253070 /* SceneDelegate.swift */; };
 		C4917643262451D100253070 /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C491763C262451D100253070 /* ProfileViewController.xib */; };
 		C4917644262451D100253070 /* MessagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C491763D262451D100253070 /* MessagingViewController.swift */; };
@@ -91,6 +96,11 @@
 		6B8FF0732622024500F813C6 /* Social_MessagingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Social_MessagingUITests.swift; sourceTree = "<group>"; };
 		6B8FF0752622024500F813C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B8FF0882622067A00F813C6 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		6BCCA258262B3A250075A2A3 /* Note.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note.txt; sourceTree = "<group>"; };
+		6BCCA25D262B3A310075A2A3 /* Note.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note.txt; sourceTree = "<group>"; };
+		6BCCA262262B3A3A0075A2A3 /* Note.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note.txt; sourceTree = "<group>"; };
+		6BCCA267262B3A420075A2A3 /* Note.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note.txt; sourceTree = "<group>"; };
+		6BCCA275262B3A930075A2A3 /* Note.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note.txt; sourceTree = "<group>"; };
 		C49176032624510600253070 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C491763C262451D100253070 /* ProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
 		C491763D262451D100253070 /* MessagingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagingViewController.swift; sourceTree = "<group>"; };
@@ -210,6 +220,14 @@
 			path = "Social MessagingUITests";
 			sourceTree = "<group>";
 		};
+		6BCCA274262B3A930075A2A3 /* References */ = {
+			isa = PBXGroup;
+			children = (
+				6BCCA275262B3A930075A2A3 /* Note.txt */,
+			);
+			path = References;
+			sourceTree = "<group>";
+		};
 		C491763B262451D100253070 /* Main */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +255,7 @@
 		C49176552624546C00253070 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6BCCA258262B3A250075A2A3 /* Note.txt */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -313,6 +332,7 @@
 		C491766B2624546D00253070 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				6BCCA25D262B3A310075A2A3 /* Note.txt */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -320,6 +340,7 @@
 		C491766C2624546D00253070 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				6BCCA262262B3A3A0075A2A3 /* Note.txt */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -335,16 +356,10 @@
 		C49176842624553600253070 /* Docs */ = {
 			isa = PBXGroup;
 			children = (
-				C49176962624574900253070 /* References */,
+				6BCCA274262B3A930075A2A3 /* References */,
+				6BCCA267262B3A420075A2A3 /* Note.txt */,
 			);
 			path = Docs;
-			sourceTree = "<group>";
-		};
-		C49176962624574900253070 /* References */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = References;
 			sourceTree = "<group>";
 		};
 		C4936D0C2629F1410082CACC /* Messaging */ = {
@@ -486,11 +501,16 @@
 				6B8FF05E2622024500F813C6 /* LaunchScreen.storyboard in Resources */,
 				C4936D2A262AB4E90082CACC /* Cell.xib in Resources */,
 				C4936D31262AB5000082CACC /* HeaderTableViewCell.xib in Resources */,
+				6BCCA25E262B3A310075A2A3 /* Note.txt in Resources */,
 				6B04823D26272F0B0031D15B /* CustomSupplementaryView.xib in Resources */,
+				6BCCA259262B3A250075A2A3 /* Note.txt in Resources */,
 				6B0482512627C9960031D15B /* CustomCollectionViewListCell.xib in Resources */,
 				C49176922624572D00253070 /* README.md in Resources */,
 				6B8FF05B2622024500F813C6 /* Assets.xcassets in Resources */,
+				6BCCA263262B3A3A0075A2A3 /* Note.txt in Resources */,
 				6B8FF0562622024000F813C6 /* Main.storyboard in Resources */,
+				6BCCA268262B3A420075A2A3 /* Note.txt in Resources */,
+				6BCCA276262B3A930075A2A3 /* Note.txt in Resources */,
 				C4917648262451D100253070 /* MessagingViewController.xib in Resources */,
 				6B04825E2627CF4B0031D15B /* TextCell.xib in Resources */,
 			);
