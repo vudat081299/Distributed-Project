@@ -94,3 +94,13 @@ iOSInjectionProject/
 */.DS_Store
 **/.DS_Store
 
+
+**/.swiftpm
+*/.swiftpm                                 
+
+.DS_Store
+.build
+Packages
+xcuserdata/
+DerivedData/
+

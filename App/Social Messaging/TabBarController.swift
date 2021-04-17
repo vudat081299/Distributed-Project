@@ -7,14 +7,44 @@
 
 import UIKit
 
+struct ViewControllersData {
+    let title: String
+    let iconNormal: String
+    let selectedIcon: String
+    let viewController: UINavigationController
+    
+    static var viewControllersData: [ViewControllersData] = {
+        var profileViewController: ViewControllersData = {
+            let vc = ProfileViewController()
+            let navController = UINavigationController(rootViewController: vc)
+            return navController
+        }()
+        var messagingViewController: ViewControllersData = {
+            let vc = MessagingViewController()
+            let navController = UINavigationController(rootViewController: vc)
+            return navController
+        }()
+        var viewController1: ViewControllersData = {
+            let vc = UIViewController()
+            let navController = UINavigationController(rootViewController: vc)
+            return navController
+        }()
+        
+        
+        
+    }()
+}
+
 class TabBarController: UITabBarController {
     
     let listTab = ["Home", "Notifications", "Chat", "Profile"]
     
-    var viewController: ViewController = {
-        let vc = ViewController()
-        return vc
-    }()
+//    var viewController: ViewController = {
+//        let vc = ViewController()
+//        return vc
+//    }()
+    
+//    let navigationController = UINavigationController(rootViewController: viewController)
     var profileViewController: ProfileViewController = {
         let vc = ProfileViewController()
         return vc
@@ -28,8 +58,8 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        viewController.tabBarItem.image = UIImage(systemName: "house")
-        viewController.tabBarItem.selectedImage = UIImage(named: "house.fill")
+//        viewController.tabBarItem.image = UIImage(systemName: "house")
+//        viewController.tabBarItem.selectedImage = UIImage(named: "house.fill")
         messagingViewController.tabBarItem.image = UIImage(systemName: "message")
         messagingViewController.tabBarItem.selectedImage = UIImage(named: "message.fill")
         profileViewController.tabBarItem.image = UIImage(systemName: "person")

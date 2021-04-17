@@ -1,0 +1,68 @@
+.black {
+    background-color: black!important;
+}
+
+.breadcrumbs a {
+    color: rgba(0, 0, 0, 0.9);
+    text-decoration: underline;
+}
+
+.footer {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.connect-list li .person {
+    width:72%;
+    padding-right: 8px;
+    padding-left: 8px;
+}
+
+.connect-list li div strong {
+    margin-bottom: 8px;
+}
+
+.connect-list li div a {
+    margin-bottom: 8px;
+    float: right;
+    bottom: 0px;
+}
+
+.connect-list li img {
+    display: inline-block;
+    max-width: 26%;
+    padding: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.connect-list li div {
+    display: inline-block;
+}
+
+.list-group-item-action img {
+    max-height: 200px;
+    max-width: 200px;
+    float:left;
+    margin-right: 16px;
+}
+
+.card {
+    margin-bottom: 8px;
+}
+
+.navbar {
+    margin-bottom: 8px;
+    border-radius: 0 0 4px 4px;
+}
+
+nav .breadcrumb {
+    margin-bottom: 8px;
+}
+
+.list-group-item {
+    background-color: rgba(0, 0, 0, 0.025);
+}
+          
+.list-group-item:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.005);
+}
