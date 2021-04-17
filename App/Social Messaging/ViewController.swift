@@ -131,11 +131,11 @@ class ViewController: UIViewController {
        return searchController
     }()
     let leftBarItem: UIBarButtonItem = {
-        let bt = UIBarButtonItem(title: "Action", style: .done, target: nil, action: Selector(("leftBarButtonItemAction")))
+        let bt = UIBarButtonItem(title: "Action", style: .done, target: nil, action: #selector(leftBarItemAction))
         return bt
     }()
     let rightBarItem: UIBarButtonItem = {
-        let bt = UIBarButtonItem(image: UIImage(systemName: "bookmark.circle"), style: .plain, target: nil, action: Selector(("rightBarItemAction")))
+        let bt = UIBarButtonItem(image: UIImage(systemName: "bookmark.circle"), style: .plain, target: nil, action: #selector(rightBarItemAction))
         return bt
     }()
     
@@ -145,8 +145,6 @@ class ViewController: UIViewController {
     @objc func rightBarItemAction() {
         print("Right bar button was pressed!")
     }
-    
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()

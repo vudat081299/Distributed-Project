@@ -46,6 +46,10 @@
 		C49176802624551F00253070 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C491767F2624551F00253070 /* libz.tbd */; };
 		C49176922624572D00253070 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C49176912624572D00253070 /* README.md */; };
 		C4936D18262A71C40082CACC /* CustomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4936D17262A71C40082CACC /* CustomListCell.swift */; };
+		C4936D29262AB4E90082CACC /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4936D27262AB4E80082CACC /* Cell.swift */; };
+		C4936D2A262AB4E90082CACC /* Cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4936D28262AB4E80082CACC /* Cell.xib */; };
+		C4936D30262AB5000082CACC /* HeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4936D2E262AB5000082CACC /* HeaderTableViewCell.swift */; };
+		C4936D31262AB5000082CACC /* HeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4936D2F262AB5000082CACC /* HeaderTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +115,10 @@
 		C491767F2624551F00253070 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		C49176912624572D00253070 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C4936D17262A71C40082CACC /* CustomListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListCell.swift; sourceTree = "<group>"; };
+		C4936D27262AB4E80082CACC /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		C4936D28262AB4E80082CACC /* Cell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Cell.xib; sourceTree = "<group>"; };
+		C4936D2E262AB5000082CACC /* HeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderTableViewCell.swift; sourceTree = "<group>"; };
+		C4936D2F262AB5000082CACC /* HeaderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,8 +215,7 @@
 			children = (
 				C4936D0C2629F1410082CACC /* Messaging */,
 				C491763E262451D100253070 /* Components */,
-				C4917641262451D100253070 /* ProfileViewController.swift */,
-				C4917642262451D100253070 /* MessagingViewController.xib */,
+				C4936D20262AB4C30082CACC /* Profile */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -344,8 +351,8 @@
 			isa = PBXGroup;
 			children = (
 				C4936D16262A71A30082CACC /* Components */,
-				C491763C262451D100253070 /* ProfileViewController.xib */,
 				C491763D262451D100253070 /* MessagingViewController.swift */,
+				C4917642262451D100253070 /* MessagingViewController.xib */,
 			);
 			path = Messaging;
 			sourceTree = "<group>";
@@ -356,6 +363,19 @@
 				C4936D17262A71C40082CACC /* CustomListCell.swift */,
 			);
 			name = Components;
+			sourceTree = "<group>";
+		};
+		C4936D20262AB4C30082CACC /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				C4917641262451D100253070 /* ProfileViewController.swift */,
+				C491763C262451D100253070 /* ProfileViewController.xib */,
+				C4936D27262AB4E80082CACC /* Cell.swift */,
+				C4936D28262AB4E80082CACC /* Cell.xib */,
+				C4936D2E262AB5000082CACC /* HeaderTableViewCell.swift */,
+				C4936D2F262AB5000082CACC /* HeaderTableViewCell.xib */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -464,6 +484,8 @@
 				C491766E2624546D00253070 /* Cities.json in Resources */,
 				C4917643262451D100253070 /* ProfileViewController.xib in Resources */,
 				6B8FF05E2622024500F813C6 /* LaunchScreen.storyboard in Resources */,
+				C4936D2A262AB4E90082CACC /* Cell.xib in Resources */,
+				C4936D31262AB5000082CACC /* HeaderTableViewCell.xib in Resources */,
 				6B04823D26272F0B0031D15B /* CustomSupplementaryView.xib in Resources */,
 				6B0482512627C9960031D15B /* CustomCollectionViewListCell.xib in Resources */,
 				C49176922624572D00253070 /* README.md in Resources */,
@@ -500,6 +522,7 @@
 				C491767A2624546D00253070 /* GradientView.swift in Sources */,
 				6B0482272626D96E0031D15B /* CGColor.swift in Sources */,
 				C49176042624510600253070 /* SceneDelegate.swift in Sources */,
+				C4936D29262AB4E90082CACC /* Cell.swift in Sources */,
 				6B8FF0532622024000F813C6 /* ViewController.swift in Sources */,
 				C49176702624546D00253070 /* WebServices.swift in Sources */,
 				C49176772624546D00253070 /* Auth.swift in Sources */,
@@ -518,6 +541,7 @@
 				C49176792624546D00253070 /* File.swift in Sources */,
 				C49176782624546D00253070 /* ErrorControl.swift in Sources */,
 				C4917647262451D100253070 /* ProfileViewController.swift in Sources */,
+				C4936D30262AB5000082CACC /* HeaderTableViewCell.swift in Sources */,
 				6B8FF0892622067A00F813C6 /* TabBarController.swift in Sources */,
 				C4936D18262A71C40082CACC /* CustomListCell.swift in Sources */,
 				C4917644262451D100253070 /* MessagingViewController.swift in Sources */,

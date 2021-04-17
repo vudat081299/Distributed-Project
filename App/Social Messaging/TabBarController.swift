@@ -7,76 +7,41 @@
 
 import UIKit
 
-struct ViewControllersData {
+struct ViewControllerData {
     let title: String
     let iconNormal: String
     let selectedIcon: String
     let viewController: UINavigationController
     
-    static var viewControllersData: [ViewControllersData] = {
-        var profileViewController: ViewControllersData = {
-            let vc = ProfileViewController()
-            let navController = UINavigationController(rootViewController: vc)
-            return navController
-        }()
-        var messagingViewController: ViewControllersData = {
-            let vc = MessagingViewController()
-            let navController = UINavigationController(rootViewController: vc)
-            return navController
-        }()
-        var viewController1: ViewControllersData = {
-            let vc = UIViewController()
-            let navController = UINavigationController(rootViewController: vc)
-            return navController
-        }()
-        
-        
-        
+    static var viewControllerDatas: [ViewControllerData] = {
+        let array = [
+            ViewControllerData(title: "Notifications", iconNormal: "graduationcap", selectedIcon: "graduationcap.fill", viewController: UINavigationController(rootViewController: UITableViewController())),
+            ViewControllerData(title: "Messaging", iconNormal: "message", selectedIcon: "message.fill", viewController: UINavigationController(rootViewController: MessagingViewController())),
+            ViewControllerData(title: "Profile", iconNormal: "person", selectedIcon: "person.fill", viewController: UINavigationController(rootViewController: ProfileViewController()))
+        ]
+        var dataList: [ViewControllerData] = []
+        array.forEach {
+            $0.viewController.topViewController?.title = $0.title
+            $0.viewController.tabBarItem.image = UIImage(systemName: $0.iconNormal)
+            $0.viewController.tabBarItem.selectedImage = UIImage(named: $0.selectedIcon)
+            $0.viewController.navigationBar.prefersLargeTitles = true
+            $0.viewController.navigationBar.sizeToFit()
+            $0.viewController.navigationItem.largeTitleDisplayMode = .always
+            dataList.append($0)
+        }
+        return dataList
     }()
 }
 
 class TabBarController: UITabBarController {
     
-    let listTab = ["Home", "Notifications", "Chat", "Profile"]
-    
-//    var viewController: ViewController = {
-//        let vc = ViewController()
-//        return vc
-//    }()
-    
-//    let navigationController = UINavigationController(rootViewController: viewController)
-    var profileViewController: ProfileViewController = {
-        let vc = ProfileViewController()
-        return vc
-    }()
-    var messagingViewController: MessagingViewController = {
-        let vc = MessagingViewController()
-        return vc
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-//        viewController.tabBarItem.image = UIImage(systemName: "house")
-//        viewController.tabBarItem.selectedImage = UIImage(named: "house.fill")
-        messagingViewController.tabBarItem.image = UIImage(systemName: "message")
-        messagingViewController.tabBarItem.selectedImage = UIImage(named: "message.fill")
-        profileViewController.tabBarItem.image = UIImage(systemName: "person")
-        profileViewController.tabBarItem.selectedImage = UIImage(named: "person.fill")
-        
-        viewControllers?.append(contentsOf: [{
-            let vc = UIViewController()
-            vc.view.backgroundColor = .white
-            vc.tabBarItem.image = UIImage(systemName: "graduationcap")
-            vc.tabBarItem.selectedImage = UIImage(named: "graduationcap.fill")
-            return vc
-        }(), messagingViewController, profileViewController])
-        //        viewControllers = [viewController, messagingViewController, profileViewController]
-        for (index, tabBarItem) in tabBar.items!.enumerated() {
-            tabBarItem.title = listTab[index]
+        ViewControllerData.viewControllerDatas.forEach {
+            viewControllers?.append($0.viewController)
         }
-        
     }
     
 
