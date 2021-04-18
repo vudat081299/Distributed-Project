@@ -27,8 +27,15 @@ struct Item: Hashable {
     let description: String?
     init(category: Category, imageName: String? = nil, title: String? = nil, description: String? = nil) {
         self.category = category
-        if let systemName = imageName {
-            self.image = UIImage(systemName: systemName)
+        if let imageNameNonOptional = imageName {
+            if let subImage = UIImage(systemName: imageNameNonOptional) {
+                self.image = subImage
+            } else {
+                let aImageView = UIImageView(image: UIImage(named: imageNameNonOptional))
+                aImageView.frame = CGRect(x: aImageView.frame.origin.x, y: aImageView.frame.origin.y, width: 40, height: 40)
+                self.image = aImageView.image
+            }
+           
         } else {
             self.image = nil
         }
@@ -37,8 +44,28 @@ struct Item: Hashable {
     }
     private let identifier = UUID()
     
+//    static let all = [
+//        Item(category: .music, imageName: "headphones", title: "Headphones",
+//             description: "A portable pair of earphones that are used to listen to music and other forms of audio."),
+//        Item(category: .music, imageName: "hifispeaker.fill", title: "Loudspeaker",
+//             description: "A device used to reproduce sound by converting electrical impulses into audio waves."),
+//        Item(category: .transportation, imageName: "airplane", title: "Plane",
+//             description: "A commercial airliner used for long distance travel."),
+//        Item(category: .transportation, imageName: "tram.fill", title: "Tram",
+//             description: "A trolley car used as public transport in cities."),
+//        Item(category: .transportation, imageName: "car.fill", title: "Car",
+//             description: "A personal vehicle with four wheels that is able to carry a small number of people."),
+//        Item(category: .weather, imageName: "hurricane", title: "Hurricane",
+//             description: "A tropical cyclone in the Caribbean with violent wind."),
+//        Item(category: .weather, imageName: "tornado", title: "Tornado",
+//             description: "A destructive vortex of swirling violent winds that advances beneath a large storm system."),
+//        Item(category: .weather, imageName: "tropicalstorm", title: "Tropical Storm",
+//             description: "A localized, intense low-pressure system, forming over tropical oceans."),
+//        Item(category: .weather, imageName: "snow", title: "Snow",
+//             description: "Atmospheric water vapor frozen into ice crystals falling in light flakes.")
+//    ]
     static let all = [
-        Item(category: .music, imageName: "headphones", title: "Headphones",
+        Item(category: .music, imageName: "TestAvatar", title: "Headphones",
              description: "A portable pair of earphones that are used to listen to music and other forms of audio."),
         Item(category: .music, imageName: "hifispeaker.fill", title: "Loudspeaker",
              description: "A device used to reproduce sound by converting electrical impulses into audio waves."),
@@ -48,7 +75,7 @@ struct Item: Hashable {
              description: "A trolley car used as public transport in cities."),
         Item(category: .transportation, imageName: "car.fill", title: "Car",
              description: "A personal vehicle with four wheels that is able to carry a small number of people."),
-        Item(category: .weather, imageName: "hurricane", title: "Hurricane",
+        Item(category: .weather, imageName: "TestAvatar", title: "Hurricane",
              description: "A tropical cyclone in the Caribbean with violent wind."),
         Item(category: .weather, imageName: "tornado", title: "Tornado",
              description: "A destructive vortex of swirling violent winds that advances beneath a large storm system."),
@@ -91,6 +118,7 @@ class ItemListCell: UICollectionViewListCell {
 }
 
 class CustomListCell: ItemListCell {
+    static let reuseIdentifier = "CustomListCell"
     
     private func defaultListContentConfiguration() -> UIListContentConfiguration { return .subtitleCell() }
     private lazy var listContentView = UIListContentView(configuration: defaultListContentConfiguration())
@@ -153,6 +181,8 @@ class CustomListCell: ItemListCell {
         content.text = state.item?.title
         content.secondaryText = state.item?.description
         content.axesPreservingSuperviewLayoutMargins = []
+        content.imageProperties.maximumSize = CGSize(width: 40, height: 40)
+        content.imageProperties.cornerRadius = (content.image?.size.width)! / 2
         listContentView.configuration = content
         
         // Get the list value cell configuration for the current state, which we'll use to obtain the system default

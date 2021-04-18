@@ -38,6 +38,7 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="constraint" destination="WGa-cp-PD4" id="ClS-dZ-qIb"/>
                 <outlet property="leftLabel" destination="5Nh-tv-byz" id="Wwu-qB-2Nk"/>
                 <outlet property="rightLabel" destination="Bc5-o2-ODI" id="euG-V9-lpH"/>
             </connections>

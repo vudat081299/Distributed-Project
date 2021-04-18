@@ -78,7 +78,6 @@ class ViewController: UIViewController {
             }
             return list
         }()
-        let customCell = CellItem(data: ("1", "2"), select: triggerCellAction)
         return [
             SectionItem(cell: listCell, sectionType: .collection, behavior: .paging),
             SectionItem(cell: listCell, sectionType: .collection, behavior: .groupPaging),

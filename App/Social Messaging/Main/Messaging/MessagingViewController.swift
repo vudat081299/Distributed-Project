@@ -46,6 +46,7 @@ extension MessagingViewController {
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(collectionView)
         collectionView.delegate = self
+        collectionView.register(UINib(nibName: "CustomListCell", bundle: nil), forCellWithReuseIdentifier: CustomListCell.reuseIdentifier)
     }
     
     /// - Tag: CellRegistration
@@ -57,7 +58,14 @@ extension MessagingViewController {
         
         dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? in
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
+//            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: CustomListCell.reuseIdentifier,
+                for: indexPath) as? CustomListCell else { fatalError("Cannot create new cell") }
+            cell.updateWithItem(item)
+            cell.accessories = [
+            ]
+            return cell
         }
         
         // initial data

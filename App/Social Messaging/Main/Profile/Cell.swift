@@ -11,6 +11,7 @@ class Cell: UITableViewCell {
 
     @IBOutlet weak var leftLabel: UILabel!
     @IBOutlet weak var rightLabel: UILabel!
+    @IBOutlet weak var constraint: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
