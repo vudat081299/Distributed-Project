@@ -65,24 +65,30 @@ struct Item: Hashable {
 //             description: "Atmospheric water vapor frozen into ice crystals falling in light flakes.")
 //    ]
     static let all = [
-        Item(category: .music, imageName: "TestAvatar", title: "Headphones",
-             description: "A portable pair of earphones that are used to listen to music and other forms of audio."),
-        Item(category: .music, imageName: "hifispeaker.fill", title: "Loudspeaker",
+        Item(category: .music, imageName: "avatar_13", title: "Headphones",
+             description: "A portable pair of earphones that are used to listen to music and other forms of audio.A portable pair of earphones that are used to listen to music and other forms of audio.A portable pair of earphones that are used to listen to music and other forms of audio.A portable pair of earphones that are used to listen to music and other forms of audio.A portable pair of earphones that are used to listen to music and other forms of audio."),
+        Item(category: .music, imageName: "avatar_1", title: "Loudspeaker",
              description: "A device used to reproduce sound by converting electrical impulses into audio waves."),
-        Item(category: .transportation, imageName: "airplane", title: "Plane",
+        Item(category: .transportation, imageName: "avatar_1", title: "Plane",
              description: "A commercial airliner used for long distance travel."),
-        Item(category: .transportation, imageName: "tram.fill", title: "Tram",
+        Item(category: .transportation, imageName: "avatar_1", title: "Tram",
              description: "A trolley car used as public transport in cities."),
-        Item(category: .transportation, imageName: "car.fill", title: "Car",
+        Item(category: .transportation, imageName: "avatar_1", title: "Car",
              description: "A personal vehicle with four wheels that is able to carry a small number of people."),
-        Item(category: .weather, imageName: "TestAvatar", title: "Hurricane",
+        Item(category: .weather, imageName: "avatar_1", title: "Hurricane",
              description: "A tropical cyclone in the Caribbean with violent wind."),
-        Item(category: .weather, imageName: "tornado", title: "Tornado",
+        Item(category: .weather, imageName: "avatar_1", title: "Tornado",
              description: "A destructive vortex of swirling violent winds that advances beneath a large storm system."),
-        Item(category: .weather, imageName: "tropicalstorm", title: "Tropical Storm",
+        Item(category: .weather, imageName: "avatar_1", title: "Tropical Storm",
              description: "A localized, intense low-pressure system, forming over tropical oceans."),
-        Item(category: .weather, imageName: "snow", title: "Snow",
-             description: "Atmospheric water vapor frozen into ice crystals falling in light flakes.")
+        Item(category: .weather, imageName: "avatar_12", title: "Snow",
+             description: "Atmospheric water vapor frozen into ice crystals falling in light flakes."),
+        Item(category: .weather, imageName: "avatar_12", title: "Snow",
+             description: "Atmospheric water vapor frozen into ice crystals falling in light flakes."),
+        Item(category: .weather, imageName: "avatar_1", title: "Tropical Storm",
+             description: "A localized, intense low-pressure system, forming over tropical oceans."),
+        Item(category: .weather, imageName: "avatar_1", title: "Tropical Storm",
+             description: "A localized, intense low-pressure system, forming over tropical oceans.")
     ]
 }
 
@@ -119,6 +125,7 @@ class ItemListCell: UICollectionViewListCell {
 
 class CustomListCell: ItemListCell {
     static let reuseIdentifier = "CustomListCell"
+    private let maxWidthOfImage = 60
     
     private func defaultListContentConfiguration() -> UIListContentConfiguration { return .subtitleCell() }
     private lazy var listContentView = UIListContentView(configuration: defaultListContentConfiguration())
@@ -172,39 +179,60 @@ class CustomListCell: ItemListCell {
     
     /// - Tag: UpdateConfiguration
     override func updateConfiguration(using state: UICellConfigurationState) {
-        setupViewsIfNeeded()
+        
+        self.setupViewsIfNeeded()
         
         // Configure the list content configuration and apply that to the list content view.
-        var content = defaultListContentConfiguration().updated(for: state)
-        content.imageProperties.preferredSymbolConfiguration = .init(font: content.textProperties.font, scale: .large)
-        content.image = state.item?.image
-        content.text = state.item?.title
-        content.secondaryText = state.item?.description
-        content.axesPreservingSuperviewLayoutMargins = []
-        content.imageProperties.maximumSize = CGSize(width: 40, height: 40)
-        content.imageProperties.cornerRadius = (content.image?.size.width)! / 2
-        listContentView.configuration = content
+        var content = self.defaultListContentConfiguration().updated(for: state)
         
-        // Get the list value cell configuration for the current state, which we'll use to obtain the system default
-        // styling and metrics to copy to our custom views.
-        let valueConfiguration = UIListContentConfiguration.valueCell().updated(for: state)
-        
-        // Configure custom image view for the category icon, copying some of the styling from the value cell configuration.
-        categoryIconView.image = state.item?.category.icon
-        categoryIconView.tintColor = valueConfiguration.imageProperties.resolvedTintColor(for: tintColor)
-        categoryIconView.preferredSymbolConfiguration = .init(font: valueConfiguration.secondaryTextProperties.font, scale: .small)
-        
-        // Configure custom label for the category name, copying some of the styling from the value cell configuration.
-        categoryLabel.text = state.item?.category.name
-        categoryLabel.textColor = valueConfiguration.secondaryTextProperties.resolvedColor()
-        categoryLabel.font = valueConfiguration.secondaryTextProperties.font
-        categoryLabel.adjustsFontForContentSizeCategory = valueConfiguration.secondaryTextProperties.adjustsFontForContentSizeCategory
-        
-        // Update some of the constraints for our custom views using the system default metrics from the configurations.
-        customViewConstraints?.categoryLabelLeading.constant = content.directionalLayoutMargins.trailing
-        customViewConstraints?.categoryLabelTrailing.constant = valueConfiguration.textToSecondaryTextHorizontalPadding
-        customViewConstraints?.categoryIconTrailing.constant = content.directionalLayoutMargins.trailing
-        updateSeparatorConstraint()
+//        DispatchQueue.global(qos: .utility).async { [weak self] in
+//            guard let self = self else { return }
+            // Perform your work here
+            // ...
+            content.image = state.item?.image
+            content.imageProperties.preferredSymbolConfiguration = .init(font: content.textProperties.font, scale: .large)
+            content.imageProperties.maximumSize = CGSize(width: self.maxWidthOfImage, height: self.maxWidthOfImage)
+            content.imageProperties.cornerRadius = CGFloat(self.maxWidthOfImage) / 2
+            content.text = state.item?.title
+            
+            // Switch back to the main queue to
+            // update your UI
+//            DispatchQueue.main.async {
+                if (state.item?.description?.count)! > 90 {
+                    var string = state.item?.description!
+                    let range = string!.index(string!.startIndex, offsetBy: 90)..<string!.endIndex
+                    string!.removeSubrange(range)
+                    content.secondaryText = string! + "..."
+                } else {
+                    content.secondaryText = state.item?.description
+                }
+                content.secondaryTextProperties.color = .systemGray2
+                
+                content.axesPreservingSuperviewLayoutMargins = []
+                self.listContentView.configuration = content
+                
+                // Get the list value cell configuration for the current state, which we'll use to obtain the system default
+                // styling and metrics to copy to our custom views.
+                let valueConfiguration = UIListContentConfiguration.valueCell().updated(for: state)
+                
+                // Configure custom image view for the category icon, copying some of the styling from the value cell configuration.
+                self.categoryIconView.image = state.item?.category.icon
+                self.categoryIconView.tintColor = valueConfiguration.imageProperties.resolvedTintColor(for: self.tintColor)
+                self.categoryIconView.preferredSymbolConfiguration = .init(font: valueConfiguration.secondaryTextProperties.font, scale: .small)
+                
+                // Configure custom label for the category name, copying some of the styling from the value cell configuration.
+                self.categoryLabel.text = state.item?.category.name
+                self.categoryLabel.textColor = valueConfiguration.secondaryTextProperties.resolvedColor()
+                self.categoryLabel.font = valueConfiguration.secondaryTextProperties.font
+                self.categoryLabel.adjustsFontForContentSizeCategory = valueConfiguration.secondaryTextProperties.adjustsFontForContentSizeCategory
+                
+                // Update some of the constraints for our custom views using the system default metrics from the configurations.
+                self.customViewConstraints?.categoryLabelLeading.constant = content.directionalLayoutMargins.trailing
+                self.customViewConstraints?.categoryLabelTrailing.constant = valueConfiguration.textToSecondaryTextHorizontalPadding
+                self.customViewConstraints?.categoryIconTrailing.constant = content.directionalLayoutMargins.trailing
+                self.updateSeparatorConstraint()
+//            }
+//        }
     }
 }
 

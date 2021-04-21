@@ -11,6 +11,16 @@ class MessagingViewController: UIViewController {
     
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
     private var collectionView: UICollectionView! = nil
+    
+    // MARK: - Navbar components.
+    let searchController: UISearchController = {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.placeholder = "New Search"
+        searchController.searchBar.searchBarStyle = .minimal
+//        searchController.dimsBackgroundDuringPresentation = false // was deprecated in iOS 12.0
+        searchController.definesPresentationContext = true
+       return searchController
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +28,8 @@ class MessagingViewController: UIViewController {
         // Do any additional setup after loading the view.
         configureHierarchy()
         configureDataSource()
+    
+        navigationItem.searchController = searchController
     }
 
 
@@ -63,8 +75,7 @@ extension MessagingViewController {
                 withReuseIdentifier: CustomListCell.reuseIdentifier,
                 for: indexPath) as? CustomListCell else { fatalError("Cannot create new cell") }
             cell.updateWithItem(item)
-            cell.accessories = [
-            ]
+            cell.accessories = []
             return cell
         }
         
@@ -79,5 +90,9 @@ extension MessagingViewController {
 extension MessagingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        
+        
+        
+        
     }
 }
