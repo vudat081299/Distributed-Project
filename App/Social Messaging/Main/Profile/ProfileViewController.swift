@@ -10,7 +10,6 @@ import UIKit
 
 class ProfileViewController: UIViewController {
 
-    @IBOutlet var panGesture: UIPanGestureRecognizer!
     @IBOutlet weak var tableView: UITableView!
 
     var headersIndex = [IndexPath]()
@@ -36,49 +35,30 @@ class ProfileViewController: UIViewController {
     }
     */
     
-    
-    
-    
-    
-    
-    
-    
-//    @IBAction func panGestureOnTable(_ sender: UIPanGestureRecognizer) {
-//        let touchPoint = sender.location(in: tableView)
-//        print(touchPoint)
-//        if sender.state == .ended {
-//            tableView.visibleCells.forEach {
-//                if let cell = $0 as? Cell {
-//                    UIView.animate(withDuration: 0.1) { [weak self] in
-//                        cell.constraint.constant = 0
-//                        self?.view.layoutIfNeeded()
-//                    }
-//                }
-//            }
-//        } else if sender.state == .began {
-//            touchPosition = touchPoint
-//        } else if sender.state == .changed {
-//            tableView.visibleCells.forEach {
-//                $0.textLabel?.text = "\(touchPoint.x)"
-//                if let cell = $0 as? Cell {
-//                    cell.constraint.constant = (touchPosition.x - touchPoint.x) > 0 ? (touchPosition.x - touchPoint.x) : 0
-//                }
-//            }
-//        }
-//    }
-    
-//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return [gestureRecognizer, otherGestureRecognizer].contains(panGesture)
-//    }
-//
-//    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        if let gesture = gestureRecognizer as? UIPanGestureRecognizer, gesture == panGesture {
-//            let translation = gesture.translation(in: gesture.view)
-//            return (abs(translation.x) > abs(translation.y)) && (gesture == panGesture)
-//        }
-//        return false
-//    }
-    
+    @IBAction func panGestureOnTable(_ sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: tableView)
+        if sender.state == .ended {
+            tableView.visibleCells.forEach {
+                if let cell = $0 as? Cell {
+                    UIView.animate(withDuration: 0.5, delay: 0.05,
+                                   options: [.curveEaseOut],
+                                   animations: { [weak self] in
+                                    cell.constraint.constant = 0
+                                    self?.view.layoutIfNeeded()
+                                   }, completion: nil)
+                }
+            }
+        } else if sender.state == .began {
+            touchPosition = touchPoint
+        } else if sender.state == .changed {
+            tableView.visibleCells.forEach {
+                $0.textLabel?.text = "\(touchPoint.x)"
+                if let cell = $0 as? Cell {
+                    cell.constraint.constant = (touchPosition.x - touchPoint.x) > 0 ? (touchPosition.x - touchPoint.x) : 0
+                }
+            }
+        }
+    }
 }
 
 extension ProfileViewController: UITableViewDataSource,UITableViewDelegate {

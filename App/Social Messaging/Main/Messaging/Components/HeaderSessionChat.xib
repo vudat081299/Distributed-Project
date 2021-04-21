@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HeaderSessionChat" id="U6b-Vx-4bR" customClass="HeaderSessionChat" customModule="Social_Messaging" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="335" height="45"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vdu-mk-hmc">
+                    <rect key="frame" x="5" y="0.0" width="330" height="45"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar_13" translatesAutoresizingMaskIntoConstraints="NO" id="4Ve-rZ-V4m">
+                            <rect key="frame" x="0.0" y="10" width="35" height="35"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="35" id="4ZT-4d-ytM"/>
+                                <constraint firstAttribute="width" constant="35" id="yRH-7u-gNU"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="4Ve-rZ-V4m" firstAttribute="leading" secondItem="Vdu-mk-hmc" secondAttribute="leading" id="bcg-d7-L9v"/>
+                        <constraint firstItem="4Ve-rZ-V4m" firstAttribute="top" secondItem="Vdu-mk-hmc" secondAttribute="top" constant="10" id="dYh-4X-kks"/>
+                        <constraint firstAttribute="bottom" secondItem="4Ve-rZ-V4m" secondAttribute="bottom" id="phE-lM-XxP"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
+            <constraints>
+                <constraint firstItem="Vdu-mk-hmc" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" id="6Vp-nn-JgX"/>
+                <constraint firstItem="Vdu-mk-hmc" firstAttribute="bottom" secondItem="U6b-Vx-4bR" secondAttribute="bottom" id="Yt9-IA-y0A"/>
+                <constraint firstAttribute="trailing" secondItem="Vdu-mk-hmc" secondAttribute="trailing" id="ZQV-F6-Fay"/>
+                <constraint firstItem="Vdu-mk-hmc" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" constant="5" id="gIw-a0-4kA"/>
+            </constraints>
+            <connections>
+                <outlet property="avatar" destination="4Ve-rZ-V4m" id="48z-ai-MNb"/>
+            </connections>
+            <point key="canvasLocation" x="-38.405797101449281" y="166.74107142857142"/>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <image name="avatar_13" width="746" height="1792"/>
+    </resources>
+</document>

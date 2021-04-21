@@ -21,7 +21,7 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mmu-f7-UTO">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                     <gestureRecognizers/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="BHz-sa-jSb"/>
@@ -38,6 +38,9 @@
                 <constraint firstItem="mmu-f7-UTO" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="hOt-l8-Wyb"/>
                 <constraint firstItem="mmu-f7-UTO" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="qMa-WT-hTb"/>
             </constraints>
+            <connections>
+                <outletCollection property="gestureRecognizers" destination="kYp-5e-OxU" appends="YES" id="Q1z-ma-ahK"/>
+            </connections>
             <point key="canvasLocation" x="-19" y="92"/>
         </view>
         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="rKd-CO-64I">
@@ -46,10 +49,19 @@
             <state key="normal" title="Button"/>
             <point key="canvasLocation" x="587" y="-39"/>
         </button>
+        <panGestureRecognizer minimumNumberOfTouches="1" id="kYp-5e-OxU">
+            <connections>
+                <action selector="panGestureOnTable:" destination="-1" id="wRW-Mh-aip"/>
+                <outlet property="delegate" destination="mmu-f7-UTO" id="8DQ-wd-Jta"/>
+            </connections>
+        </panGestureRecognizer>
     </objects>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

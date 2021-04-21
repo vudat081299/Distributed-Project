@@ -23,12 +23,14 @@
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="ybz-LL-lZe" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="CL4-3c-yqg"/>
                     <constraint firstItem="ybz-LL-lZe" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="jcR-2l-DfS"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="centerLabel" destination="ybz-LL-lZe" id="pde-FO-XqG"/>
             </connections>

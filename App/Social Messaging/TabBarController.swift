@@ -16,7 +16,7 @@ struct ViewControllerData {
     static var viewControllerDatas: [ViewControllerData] = {
         let array = [
             ViewControllerData(title: "Notifications", iconNormal: "graduationcap", selectedIcon: "graduationcap.fill", viewController: UINavigationController(rootViewController: UITableViewController())),
-            ViewControllerData(title: "Messaging", iconNormal: "message", selectedIcon: "message.fill", viewController: UINavigationController(rootViewController: MessagingViewController())),
+            ViewControllerData(title: "Message", iconNormal: "message", selectedIcon: "message.fill", viewController: UINavigationController(rootViewController: MessagingViewController())),
             ViewControllerData(title: "Profile", iconNormal: "person", selectedIcon: "person.fill", viewController: UINavigationController(rootViewController: ProfileViewController()))
         ]
         var dataList: [ViewControllerData] = []

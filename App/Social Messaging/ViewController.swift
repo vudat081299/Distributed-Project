@@ -273,7 +273,7 @@ extension ViewController {
 //            content.text = "List cell!"
 //            content.secondaryText = "detail"
 //            cell.contentConfiguration = content
-            cell.icon.image = UIImage(named: "avatar")
+            cell.icon.image = UIImage(named: "avatar_11")
             cell.textLabel.text = "Name"
         }
     }
@@ -289,7 +289,8 @@ extension ViewController {
         collectionView.backgroundColor = .systemGroupedBackground
         view.addSubview(collectionView)
         collectionView.delegate = self
-        collectionView.register(UINib(nibName: "CustomCollectionViewListCell", bundle: nil), forCellWithReuseIdentifier: CustomCollectionViewListCell.reuseIdentifier)
+        collectionView.register(UINib(nibName: CustomCollectionViewListCell.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: CustomCollectionViewListCell.reuseIdentifier)
+        collectionView.register(UINib(nibName: CustomSupplementaryView.reuseIdentifier, bundle: nil), forSupplementaryViewOfKind: ViewController.headerElementKind, withReuseIdentifier: CustomSupplementaryView.reuseIdentifier)
     }
     func configureDataSource() {
         
@@ -321,7 +322,7 @@ extension ViewController {
         
         let customCellRegistration = UICollectionView.CellRegistration<CustomCollectionViewListCell, Int> { [self] (cell, indexPath, item) in
             if cell.icon != nil && cell.textLabel != nil {
-                cell.icon.image = UIImage(named: "avatar")
+                cell.icon.image = UIImage(named: "avatar_11")
                 cell.textLabel.text = "Name"
             } else {
                 
@@ -336,6 +337,7 @@ extension ViewController {
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: CustomCollectionViewListCell.reuseIdentifier,
                     for: indexPath) as? CustomCollectionViewListCell else { fatalError("Cannot create new cell") }
+                cell.icon.image = UIImage(named: "avatar_11")
                 return cell
 //                return collectionView.dequeueConfiguredReusableCell(using: customCellRegistration, for: indexPath, item: identifier)
             case .collection:
@@ -363,8 +365,10 @@ extension ViewController {
 //                return self.collectionView.dequeueConfiguredReusableSupplementary(
 //                    using: customSupplementaryRegistration, for: index)
 //            }
-            return self.collectionView.dequeueConfiguredReusableSupplementary(
-                using: supplementaryRegistration, for: index)
+//            return self.collectionView.dequeueConfiguredReusableSupplementary(
+//                using: customSupplementaryRegistration, for: index)
+            guard let cell = view.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CustomSupplementaryView.reuseIdentifier, for: index) as? CustomSupplementaryView else { fatalError("Cannot create new cell") }
+            return cell
         }
 
         // initial data

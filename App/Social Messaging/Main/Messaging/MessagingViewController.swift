@@ -58,7 +58,7 @@ extension MessagingViewController {
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(collectionView)
         collectionView.delegate = self
-        collectionView.register(UINib(nibName: "CustomListCell", bundle: nil), forCellWithReuseIdentifier: CustomListCell.reuseIdentifier)
+        collectionView.register(UINib(nibName: CustomListCell.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: CustomListCell.reuseIdentifier)
     }
     
     /// - Tag: CellRegistration
@@ -91,8 +91,10 @@ extension MessagingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
-        
-        
-        
+        let chattingViewController = ChattingViewController()
+        chattingViewController.navigationItem.largeTitleDisplayMode = .never
+        chattingViewController.tabBarController?.tabBar.isHidden = true
+        navigationController?.pushViewController(chattingViewController, animated: true)
+        self.tabBarController?.tabBar.isHidden = true
     }
 }

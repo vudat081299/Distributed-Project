@@ -1,16 +1,16 @@
 //
-//  CustomSupplementaryView.swift
+//  HeaderSessionChat.swift
 //  Social Messaging
 //
-//  Created by Vũ Quý Đạt  on 14/04/2021.
+//  Created by Vũ Quý Đạt  on 21/04/2021.
 //
 
 import UIKit
 
-class CustomSupplementaryView: UICollectionReusableView {
-    static let reuseIdentifier = "CustomSupplementaryView"
+class HeaderSessionChat: UICollectionReusableView {
+    static let reuseIdentifier = "HeaderSessionChat"
     
-    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var avatar: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,6 +22,13 @@ class CustomSupplementaryView: UICollectionReusableView {
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        configure()
     }
     
 }
+
+extension HeaderSessionChat {
+    func configure() {
+    }
+}
+
