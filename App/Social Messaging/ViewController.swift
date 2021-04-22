@@ -9,6 +9,8 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    
+    
     // MARK: - Collection view setting up.
     static let headerElementKind = "header-element-kind"
     
@@ -120,7 +122,7 @@ class ViewController: UIViewController {
     
     
     
-    // MARK: - Navbar components.
+    // MARK: - Navigation Bar set up and create component.
     let searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = "New Search"
@@ -129,14 +131,6 @@ class ViewController: UIViewController {
         searchController.definesPresentationContext = true
        return searchController
     }()
-    let leftBarItem: UIBarButtonItem = {
-        let bt = UIBarButtonItem(title: "Action", style: .done, target: nil, action: #selector(leftBarItemAction))
-        return bt
-    }()
-    let rightBarItem: UIBarButtonItem = {
-        let bt = UIBarButtonItem(image: UIImage(systemName: "bookmark.circle"), style: .plain, target: nil, action: #selector(rightBarItemAction))
-        return bt
-    }()
     
     @objc func leftBarItemAction() {
         print("Left bar button was pressed!")
@@ -144,11 +138,8 @@ class ViewController: UIViewController {
     @objc func rightBarItemAction() {
         print("Right bar button was pressed!")
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
+    
+    func setUpNavigationBar() {
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.sizeToFit()
@@ -156,8 +147,32 @@ class ViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.searchController = searchController
 //        navigationItem.hidesSearchBarWhenScrolling = false
+        
+//        self.searchController.hidesNavigationBarDuringPresentation = true
+//        self.searchController.searchBar.searchBarStyle = .prominent
+//        // Include the search bar within the navigation bar.
+//        self.navigationItem.titleView = self.searchController.searchBar
+        
+        let leftBarItem: UIBarButtonItem = {
+            let bt = UIBarButtonItem(title: "Action", style: .done, target: self, action: #selector(leftBarItemAction))
+            return bt
+        }()
+        let rightBarItem: UIBarButtonItem = {
+            let bt = UIBarButtonItem(image: UIImage(systemName: "bookmark.circle"), style: .plain, target: self, action: #selector(rightBarItemAction))
+            return bt
+        }()
         navigationItem.leftBarButtonItem = leftBarItem
         navigationItem.rightBarButtonItem = rightBarItem
+    }
+
+    
+    
+    // MARK: - Life cycle.
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view.
+        setUpNavigationBar()
         
         view.backgroundColor = .lightGray
         definesPresentationContext = true
@@ -166,10 +181,6 @@ class ViewController: UIViewController {
         configureHierarchy()
         configureDataSource()
         
-//        self.searchController.hidesNavigationBarDuringPresentation = true
-//        self.searchController.searchBar.searchBarStyle = .prominent
-//        // Include the search bar within the navigation bar.
-//        self.navigationItem.titleView = self.searchController.searchBar
     }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

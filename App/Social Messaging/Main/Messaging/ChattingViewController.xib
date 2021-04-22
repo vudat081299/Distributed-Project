@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="pMn-Qj-0kb">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="kIl-YS-hyP">
                         <size key="itemSize" width="128" height="128"/>
@@ -33,10 +33,10 @@
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="pMn-Qj-0kb" secondAttribute="bottom" id="V1c-r7-UWH"/>
-                <constraint firstItem="pMn-Qj-0kb" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="iCx-CG-24P"/>
-                <constraint firstItem="pMn-Qj-0kb" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="x8m-cc-3iO"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="pMn-Qj-0kb" secondAttribute="trailing" id="yzE-IA-kPr"/>
+                <constraint firstAttribute="bottom" secondItem="pMn-Qj-0kb" secondAttribute="bottom" id="V1c-r7-UWH"/>
+                <constraint firstItem="pMn-Qj-0kb" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="iCx-CG-24P"/>
+                <constraint firstItem="pMn-Qj-0kb" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="x8m-cc-3iO"/>
+                <constraint firstAttribute="trailing" secondItem="pMn-Qj-0kb" secondAttribute="trailing" id="yzE-IA-kPr"/>
             </constraints>
             <point key="canvasLocation" x="-145" y="87"/>
         </view>

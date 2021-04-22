@@ -25,11 +25,27 @@ class ChattingViewController: UIViewController {
         return gesture
     }()
     
+    @objc func rightBarItemAction() {
+        print("Right bar button was pressed!")
+    }
+    
+    func setUpNavigationBar() {
+        
+        navigationItem.title = "Pinned"
+        
+        // BarButtonItem.
+        let rightBarItem: UIBarButtonItem = {
+            let bt = UIBarButtonItem(image: UIImage(systemName: "video.circle.fill"), style: .plain, target: self, action: #selector(rightBarItemAction))
+            return bt
+        }()
+        navigationItem.rightBarButtonItem = rightBarItem
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        navigationItem.title = "Pinned Section Headers"
+        setUpNavigationBar()
         configureHierarchy()
         configureDataSource()
     }
@@ -111,7 +127,7 @@ extension ChattingViewController {
 
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(65)),
+                                              heightDimension: .estimated(55)),
             elementKind: ChattingViewController.sectionHeaderElementKind,
             alignment: .top)
         let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(

@@ -30,7 +30,7 @@ In a real app that you publish on the App Store, you would provide a user experi
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HVH-yt-xVO">
-                                <rect key="frame" x="428" y="5" width="42" height="21"/>
+                                <rect key="frame" x="428" y="-2" width="42" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="42" id="Jjr-11-IvS"/>
                                     <constraint firstAttribute="height" constant="21" id="exg-aN-bO0"/>
@@ -44,7 +44,7 @@ In a real app that you publish on the App Store, you would provide a user experi
                             <constraint firstAttribute="bottom" secondItem="41S-ZB-hsq" secondAttribute="bottom" id="1Qk-7j-GZ7"/>
                             <constraint firstItem="41S-ZB-hsq" firstAttribute="top" secondItem="bG4-iu-PYL" secondAttribute="top" id="M01-6O-VLn"/>
                             <constraint firstAttribute="trailing" secondItem="HVH-yt-xVO" secondAttribute="trailing" constant="-50" id="Ss3-jx-zlt"/>
-                            <constraint firstItem="HVH-yt-xVO" firstAttribute="top" secondItem="bG4-iu-PYL" secondAttribute="top" constant="5" id="e0R-jW-fAi"/>
+                            <constraint firstItem="HVH-yt-xVO" firstAttribute="top" secondItem="41S-ZB-hsq" secondAttribute="top" constant="-2" id="iLa-gK-w65"/>
                             <constraint firstAttribute="trailing" secondItem="41S-ZB-hsq" secondAttribute="trailing" constant="20" id="lre-Ow-EqV"/>
                             <constraint firstItem="41S-ZB-hsq" firstAttribute="leading" secondItem="bG4-iu-PYL" secondAttribute="leading" constant="55" id="rU9-yi-4nF"/>
                         </constraints>
