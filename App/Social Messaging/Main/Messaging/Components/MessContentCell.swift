@@ -19,5 +19,9 @@ class MessContentCell: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+    
+    override func prepareForReuse() {
+        constraint.constant = 0
+    }
 
 }

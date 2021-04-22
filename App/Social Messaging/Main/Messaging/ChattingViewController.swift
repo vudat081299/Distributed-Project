@@ -18,16 +18,18 @@ class ChattingViewController: UIViewController {
     
     var headersIndex = [IndexPath]()
     var touchPosition: CGPoint = CGPoint(x: 0, y: 0)
+    private lazy var panGesture: UIPanGestureRecognizer = {
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureOnTable(_:)))
+        gesture.delegate = self
+        gesture.cancelsTouchesInView = true
+        return gesture
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         navigationItem.title = "Pinned Section Headers"
-    }
-    
-    override func loadView() {
-        
         configureHierarchy()
         configureDataSource()
     }
@@ -57,7 +59,17 @@ class ChattingViewController: UIViewController {
         if sender.state == .ended {
             chatView.visibleCells.forEach {
                 if let cell = $0 as? MessContentCell {
-                    UIView.animate(withDuration: 0.5, delay: 0.05,
+                    UIView.animate(withDuration: 0.3, delay: 0.03,
+                                   options: [.curveEaseOut],
+                                   animations: { [weak self] in
+                                    cell.constraint.constant = 0
+                                    self?.view.layoutIfNeeded()
+                                   }, completion: nil)
+                }
+            }
+            chatView.visibleSupplementaryViews(ofKind: ChattingViewController.sectionHeaderElementKind).forEach {
+                if let cell = $0 as? HeaderSessionChat {
+                    UIView.animate(withDuration: 0.3, delay: 0.03,
                                    options: [.curveEaseOut],
                                    animations: { [weak self] in
                                     cell.constraint.constant = 0
@@ -70,7 +82,12 @@ class ChattingViewController: UIViewController {
         } else if sender.state == .changed {
             chatView.visibleCells.forEach {
                 if let cell = $0 as? MessContentCell {
-                    cell.constraint.constant = (touchPosition.x - touchPoint.x) > 0 && (touchPosition.x - touchPoint.x) < 50 ? (touchPosition.x - touchPoint.x) : 50
+                    cell.constraint.constant = (touchPosition.x - touchPoint.x) < 50 ? ((touchPosition.x - touchPoint.x) > 0 ? (touchPosition.x - touchPoint.x) : 0) : 50
+                }
+            }
+            chatView.visibleSupplementaryViews(ofKind: ChattingViewController.sectionHeaderElementKind).forEach {
+                if let cell = $0 as? HeaderSessionChat {
+                    cell.constraint.constant = (touchPosition.x - touchPoint.x) < 50 ? ((touchPosition.x - touchPoint.x) > 0 ? (touchPosition.x - touchPoint.x) : 0) : 50
                 }
             }
         }
@@ -94,7 +111,7 @@ extension ChattingViewController {
 
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(44)),
+                                              heightDimension: .estimated(65)),
             elementKind: ChattingViewController.sectionHeaderElementKind,
             alignment: .top)
         let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(
@@ -123,7 +140,6 @@ extension ChattingViewController {
         chatView.register(UINib(nibName: MessContentCell.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: MessContentCell.reuseIdentifier)
         chatView.register(UINib(nibName: HeaderSessionChat.reuseIdentifier, bundle: nil), forSupplementaryViewOfKind: ChattingViewController.sectionHeaderElementKind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier)
         
-        var panGesture = UIPanGestureRecognizer(target: self, action:#selector(panGestureOnTable))
         chatView.addGestureRecognizer(panGesture)
     }
     /// - Tag: PinnedHeaderRegistration
@@ -192,5 +208,19 @@ extension ChattingViewController {
 extension ChattingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+    }
+}
+
+extension ChattingViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return [gestureRecognizer, otherGestureRecognizer].contains(panGesture)
+    }
+    
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let gesture = gestureRecognizer as? UIPanGestureRecognizer, gesture == panGesture {
+            let translation = gesture.translation(in: gesture.view)
+            return (abs(translation.x) > abs(translation.y)) && (gesture == panGesture)
+        }
+        return true
     }
 }
