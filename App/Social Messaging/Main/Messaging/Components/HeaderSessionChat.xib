@@ -10,11 +10,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionReusableView opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HeaderSessionChat" id="U6b-Vx-4bR" customClass="HeaderSessionChat" customModule="Social_Messaging" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="355" height="55"/>
+            <rect key="frame" x="0.0" y="0.0" width="355" height="50"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vdu-mk-hmc">
-                    <rect key="frame" x="0.0" y="0.0" width="355" height="55"/>
+                    <rect key="frame" x="0.0" y="0.0" width="355" height="50"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar_13" translatesAutoresizingMaskIntoConstraints="NO" id="4Ve-rZ-V4m">
                             <rect key="frame" x="5" y="15" width="35" height="35"/>

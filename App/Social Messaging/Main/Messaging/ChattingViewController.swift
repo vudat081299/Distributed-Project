@@ -127,7 +127,7 @@ extension ChattingViewController {
 
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(55)),
+                                              heightDimension: .estimated(50)),
             elementKind: ChattingViewController.sectionHeaderElementKind,
             alignment: .top)
         let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(
@@ -141,6 +141,9 @@ extension ChattingViewController {
 
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
+        
+        let config = UICollectionLayoutListConfiguration(appearance: .plain)
+        return UICollectionViewCompositionalLayout.list(using: config)
     }
 }
 
@@ -154,6 +157,7 @@ extension ChattingViewController {
         view.addSubview(chatView)
         chatView.delegate = self
         chatView.register(UINib(nibName: MessContentCell.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: MessContentCell.reuseIdentifier)
+        chatView.register(UINib(nibName: FirstMessContentCellForSection.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: FirstMessContentCellForSection.reuseIdentifier)
         chatView.register(UINib(nibName: HeaderSessionChat.reuseIdentifier, bundle: nil), forSupplementaryViewOfKind: ChattingViewController.sectionHeaderElementKind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier)
         
         chatView.addGestureRecognizer(panGesture)
@@ -187,6 +191,12 @@ extension ChattingViewController {
         dataSource = UICollectionViewDiffableDataSource<Int, Int>(collectionView: chatView) {
             (collectionView: UICollectionView, indexPath: IndexPath, identifier: Int) -> UICollectionViewCell? in
 //            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
+            if indexPath.row == 0 {
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: FirstMessContentCellForSection.reuseIdentifier,
+                    for: indexPath) as? FirstMessContentCellForSection else { fatalError("Cannot create new cell") }
+                return cell
+            }
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: MessContentCell.reuseIdentifier,
                 for: indexPath) as? MessContentCell else { fatalError("Cannot create new cell") }
