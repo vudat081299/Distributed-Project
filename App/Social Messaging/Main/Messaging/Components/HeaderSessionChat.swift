@@ -10,7 +10,6 @@ import UIKit
 class HeaderSessionChat: UICollectionReusableView {
     static let reuseIdentifier = "HeaderSessionChat"
     
-    @IBOutlet weak var timeStamp: UILabel!
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var constraint: NSLayoutConstraint!
     

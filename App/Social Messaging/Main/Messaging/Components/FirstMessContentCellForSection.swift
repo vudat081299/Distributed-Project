@@ -13,6 +13,7 @@ class FirstMessContentCellForSection: UICollectionViewCell {
     @IBOutlet weak var contentTextLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var constraint: NSLayoutConstraint!
+    @IBOutlet weak var backGroundView: UIView!
     
     
     override func awakeFromNib() {
@@ -22,5 +23,17 @@ class FirstMessContentCellForSection: UICollectionViewCell {
     
     override func prepareForReuse() {
         constraint.constant = 0
+    }
+    
+    override var isHighlighted: Bool {
+        didSet {
+            if self.isHighlighted {
+                backGroundView.backgroundColor = .systemBackground
+                // Your customized animation or add a overlay view
+            } else {
+                backGroundView.backgroundColor = .clear
+                // Your customized animation or remove overlay view
+            }
+        }
     }
 }

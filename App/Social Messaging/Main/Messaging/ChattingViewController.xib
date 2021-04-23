@@ -10,7 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChattingViewController" customModule="Social_Messaging" customModuleProvider="target">
             <connections>
-                <outlet property="chatView" destination="pMn-Qj-0kb" id="vJe-LX-u42"/>
+                <outlet property="messInput" destination="Zl3-rc-XKs" id="yBt-sD-3Wx"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -19,24 +19,18 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="pMn-Qj-0kb">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="kIl-YS-hyP">
-                        <size key="itemSize" width="128" height="128"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    </collectionViewFlowLayout>
-                </collectionView>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Zl3-rc-XKs">
+                    <rect key="frame" x="0.0" y="828" width="414" height="34"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="pMn-Qj-0kb" secondAttribute="bottom" id="V1c-r7-UWH"/>
-                <constraint firstItem="pMn-Qj-0kb" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="iCx-CG-24P"/>
-                <constraint firstItem="pMn-Qj-0kb" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="x8m-cc-3iO"/>
-                <constraint firstAttribute="trailing" secondItem="pMn-Qj-0kb" secondAttribute="trailing" id="yzE-IA-kPr"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Zl3-rc-XKs" secondAttribute="trailing" id="MFT-Lg-rkh"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Zl3-rc-XKs" secondAttribute="bottom" id="czX-b5-U1Z"/>
+                <constraint firstItem="Zl3-rc-XKs" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="shN-qH-awU"/>
             </constraints>
             <point key="canvasLocation" x="-145" y="87"/>
         </view>

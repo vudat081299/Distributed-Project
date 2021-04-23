@@ -17,11 +17,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="421" height="124"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ujj-UE-xqP">
+                        <rect key="frame" x="0.0" y="-45" width="421" height="169"/>
+                    </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="voV-Ho-Jdq">
                         <rect key="frame" x="0.0" y="0.0" width="421" height="124"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fSz-KO-0ba">
-                                <rect key="frame" x="55" y="0.0" width="346" height="124"/>
+                                <rect key="frame" x="65" y="0.0" width="336" height="124"/>
                                 <string key="text">This view hierarchy is useful for learning how HomeKit structures device data, which is slightly different than the way the Apple Home app refers to related concepts. It’s also useful for device developers who want to understand how HomeKit sees custom hardware.
 
 In a real app that you publish on the App Store, you would provide a user experience more like the one found in Configuring a Home Automation Device. For example, you would focus on the actions a user can take and hide the underlying technical details. For more tips about presenting HomeKit data to users, see the “Adjust the Interface for a Published App” section at the end of this article.</string>
@@ -30,46 +33,91 @@ In a real app that you publish on the App Store, you would provide a user experi
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PV0-b7-Zaj">
-                                <rect key="frame" x="429" y="-2" width="42" height="21"/>
+                                <rect key="frame" x="454" y="-2" width="42" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="TY0-dG-9Sk"/>
                                     <constraint firstAttribute="width" constant="42" id="pnJ-cL-DrR"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="fSz-KO-0ba" firstAttribute="leading" secondItem="voV-Ho-Jdq" secondAttribute="leading" constant="55" id="4hD-BX-pia"/>
+                            <constraint firstItem="fSz-KO-0ba" firstAttribute="leading" secondItem="voV-Ho-Jdq" secondAttribute="leading" constant="65" id="4hD-BX-pia"/>
                             <constraint firstAttribute="trailing" secondItem="fSz-KO-0ba" secondAttribute="trailing" constant="20" id="EoZ-lw-DHi"/>
                             <constraint firstItem="PV0-b7-Zaj" firstAttribute="top" secondItem="fSz-KO-0ba" secondAttribute="top" constant="-2" id="N5Q-0r-JIC"/>
-                            <constraint firstAttribute="trailing" secondItem="PV0-b7-Zaj" secondAttribute="trailing" constant="-50" id="U5c-Dg-Dyp"/>
+                            <constraint firstAttribute="trailing" secondItem="PV0-b7-Zaj" secondAttribute="trailing" constant="-75" id="U5c-Dg-Dyp"/>
                             <constraint firstAttribute="bottom" secondItem="fSz-KO-0ba" secondAttribute="bottom" id="lMS-cW-QJF"/>
                             <constraint firstItem="fSz-KO-0ba" firstAttribute="top" secondItem="voV-Ho-Jdq" secondAttribute="top" id="xEq-0V-gXI"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S4Q-u5-R8K">
-                        <rect key="frame" x="0.0" y="-50" width="421" height="50"/>
-                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                        <rect key="frame" x="0.0" y="-45" width="421" height="45"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Datvu" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gsJ-15-L8l">
+                                <rect key="frame" x="65" y="10" width="40" height="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                <color key="textColor" systemColor="systemOrangeColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="04/23/2021" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iZA-jO-MgI">
+                                <rect key="frame" x="110" y="13.5" width="62" height="13.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="11"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="koq-8q-juk">
+                                <rect key="frame" x="454" y="15" width="42" height="12"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="PVz-Sz-fRN"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This view hierarchy is useful" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hAA-qD-cTu">
+                                <rect key="frame" x="65" y="26" width="159.5" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="9Ew-Ls-pTC"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <mutableString key="userLabel">This view hierarchy is useful for learning how HomeKit structures device data, which is slightly different than the way the Apple Home app refers to related concepts. It’s also useful for device developers who want to understand how HomeKit sees custom hardware.  In a real app that you publish on the App Store, you would provide a user experience more like the one found in Configuring a Home Automation Device. For example, you would focus on the actions a user can take and hide the underlying technical details. For more tips about presenting HomeKit data to users, see the “Adjust the Interface for a Published App” section at the end of this article.</mutableString>
+                            </label>
+                        </subviews>
                         <constraints>
-                            <constraint firstAttribute="height" constant="50" id="9zt-Pq-aS1"/>
+                            <constraint firstItem="iZA-jO-MgI" firstAttribute="bottom" secondItem="gsJ-15-L8l" secondAttribute="bottom" id="1hg-V7-yqL"/>
+                            <constraint firstItem="iZA-jO-MgI" firstAttribute="leading" secondItem="gsJ-15-L8l" secondAttribute="trailing" constant="5" id="940-pa-9mX"/>
+                            <constraint firstAttribute="height" constant="45" id="9zt-Pq-aS1"/>
+                            <constraint firstItem="gsJ-15-L8l" firstAttribute="top" secondItem="S4Q-u5-R8K" secondAttribute="top" constant="10" id="CH5-Gl-HZA"/>
+                            <constraint firstItem="koq-8q-juk" firstAttribute="bottom" secondItem="iZA-jO-MgI" secondAttribute="bottom" id="KWO-iM-TUH"/>
+                            <constraint firstAttribute="bottom" secondItem="hAA-qD-cTu" secondAttribute="bottom" constant="-2" id="aOE-JP-TCM"/>
+                            <constraint firstItem="hAA-qD-cTu" firstAttribute="leading" secondItem="gsJ-15-L8l" secondAttribute="leading" id="d3p-sm-pzM"/>
+                            <constraint firstItem="gsJ-15-L8l" firstAttribute="leading" secondItem="S4Q-u5-R8K" secondAttribute="leading" constant="65" id="uGC-CV-Ge7"/>
+                            <constraint firstAttribute="trailing" secondItem="koq-8q-juk" secondAttribute="trailing" constant="-75" id="vsx-Kj-mZ7"/>
                         </constraints>
                     </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="S4Q-u5-R8K" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="-50" id="GYu-Tx-EgG"/>
+                <constraint firstItem="Ujj-UE-xqP" firstAttribute="top" secondItem="S4Q-u5-R8K" secondAttribute="top" id="0D0-tq-pgC"/>
+                <constraint firstItem="S4Q-u5-R8K" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="-45" id="GYu-Tx-EgG"/>
+                <constraint firstAttribute="trailing" secondItem="Ujj-UE-xqP" secondAttribute="trailing" id="Lmg-ll-3CL"/>
                 <constraint firstAttribute="trailing" secondItem="voV-Ho-Jdq" secondAttribute="trailing" id="OyS-mr-fAI"/>
-                <constraint firstItem="S4Q-u5-R8K" firstAttribute="width" secondItem="gTV-IL-0wX" secondAttribute="width" id="gQV-6f-n1V"/>
+                <constraint firstItem="S4Q-u5-R8K" firstAttribute="trailing" secondItem="voV-Ho-Jdq" secondAttribute="trailing" id="ZKf-fU-Zth"/>
+                <constraint firstItem="S4Q-u5-R8K" firstAttribute="width" secondItem="gTV-IL-0wX" secondAttribute="width" id="cby-Pr-gkK"/>
                 <constraint firstAttribute="bottom" secondItem="voV-Ho-Jdq" secondAttribute="bottom" id="lwd-BC-pqI"/>
-                <constraint firstAttribute="trailing" secondItem="S4Q-u5-R8K" secondAttribute="trailing" id="o1M-14-jaS"/>
                 <constraint firstItem="voV-Ho-Jdq" firstAttribute="top" secondItem="S4Q-u5-R8K" secondAttribute="bottom" id="uW0-cL-BES"/>
+                <constraint firstAttribute="bottom" secondItem="Ujj-UE-xqP" secondAttribute="bottom" id="wcv-dM-1nB"/>
                 <constraint firstItem="voV-Ho-Jdq" firstAttribute="width" secondItem="gTV-IL-0wX" secondAttribute="width" id="z52-um-GAS"/>
+                <constraint firstItem="Ujj-UE-xqP" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="zPC-un-kx6"/>
             </constraints>
             <size key="customSize" width="421" height="124"/>
             <connections>
+                <outlet property="backGroundView" destination="Ujj-UE-xqP" id="SRs-hw-Ejw"/>
                 <outlet property="constraint" destination="OyS-mr-fAI" id="oD6-u3-5ux"/>
                 <outlet property="contentTextLabel" destination="fSz-KO-0ba" id="CJW-46-G0H"/>
                 <outlet property="timeLabel" destination="PV0-b7-Zaj" id="tPM-rZ-zjh"/>
@@ -81,8 +129,8 @@ In a real app that you publish on the App Store, you would provide a user experi
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
-        <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

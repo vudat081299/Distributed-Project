@@ -24,4 +24,16 @@ class MessContentCell: UICollectionViewCell {
         constraint.constant = 0
     }
 
+    override var isHighlighted: Bool {
+        didSet {
+            if self.isHighlighted {
+                backgroundColor = .systemBackground
+                // Your customized animation or add a overlay view
+            } else {
+                backgroundColor = .clear
+                // Your customized animation or remove overlay view
+            }
+        }
+    }
+
 }

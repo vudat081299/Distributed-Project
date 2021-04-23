@@ -13,8 +13,9 @@ class ChattingViewController: UIViewController {
     static let sectionFooterElementKind = "section-footer-element-kind"
 
     var dataSource: UICollectionViewDiffableDataSource<Int, Int>! = nil
-//    var chatView: UICollectionView! = nil
-    @IBOutlet weak var chatView: UICollectionView!
+    var chatView: UICollectionView! = nil
+//    @IBOutlet weak var chatView: UICollectionView!
+    @IBOutlet weak var messInput: UITextField!
     
     var headersIndex = [IndexPath]()
     var touchPosition: CGPoint = CGPoint(x: 0, y: 0)
@@ -48,6 +49,28 @@ class ChattingViewController: UIViewController {
         setUpNavigationBar()
         configureHierarchy()
         configureDataSource()
+        
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+    }
+    
+    @objc func adjustForKeyboard(notification: Notification) {
+        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+        let keyboardScreenEndFrame = keyboardValue.cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+
+        if notification.name == UIResponder.keyboardWillHideNotification {
+            chatView.contentInset = .zero
+        } else {
+            chatView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+        }
+
+        chatView.scrollIndicatorInsets = chatView.contentInset
+//        chatView.scrollToItem(at: <#T##IndexPath#>, at: <#T##UICollectionView.ScrollPosition#>, animated: <#T##Bool#>)
+//        let selectedRange = chatView.range
+//        chatView.scrollRangeToVisible(selectedRange)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,6 +97,14 @@ class ChattingViewController: UIViewController {
         let touchPoint = sender.location(in: chatView)
         if sender.state == .ended {
             chatView.visibleCells.forEach {
+                if let cell = $0 as? FirstMessContentCellForSection {
+                    UIView.animate(withDuration: 0.3, delay: 0.03,
+                                   options: [.curveEaseOut],
+                                   animations: { [weak self] in
+                                    cell.constraint.constant = 0
+                                    self?.view.layoutIfNeeded()
+                                   }, completion: nil)
+                }
                 if let cell = $0 as? MessContentCell {
                     UIView.animate(withDuration: 0.3, delay: 0.03,
                                    options: [.curveEaseOut],
@@ -97,13 +128,16 @@ class ChattingViewController: UIViewController {
             touchPosition = touchPoint
         } else if sender.state == .changed {
             chatView.visibleCells.forEach {
+                if let cell = $0 as? FirstMessContentCellForSection {
+                    cell.constraint.constant = (touchPosition.x - touchPoint.x) < 75 ? ((touchPosition.x - touchPoint.x) > 0 ? (touchPosition.x - touchPoint.x) : 0) : 75
+                }
                 if let cell = $0 as? MessContentCell {
-                    cell.constraint.constant = (touchPosition.x - touchPoint.x) < 50 ? ((touchPosition.x - touchPoint.x) > 0 ? (touchPosition.x - touchPoint.x) : 0) : 50
+                    cell.constraint.constant = (touchPosition.x - touchPoint.x) < 75 ? ((touchPosition.x - touchPoint.x) > 0 ? (touchPosition.x - touchPoint.x) : 0) : 75
                 }
             }
             chatView.visibleSupplementaryViews(ofKind: ChattingViewController.sectionHeaderElementKind).forEach {
                 if let cell = $0 as? HeaderSessionChat {
-                    cell.constraint.constant = (touchPosition.x - touchPoint.x) < 50 ? ((touchPosition.x - touchPoint.x) > 0 ? (touchPosition.x - touchPoint.x) : 0) : 50
+                    cell.constraint.constant = (touchPosition.x - touchPoint.x) < 75 ? ((touchPosition.x - touchPoint.x) > 0 ? (touchPosition.x - touchPoint.x) : 0) : 75
                 }
             }
         }
@@ -113,21 +147,21 @@ class ChattingViewController: UIViewController {
 extension ChattingViewController {
     /// - Tag: PinnedHeader
     func createLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(44))
+        
+        let config = UICollectionViewCompositionalLayoutConfiguration()
+        config.interSectionSpacing = 1
+        
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(44))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 5
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
 
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(50)),
+                                              heightDimension: .estimated(45)),
             elementKind: ChattingViewController.sectionHeaderElementKind,
             alignment: .top)
         let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(
@@ -139,19 +173,23 @@ extension ChattingViewController {
         sectionHeader.zIndex = 2
         section.boundarySupplementaryItems = [sectionHeader]
 
-        let layout = UICollectionViewCompositionalLayout(section: section)
+        let layout = UICollectionViewCompositionalLayout(section: section, configuration: config)
         return layout
         
-        let config = UICollectionLayoutListConfiguration(appearance: .plain)
-        return UICollectionViewCompositionalLayout.list(using: config)
+//        let config = UICollectionLayoutListConfiguration(appearance: .plain)
+//        return UICollectionViewCompositionalLayout.list(using: config)
     }
 }
 
 extension ChattingViewController {
     func configureHierarchy() {
-//        chatView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        chatView.frame = view.bounds
-        chatView.collectionViewLayout = createLayout()
+        
+        // Work with infile collection view.
+        chatView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        // Work with xib collection view.
+//        chatView.frame = view.bounds
+//        chatView.collectionViewLayout = createLayout()
+        
         chatView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         chatView.backgroundColor = .systemGray6
         view.addSubview(chatView)
@@ -159,8 +197,8 @@ extension ChattingViewController {
         chatView.register(UINib(nibName: MessContentCell.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: MessContentCell.reuseIdentifier)
         chatView.register(UINib(nibName: FirstMessContentCellForSection.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: FirstMessContentCellForSection.reuseIdentifier)
         chatView.register(UINib(nibName: HeaderSessionChat.reuseIdentifier, bundle: nil), forSupplementaryViewOfKind: ChattingViewController.sectionHeaderElementKind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier)
-        
         chatView.addGestureRecognizer(panGesture)
+        view.bringSubviewToFront(messInput)
     }
     /// - Tag: PinnedHeaderRegistration
     func configureDataSource() {
@@ -233,7 +271,7 @@ extension ChattingViewController {
 
 extension ChattingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
+//        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 

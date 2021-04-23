@@ -23,7 +23,7 @@ struct ViewControllerData {
         array.forEach {
             $0.viewController.topViewController?.title = $0.title
             $0.viewController.tabBarItem.image = UIImage(systemName: $0.iconNormal)
-            $0.viewController.tabBarItem.selectedImage = UIImage(named: $0.selectedIcon)
+            $0.viewController.tabBarItem.selectedImage = UIImage(systemName: $0.selectedIcon)
             $0.viewController.navigationBar.prefersLargeTitles = true
             $0.viewController.navigationBar.sizeToFit()
             $0.viewController.navigationItem.largeTitleDisplayMode = .always

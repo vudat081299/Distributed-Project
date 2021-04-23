@@ -34,6 +34,7 @@
 		6BCCA263262B3A3A0075A2A3 /* Note3.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA262262B3A3A0075A2A3 /* Note3.txt */; };
 		6BCCA268262B3A420075A2A3 /* Note2.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA267262B3A420075A2A3 /* Note2.txt */; };
 		6BCCA276262B3A930075A2A3 /* Note1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA275262B3A930075A2A3 /* Note1.txt */; };
+		6BCF0912263324CB00311C41 /* UICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCF0911263324CB00311C41 /* UICollectionViewCell.swift */; };
 		C49176042624510600253070 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49176032624510600253070 /* SceneDelegate.swift */; };
 		C4917643262451D100253070 /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C491763C262451D100253070 /* ProfileViewController.xib */; };
 		C4917644262451D100253070 /* MessagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C491763D262451D100253070 /* MessagingViewController.swift */; };
@@ -117,6 +118,7 @@
 		6BCCA262262B3A3A0075A2A3 /* Note3.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note3.txt; sourceTree = "<group>"; };
 		6BCCA267262B3A420075A2A3 /* Note2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note2.txt; sourceTree = "<group>"; };
 		6BCCA275262B3A930075A2A3 /* Note1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note1.txt; sourceTree = "<group>"; };
+		6BCF0911263324CB00311C41 /* UICollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewCell.swift; sourceTree = "<group>"; };
 		C49176032624510600253070 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C491763C262451D100253070 /* ProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
 		C491763D262451D100253070 /* MessagingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagingViewController.swift; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 				C491765E2624546D00253070 /* UIView.swift */,
 				C49176602624546D00253070 /* URLSession+Extensions.swift */,
 				6B0482262626D96E0031D15B /* CGColor.swift */,
+				6BCF0911263324CB00311C41 /* UICollectionViewCell.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -586,6 +589,7 @@
 				C49176742624546D00253070 /* UIImage.swift in Sources */,
 				6B89CB0D26306B3C007FCAE5 /* HeaderSessionChat.swift in Sources */,
 				6B89CB012630649F007FCAE5 /* MessContentCell.swift in Sources */,
+				6BCF0912263324CB00311C41 /* UICollectionViewCell.swift in Sources */,
 				C4917645262451D100253070 /* TextCell.swift in Sources */,
 				6B04823C26272F0B0031D15B /* CustomSupplementaryView.swift in Sources */,
 				6B8FF04F2622024000F813C6 /* AppDelegate.swift in Sources */,
