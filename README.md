@@ -39,7 +39,7 @@ Hướng dân build server. (Tham khảo: https://swift.org/package-manager/)
 > 3. run $ swift build trên terminal để build package cho project.
 > 4. run $ swift run trên terminal để run server trên localhost với port 8080.
 
-Yêu cầu khi tham gia làm bài tập nhóm: 
+> - Yêu cầu khi tham gia làm bài tập nhóm: 
 > - Thành viên nhớ gửi yêu cầu chỉnh sửa link git khi muốn push code để phân quyền hoặc gửi tài khoản mail đăng kí tài khoản github để được phân quyền.
 > - Commit code hàng ngày lên link git của project này.
 > - Tài khoản commit sử dụng mail cá nhân, có tên của mình.
