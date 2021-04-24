@@ -10,10 +10,11 @@ import UIKit
 class ChattingViewController: UIViewController {
     
     // MARK: - CV config data.
-    /// Collection view config data.
+    // Collection view config data.
     static let sectionHeaderElementKind = "section-header-element-kind"
     static let sectionFooterElementKind = "section-footer-element-kind"
 
+    /// Datasource of main collectionview (chat content view).
     var dataSource: UICollectionViewDiffableDataSource<Int, Int>! = nil
     
     
@@ -24,12 +25,12 @@ class ChattingViewController: UIViewController {
     
     
     // MARK: - IBOutlet.
-    /// Views.
+    // Views.
     @IBOutlet weak var containChattingView: UIView!
 
     @IBOutlet weak var chatView: UICollectionView!
     @IBOutlet weak var chatTextField: UITextField!
-    /// Constraints.
+    // Constraints.
     @IBOutlet weak var textFieldBottomAlign: NSLayoutConstraint!
     @IBOutlet weak var popKeyboardHeight: NSLayoutConstraint!
     
@@ -345,7 +346,7 @@ extension ChattingViewController: UIGestureRecognizerDelegate {
 
 
 
-// MARK: Keyboard.
+// MARK: - Keyboard.
 extension ChattingViewController: UITextFieldDelegate {
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
