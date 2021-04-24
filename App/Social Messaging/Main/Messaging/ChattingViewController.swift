@@ -9,16 +9,40 @@ import UIKit
 
 class ChattingViewController: UIViewController {
     
+    // MARK: - CV config data.
+    /// Collection view config data.
     static let sectionHeaderElementKind = "section-header-element-kind"
     static let sectionFooterElementKind = "section-footer-element-kind"
 
     var dataSource: UICollectionViewDiffableDataSource<Int, Int>! = nil
-    var chatView: UICollectionView! = nil
-//    @IBOutlet weak var chatView: UICollectionView!
-    @IBOutlet weak var messInput: UITextField!
     
+    
+    
+    // MARK: - UI.
+//    var chatView: UICollectionView! = nil
+    
+    
+    
+    // MARK: - IBOutlet.
+    /// Views.
+    @IBOutlet weak var containChattingView: UIView!
+
+    @IBOutlet weak var chatView: UICollectionView!
+    @IBOutlet weak var chatTextField: UITextField!
+    /// Constraints.
+    @IBOutlet weak var textFieldBottomAlign: NSLayoutConstraint!
+    @IBOutlet weak var popKeyboardHeight: NSLayoutConstraint!
+    
+    
+    
+    // MARK: - Variables.
+    var keyboardHeight: CGFloat = 0.0
     var headersIndex = [IndexPath]()
     var touchPosition: CGPoint = CGPoint(x: 0, y: 0)
+    
+    
+    
+    // MARK: - Closures.
     private lazy var panGesture: UIPanGestureRecognizer = {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureOnTable(_:)))
         gesture.delegate = self
@@ -26,6 +50,9 @@ class ChattingViewController: UIViewController {
         return gesture
     }()
     
+    
+    
+    // MARK: - Set up methods.
     @objc func rightBarItemAction() {
         print("Right bar button was pressed!")
     }
@@ -42,6 +69,9 @@ class ChattingViewController: UIViewController {
         navigationItem.rightBarButtonItem = rightBarItem
     }
     
+    
+    
+    // MARK: - Life cycle.
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -51,26 +81,9 @@ class ChattingViewController: UIViewController {
         configureDataSource()
         
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-    }
-    
-    @objc func adjustForKeyboard(notification: Notification) {
-        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-
-        let keyboardScreenEndFrame = keyboardValue.cgRectValue
-        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
-
-        if notification.name == UIResponder.keyboardWillHideNotification {
-            chatView.contentInset = .zero
-        } else {
-            chatView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
-        }
-
-        chatView.scrollIndicatorInsets = chatView.contentInset
-//        chatView.scrollToItem(at: <#T##IndexPath#>, at: <#T##UICollectionView.ScrollPosition#>, animated: <#T##Bool#>)
-//        let selectedRange = chatView.range
-//        chatView.scrollRangeToVisible(selectedRange)
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,6 +106,16 @@ class ChattingViewController: UIViewController {
     }
     */
     
+    
+    
+    // MARK: - IBAction
+    @IBAction func sendMessage(_ sender: UIButton) {
+    }
+    
+    
+    
+    // MARK: - Gesture.
+    /// Pan Gesture on collection chat view. Using for swipe showing time stamp.
     @objc func panGestureOnTable(_ sender: UIPanGestureRecognizer) {
         let touchPoint = sender.location(in: chatView)
         if sender.state == .ended {
@@ -142,9 +165,26 @@ class ChattingViewController: UIViewController {
             }
         }
     }
+    
 }
 
+
+
+
+
+
+
+
+
+
+
+
+// MARK: - Extensions.
 extension ChattingViewController {
+    
+    
+    
+    // MARK: - Layout for collection view.
     /// - Tag: PinnedHeader
     func createLayout() -> UICollectionViewLayout {
         
@@ -181,14 +221,20 @@ extension ChattingViewController {
     }
 }
 
+
+
 extension ChattingViewController {
+    
+    
+    
+    // MARK: - Config collection view.
     func configureHierarchy() {
         
         // Work with infile collection view.
-        chatView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+//        chatView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         // Work with xib collection view.
-//        chatView.frame = view.bounds
-//        chatView.collectionViewLayout = createLayout()
+        chatView.frame = view.bounds
+        chatView.collectionViewLayout = createLayout()
         
         chatView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         chatView.backgroundColor = .systemGray6
@@ -198,8 +244,10 @@ extension ChattingViewController {
         chatView.register(UINib(nibName: FirstMessContentCellForSection.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: FirstMessContentCellForSection.reuseIdentifier)
         chatView.register(UINib(nibName: HeaderSessionChat.reuseIdentifier, bundle: nil), forSupplementaryViewOfKind: ChattingViewController.sectionHeaderElementKind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier)
         chatView.addGestureRecognizer(panGesture)
-        view.bringSubviewToFront(messInput)
+        view.bringSubviewToFront(containChattingView)
     }
+    
+    // MARK: - Config datasource.
     /// - Tag: PinnedHeaderRegistration
     func configureDataSource() {
         
@@ -269,12 +317,18 @@ extension ChattingViewController {
     }
 }
 
+
+
+// MARK: - Select cells.
 extension ChattingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 
+
+
+// MARK: - Config gesture recognizer.
 extension ChattingViewController: UIGestureRecognizerDelegate {
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return [gestureRecognizer, otherGestureRecognizer].contains(panGesture)
@@ -286,5 +340,26 @@ extension ChattingViewController: UIGestureRecognizerDelegate {
             return (abs(translation.x) > abs(translation.y)) && (gesture == panGesture)
         }
         return true
+    }
+}
+
+
+
+// MARK: Keyboard.
+extension ChattingViewController: UITextFieldDelegate {
+    @objc func keyboardWillShow(_ notification: NSNotification) {
+        if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardHeight = keyboardRect.height
+            self.popKeyboardHeight.constant = keyboardHeight + 50
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardHeight = keyboardRect.height
+            self.popKeyboardHeight.constant -= keyboardRect.height
+            self.view.layoutIfNeeded()
+        }
     }
 }
