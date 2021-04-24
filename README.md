@@ -15,6 +15,18 @@ IDE: Build app và server trên Xcode 12.0.
 Folder App: app iOS.
 Folder Social-Messaging-Server: Server, Database.
 
+Hướng dẫn build docker image:
+> ## Note: This file is intended for testing and does not
+> ## implement best practices for a production deployment.
+> ##
+> ## Learn more: https://docs.docker.com/compose/reference/
+> ##
+> ##   Build images: docker-compose build
+> ##      Start app: docker-compose up app
+> ## Start database: docker-compose up db
+> ## Run migrations: docker-compose run migrate
+> ##       Stop all: docker-compose down (add -v to wipe db)
+
 Hướng dẫn build app. (Yêu cầu máy có phần mềm Xcode)
 > 1. Clone link git
 > 2. Mở file có extend: .xcodeproj
@@ -37,9 +49,10 @@ Yêu cầu khi tham gia làm bài tập nhóm:
 > - Trong mỗi project app và server đều có file README.md, hướng dẫn build, và có tài liệu tham khảo.
 
 Tài liệu tham khảo:
+https://developer.apple.com/documentation/uikit/view_controllers
 Swift package manager: https://swift.org/package-manager/
 Swift UI framework - UIKit: https://developer.apple.com/documentation/uikit
 
-liên hệ:
+Liên hệ:
 > Đạt - vuwit16b: 0899081299 - vudat081299@gmail.com
 
