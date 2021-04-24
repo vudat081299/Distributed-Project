@@ -8,8 +8,8 @@ Chức năng:
 > - Gửi tin nhắn với các định dạng text, png, jpg,..
 
 Công nghệ sử dụng
-> WebRTC, vapor swift on server-side, swift.
-> IDE: Xcode(App), visual studio (Server).
+> - WebRTC, vapor swift on server-side, swift.
+> - IDE: Xcode(App), visual studio (Server).
 
 IDE: Build app và server trên Xcode 12.0.
 Folder App: app iOS.
@@ -28,13 +28,13 @@ Hướng dân build server. (Tham khảo: https://swift.org/package-manager/)
 > 4. run $ swift run trên terminal để run server trên localhost với port 8080.
 
 Yêu cầu khi tham gia làm bài tập nhóm: 
-> Thành viên nhớ gửi yêu cầu chỉnh sửa link git khi muốn push code để phân quyền hoặc gửi tài khoản mail đăng kí tài khoản github để được phân quyền.
-> Commit code hàng ngày lên link git của project này.
-> Tài khoản commit sử dụng mail cá nhân, có tên của mình.
-> Không đợi đến gần khi bảo vệ mới push hết code lên git.
-> Pull về trước khi code.
-> Phần app code dễ hiểu và dễ xây dựng hơn phần server, tham khảo https://developer.apple.com/documentation/uikit và đọc tài liệu hướng dẫn. (Nên xây dựng app trước, phần server hiện đã có api đăng kí đăng nhập, load tin nhắn, nhắn tin, kết bạn,..).
-> Trong mỗi project app và server đều có file README.md, hướng dẫn build, và có tài liệu tham khảo.
+> - Thành viên nhớ gửi yêu cầu chỉnh sửa link git khi muốn push code để phân quyền hoặc gửi tài khoản mail đăng kí tài khoản github để được phân quyền.
+> - Commit code hàng ngày lên link git của project này.
+> - Tài khoản commit sử dụng mail cá nhân, có tên của mình.
+> - Không đợi đến gần khi bảo vệ mới push hết code lên git.
+> - Pull về trước khi code.
+> - Phần app code dễ hiểu và dễ xây dựng hơn phần server, tham khảo https://developer.apple.com/documentation/uikit và đọc tài liệu hướng dẫn. (Nên xây dựng app trước, phần server hiện đã có api đăng kí đăng nhập, load tin nhắn, nhắn tin, kết bạn,..).
+> - Trong mỗi project app và server đều có file README.md, hướng dẫn build, và có tài liệu tham khảo.
 
 Tài liệu tham khảo:
 Swift package manager: https://swift.org/package-manager/
