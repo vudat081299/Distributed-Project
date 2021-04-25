@@ -39,6 +39,9 @@ import Vapor
 import Leaf
 import MongoKitten
 
+
+
+// MARK: - App.
 public func makeApp() throws -> Application {
     let app = Application()
 
@@ -60,12 +63,17 @@ public func makeApp() throws -> Application {
     return app
 }
 
-// MARK: - MongoDB.
+
+
+// MARK: - Context.
 struct HomepageContext: Codable {
     let posts: [ResolvedTimelinePost]
     let suggestedUsers: [UserMongoDB]
 }
 
+
+
+// MARK: - Route.
 func registerRoutes(to app: Application) {
     app.get { request -> EventLoopFuture<View> in
         // Get the "server" cookie's string value

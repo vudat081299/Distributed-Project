@@ -1,6 +1,6 @@
 ## Extension .yml or .yaml are the same.
 
-## TILApp
+## MARK: - TILApp
 ## Docker Compose file for Vapor
 ##
 ## Install Docker on your system to run and test
@@ -76,57 +76,66 @@
 #    ports:
 #      - '5432:5432'
 
-# MongoDB (using db)
-version: "3"
+## MARK: - MongoDB (using db)
+##  Ref: Raywenderlich MongoDB tutorial
+## Learn more: https://docs.docker.com/compose/reference/
+##
+##   Build images: docker-compose build
+##      Start app: docker-compose up app
+## Start database: docker-compose up db
+## Run migrations: docker-compose run migrate
+##       Stop all: docker-compose down (add -v to wipe db)
+##
+#version: "3"
+#
+#services:
+#  mongo-1:
+#    image: mongo:4.2.6
+#    ports:
+#      - "27017:27017"
+#    container_name: mongo-1
+#    hostname: mongo-1
+#    networks:
+#      - mongo_cluster
+#    command: mongod --replSet rs0
+#
+#  mongo-2:
+#    image: mongo:4.2.6
+#    ports:
+#      - "27018:27017"
+#    container_name: mongo-2
+#    hostname: mongo-2
+#    networks:
+#      - mongo_cluster
+#    command: mongod --replSet rs0
+#    depends_on:
+#      - mongo-1
+#
+#  mongo-3:
+#    image: mongo:4.2.6
+#    ports:
+#      - "27019:27017"
+#    container_name: mongo-3
+#    hostname: mongo-3
+#    networks:
+#      - mongo_cluster
+#    command: mongod --replSet rs0
+#    depends_on:
+#      - mongo-2
+#
+#  mongosetup:
+#    image: mongo:4.2.6
+#    networks:
+#    - mongo_cluster
+#    volumes:
+#    - ./scripts:/scripts
+#    command: bash -c "chmod +x /scripts/setup.sh && /scripts/setup.sh"
+#
+#networks:
+#  mongo_cluster:
+#    driver: bridge
 
-services:
-  mongo-1:
-    image: mongo:4.2.6
-    ports:
-      - "27017:27017"
-    container_name: mongo-1
-    hostname: mongo-1
-    networks:
-      - mongo_cluster
-    command: mongod --replSet rs0
-
-  mongo-2:
-    image: mongo:4.2.6
-    ports:
-      - "27018:27017"
-    container_name: mongo-2
-    hostname: mongo-2
-    networks:
-      - mongo_cluster
-    command: mongod --replSet rs0
-    depends_on:
-      - mongo-1
-
-  mongo-3:
-    image: mongo:4.2.6
-    ports:
-      - "27019:27017"
-    container_name: mongo-3
-    hostname: mongo-3
-    networks:
-      - mongo_cluster
-    command: mongod --replSet rs0
-    depends_on:
-      - mongo-2
-
-  mongosetup:
-    image: mongo:4.2.6
-    networks:
-    - mongo_cluster
-    volumes:
-    - ./scripts:/scripts
-    command: bash -c "chmod +x /scripts/setup.sh && /scripts/setup.sh"
-
-networks:
-  mongo_cluster:
-    driver: bridge
-
-# Default Postgres
+## MARK: - Default Postgres
 ## Docker Compose file for Vapor
 ##
 ## Install Docker on your system to run and test
@@ -202,7 +211,7 @@ networks:
 #    ports:
 #      - '5432:5432'
 
-## Default MongoDB
+## MARK: - Default MongoDB
 ## Docker Compose file for Vapor
 ##
 ## Install Docker on your system to run and test
@@ -266,3 +275,63 @@ networks:
 #    command: ["migrate", "--revert", "--yes"]
 #    deploy:
 #      replicas: 0
+
+
+## MARK: - Distributed project.
+## Distributed project - Social Messaging - MongoDB
+## Learn more: https://docs.docker.com/compose/reference/
+##
+##   Build images: docker-compose build
+##      Start app: docker-compose up app
+## Start database: docker-compose up db
+## Run migrations: docker-compose run migrate
+##       Stop all: docker-compose down (add -v to wipe db)
+##
+version: "3"
+
+services:
+  mongo-1:
+    image: mongo:4.2.6
+    ports:
+      - "27017:27017"
+    container_name: mongo-1
+    hostname: mongo-1
+    networks:
+      - mongo_cluster
+    command: mongod --replSet rs0
+
+  mongo-2:
+    image: mongo:4.2.6
+    ports:
+      - "27018:27017"
+    container_name: mongo-2
+    hostname: mongo-2
+    networks:
+      - mongo_cluster
+    command: mongod --replSet rs0
+    depends_on:
+      - mongo-1
+
+  mongo-3:
+    image: mongo:4.2.6
+    ports:
+      - "27019:27017"
+    container_name: mongo-3
+    hostname: mongo-3
+    networks:
+      - mongo_cluster
+    command: mongod --replSet rs0
+    depends_on:
+      - mongo-2
+
+  mongosetup:
+    image: mongo:4.2.6
+    networks:
+    - mongo_cluster
+    volumes:
+    - ./scripts:/scripts
+    command: bash -c "chmod +x /scripts/setup.sh && /scripts/setup.sh"
+
+networks:
+  mongo_cluster:
+    driver: bridge
