@@ -17,37 +17,37 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     
     let ray = try UserSM(
         _id: ObjectId(),
-        profile: UserProfile(
+        profile: UserProfileSM(
             firstName: "Ray",
             lastName: "Wenderlich"
         ),
-        credentials: EncryptedCredentials(
+        credentials: EncryptedCredentialsSM(
             username: "ray",
             password: "beachvacations"
         ),
         following: []
     )
     
-    let tim = try UserMongoDB(
+    let tim = try UserSM(
         _id: ObjectId(),
-        profile: UserProfile(
+        profile: UserProfileSM(
             firstName: "Tim",
             lastName: "Cordon"
         ),
-        credentials: EncryptedCredentials(
+        credentials: EncryptedCredentialsSM(
             username: "0xtim",
             password: "0xpassword"
         ),
         following: []
     )
     
-    let joannis = try UserMongoDB(
+    let joannis = try UserSM(
         _id: ObjectId(),
-        profile: UserProfile(
+        profile: UserProfileSM(
             firstName: "Joannis",
             lastName: "Orlandos"
         ),
-        credentials: EncryptedCredentials(
+        credentials: EncryptedCredentialsSM(
             username: "Joannis",
             password: "hunter2"
         ),
@@ -60,13 +60,13 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     ]
     
     let otherUsers = try names.map { (firstName, lastName) in
-        try UserMongoDB(
+        try UserSM(
             _id: ObjectId(),
-            profile: UserProfile(
+            profile: UserProfileSM(
                 firstName: firstName,
                 lastName: lastName
             ),
-            credentials: EncryptedCredentials(
+            credentials: EncryptedCredentialsSM(
                 username: "\(firstName).\(lastName)",
                 password: "1234"
             ),
@@ -74,10 +74,10 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
         )
     }
     
-    var posts = [TimelinePost]()
+    var posts = [Message]()
     
     posts.append(
-        TimelinePost(
+        Message(
             _id: ObjectId(),
             text: "Breaking news: Vapor formed into clouds",
             creationDate: Date(),
@@ -87,7 +87,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     )
     
     posts.append(
-        TimelinePost(
+        Message(
             _id: ObjectId(),
             text: "MongoKitten needs a sequel!",
             creationDate: Date(),
@@ -102,7 +102,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     ]
     
     let tutorialPosts = tutorialNames.map { tutorial in
-        TimelinePost(
+        Message(
             _id: ObjectId(),
             text: "A new tutorial on \(tutorial)!",
             creationDate: Date(),
@@ -112,10 +112,10 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     }
     
     posts.append(contentsOf: tutorialPosts)
-    let mainUser = try UserMongoDB(
+    let mainUser = try UserSM(
         _id: ObjectId(),
-        profile: UserProfile(firstName: "Me", lastName: ""),
-        credentials: EncryptedCredentials(
+        profile: UserProfileSM(firstName: "Me", lastName: ""),
+        credentials: EncryptedCredentialsSM(
             username: "me",
             password: "opensesame"
         ),
@@ -123,13 +123,13 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
         following: [ray._id]
     )
     
-    let createdAdmin = database[UserMongoDB.collection].insertEncoded(mainUser)
-    let createdUsers = database[UserMongoDB.collection].insertManyEncoded([
+    let createdAdmin = database[UserSM.collection].insertEncoded(mainUser)
+    let createdUsers = database[UserSM.collection].insertManyEncoded([
         ray,
         tim,
         joannis
     ] + otherUsers)
-    let createdPosts = database[TimelinePost.collection].insertManyEncoded(posts)
+    let createdPosts = database[Message.collection].insertManyEncoded(posts)
     
     _ = try createdAdmin.and(createdUsers).and(createdPosts).wait()
 }

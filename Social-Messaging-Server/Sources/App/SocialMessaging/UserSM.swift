@@ -8,7 +8,7 @@
 import MongoKitten
 import Vapor
 
-struct UserSMProfile: Codable {
+struct UserProfileSM: Codable {
     let firstName: String
     let lastName: String
 }
@@ -26,7 +26,7 @@ struct EncryptedCredentialsSM: Codable {
     // When stored in MongoDB, it is hashed using BCrypt
     let hashedPassword: String
     
-    public init(hashing credentials: Credentials) throws {
+    public init(hashing credentials: CredentialsSM) throws {
         self.username = credentials.username
         self.hashedPassword = try BCryptDigest().hash(credentials.password)
     }
@@ -45,7 +45,7 @@ struct UserSM: Codable {
     static let collection = "users"
 
     let _id: ObjectId
-    let profile: UserProfile
-    let credentials: EncryptedCredentials
+    let profile: UserProfileSM
+    let credentials: EncryptedCredentialsSM
     var following: [ObjectId]
 }

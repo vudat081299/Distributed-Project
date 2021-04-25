@@ -23,12 +23,12 @@ public func makeSocialMessApp() throws -> Application {
         fatalError("No MongoDB connection string is available in .env")
     }
     // connectionString should be MONGODB=mongodb://localhost:27017,localhost:27018,localhost:27019/server
-    try app.initializeMongoDB(connectionString: connectionString)
+    try app.initializeMongoDBSM(connectionString: connectionString)
     
     // Refer: /Users/vudat81299/Desktop/DiplomaProject/Server/Sources/App/routes.swift
     routeOfSocialMess(to: app) // Uncomment to run this service.
     
-    try createTestingUsers(inDatabase: app.mongoDB)
+    try createTestingUsersSM(inDatabase: app.mongoDBSM)
     
     return app
 }

@@ -21,16 +21,16 @@ extension Application {
             // Not having MongoDB would be a serious programming error
             // Without MongoDB, the application does not function
             // Therefore force unwrapping is used
-            return storage[MongoDBStorageKey.self]!
+            return storage[MongoDBStorageKeySM.self]!
         }
         set {
-            storage[MongoDBStorageKey.self] = newValue
+            storage[MongoDBStorageKeySM.self] = newValue
         }
     }
     
     // 3
     public func initializeMongoDBSM(connectionString: String) throws {
-        self.mongoDB = try MongoDatabase.connect(connectionString, on: self.eventLoopGroup).wait()
+        self.mongoDBSM = try MongoDatabase.connect(connectionString, on: self.eventLoopGroup).wait()
     }
 }
 
@@ -38,7 +38,7 @@ extension Request {
     // 4
     public var mongoDBSM: MongoDatabase {
         // 5
-        return application.mongoDB.hopped(to: eventLoop)
+        return application.mongoDBSM.hopped(to: eventLoop)
     }
 }
 

@@ -13,7 +13,7 @@ struct AccessTokenSM: JWTPayload {
     let expiration: ExpirationClaim
     let subject: ObjectId
     
-    init(subject: UserMongoDB) {
+    init(subject: UserSM) {
         // Expires in 24 hours
 //        self.expiration = ExpirationClaim(value: Date().addingTimeInterval(24 * 3600))
         self.expiration = ExpirationClaim(value: Date().addingTimeInterval(10 * 60))

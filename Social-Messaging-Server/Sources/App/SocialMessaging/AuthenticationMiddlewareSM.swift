@@ -21,8 +21,8 @@ struct AuthenticationMiddlewareSM: Middleware {
         
         do {
             // Only a valid token is needed
-            let accessToken = try request.application.jwt.verify(token, as: AccessToken.self)
-            request.accessToken = accessToken
+            let accessToken = try request.application.jwtSM.verify(token, as: AccessTokenSM.self)
+            request.accessTokenSM = accessToken
             
             return next.respond(to: request)
         } catch {
@@ -35,16 +35,16 @@ struct AuthenticationMiddlewareSM: Middleware {
 }
 
 extension Request {
-    var accessTokenSM: AccessToken? {
+    var accessTokenSM: AccessTokenSM? {
         get {
-            return self.storage[TokenStorageKey.self]
+            return self.storage[TokenStorageKeySM.self]
         }
         set {
-            self.storage[TokenStorageKey.self] = newValue
+            self.storage[TokenStorageKeySM.self] = newValue
         }
     }
 }
 
 private struct TokenStorageKeySM: StorageKey {
-    typealias Value = AccessToken
+    typealias Value = AccessTokenSM
 }
