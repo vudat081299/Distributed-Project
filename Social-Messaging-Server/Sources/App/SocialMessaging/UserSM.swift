@@ -11,6 +11,10 @@ import Vapor
 struct UserProfileSM: Codable {
     let firstName: String
     let lastName: String
+    let phoneNumber: String
+    let email: String
+    let dateOfBirth: String
+    let bio: String
 }
 
 struct CredentialsSM: Codable {
@@ -48,4 +52,5 @@ struct UserSM: Codable {
     let profile: UserProfileSM
     let credentials: EncryptedCredentialsSM
     var following: [ObjectId]
+    var followers: [ObjectId]
 }

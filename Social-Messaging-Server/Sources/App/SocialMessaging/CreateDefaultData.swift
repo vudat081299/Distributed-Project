@@ -18,40 +18,46 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     let ray = try UserSM(
         _id: ObjectId(),
         profile: UserProfileSM(
-            firstName: "Ray",
-            lastName: "Wenderlich"
+            firstName: "", lastName: "", phoneNumber: "", email: "",
+            dateOfBirth: "Ray",
+            bio: "Wenderlich"
         ),
         credentials: EncryptedCredentialsSM(
             username: "ray",
             password: "beachvacations"
         ),
-        following: []
+        following: [],
+        followers: []
     )
     
     let tim = try UserSM(
         _id: ObjectId(),
         profile: UserProfileSM(
-            firstName: "Tim",
-            lastName: "Cordon"
+            firstName: "", lastName: "", phoneNumber: "", email: "",
+            dateOfBirth: "Tim",
+            bio: "Cordon"
         ),
         credentials: EncryptedCredentialsSM(
             username: "0xtim",
             password: "0xpassword"
         ),
-        following: []
+        following: [],
+        followers: []
     )
     
     let joannis = try UserSM(
         _id: ObjectId(),
         profile: UserProfileSM(
-            firstName: "Joannis",
-            lastName: "Orlandos"
+            firstName: "", lastName: "", phoneNumber: "", email: "",
+            dateOfBirth: "Joannis",
+            bio: "Orlandos"
         ),
         credentials: EncryptedCredentialsSM(
             username: "Joannis",
             password: "hunter2"
         ),
-        following: []
+        following: [],
+        followers: []
     )
     
     let names = [
@@ -63,14 +69,16 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
         try UserSM(
             _id: ObjectId(),
             profile: UserProfileSM(
-                firstName: firstName,
-                lastName: lastName
+                firstName: "", lastName: "", phoneNumber: "", email: "",
+                dateOfBirth: firstName,
+                bio: lastName
             ),
             credentials: EncryptedCredentialsSM(
                 username: "\(firstName).\(lastName)",
                 password: "1234"
             ),
-            following: []
+            following: [],
+            followers: []
         )
     }
     
@@ -114,13 +122,16 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     posts.append(contentsOf: tutorialPosts)
     let mainUser = try UserSM(
         _id: ObjectId(),
-        profile: UserProfileSM(firstName: "Me", lastName: ""),
+        profile: UserProfileSM(firstName: "Me", lastName: "", phoneNumber: "", email: "",
+                               dateOfBirth: "",
+                               bio: ""),
         credentials: EncryptedCredentialsSM(
             username: "me",
             password: "opensesame"
         ),
         // One user is being followed to start off, so that the timeline isn't empty
-        following: [ray._id]
+        following: [ray._id],
+        followers: []
     )
     
     let createdAdmin = database[UserSM.collection].insertEncoded(mainUser)
