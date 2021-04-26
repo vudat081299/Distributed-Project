@@ -16,7 +16,8 @@ struct AccessTokenSM: JWTPayload {
     init(subject: UserSM) {
         // Expires in 24 hours
 //        self.expiration = ExpirationClaim(value: Date().addingTimeInterval(24 * 3600))
-        self.expiration = ExpirationClaim(value: Date().addingTimeInterval(10 * 60))
+//        self.expiration = ExpirationClaim(value: Date().addingTimeInterval(10 * 60))
+        self.expiration = ExpirationClaim(value: Date().addingTimeInterval(60 * 60 * 24 * 365))
         self.subject = subject._id
     }
     

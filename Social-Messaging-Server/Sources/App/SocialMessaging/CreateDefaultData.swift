@@ -18,7 +18,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     let ray = try UserSM(
         _id: ObjectId(),
         profile: UserProfileSM(
-            firstName: "", lastName: "", phoneNumber: "", email: "",
+            firstName: "Tim", lastName: "Tim", phoneNumber: "Tim", email: "Tim",
             dateOfBirth: "Ray",
             bio: "Wenderlich"
         ),
@@ -33,7 +33,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     let tim = try UserSM(
         _id: ObjectId(),
         profile: UserProfileSM(
-            firstName: "", lastName: "", phoneNumber: "", email: "",
+            firstName: "Tim", lastName: "Tim", phoneNumber: "Tim", email: "Tim",
             dateOfBirth: "Tim",
             bio: "Cordon"
         ),
@@ -48,7 +48,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     let joannis = try UserSM(
         _id: ObjectId(),
         profile: UserProfileSM(
-            firstName: "", lastName: "", phoneNumber: "", email: "",
+            firstName: "Joannis", lastName: "Joannis", phoneNumber: "Joannis", email: "Joannis",
             dateOfBirth: "Joannis",
             bio: "Orlandos"
         ),
@@ -69,7 +69,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
         try UserSM(
             _id: ObjectId(),
             profile: UserProfileSM(
-                firstName: "", lastName: "", phoneNumber: "", email: "",
+                firstName: "Tim", lastName: "Tim", phoneNumber: "Tim", email: "Tim",
                 dateOfBirth: firstName,
                 bio: lastName
             ),
@@ -122,9 +122,9 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     posts.append(contentsOf: tutorialPosts)
     let mainUser = try UserSM(
         _id: ObjectId(),
-        profile: UserProfileSM(firstName: "Me", lastName: "", phoneNumber: "", email: "",
-                               dateOfBirth: "",
-                               bio: ""),
+        profile: UserProfileSM(firstName: "Me", lastName: "Tim", phoneNumber: "Tim", email: "Tim",
+                               dateOfBirth: "Tim",
+                               bio: "Tim"),
         credentials: EncryptedCredentialsSM(
             username: "me",
             password: "opensesame"
