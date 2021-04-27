@@ -53,4 +53,36 @@ struct UserSM: Codable {
     let credentials: EncryptedCredentialsSM
     var following: [ObjectId]
     var followers: [ObjectId]
+    
+    func convertToPublicData() -> UserSMPublic {
+        return UserSMPublic(_id: _id, profile: profile)
+    }
+}
+
+extension Collection where Element == UserSM {
+  func convertToPublicData() -> [UserSMPublic] {
+    return self.map { $0.convertToPublicData() }
+  }
+}
+
+extension EventLoopFuture where Value == Array<UserSM> {
+  func convertToPublicData() -> EventLoopFuture<[UserSMPublic]> {
+    return self.map { $0.convertToPublicData() }
+  }
+}
+
+struct UserSMPublic: Codable, Content {
+    let _id: ObjectId
+    let profile: UserProfileSM
+}
+
+struct SignUpUser: Codable {
+    let firstName: String
+    let lastName: String
+    let phoneNumber: String
+    let email: String
+    let dateOfBirth: String
+    let bio: String
+    let username: String
+    let password: String
 }
