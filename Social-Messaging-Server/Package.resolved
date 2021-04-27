@@ -164,6 +164,15 @@
         }
       },
       {
+        "package": "SMTPKitten",
+        "repositoryURL": "https://github.com/autimatisering/SMTPKitten.git",
+        "state": {
+          "branch": null,
+          "revision": "34cbdc8aaa987dafe0ad714dffeb49afddd86ef9",
+          "version": "0.1.6"
+        }
+      },
+      {
         "package": "sql-kit",
         "repositoryURL": "https://github.com/vapor/sql-kit.git",
         "state": {
@@ -260,6 +269,15 @@
           "branch": null,
           "revision": "4ba5c2d2112005e4a07cedb43ec52b47175d67ce",
           "version": "4.41.3"
+        }
+      },
+      {
+        "package": "VaporSMTPKit",
+        "repositoryURL": "https://github.com/autimatisering/VaporSMTPKit.git",
+        "state": {
+          "branch": null,
+          "revision": "330f788e1349d871e87eaa517705d8595c8ef885",
+          "version": "1.0.3"
         }
       },
       {

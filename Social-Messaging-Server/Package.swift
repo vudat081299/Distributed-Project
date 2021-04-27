@@ -17,6 +17,7 @@ let package = Package(
         .package(name: "Markdown", url: "https://github.com/vudat81299/Markdown.git", from: "0.5.0"), // .md
 //        .package(name: "SwiftMarkdown", url: "https://github.com/vapor-community/markdown.git", from: "0.6.1"),
 //        .package(name: "LeafMarkdown", url: "https://github.com/vapor-community/leaf-markdown.git", .upToNextMajor(from: "3.0.0")),
+        .package(url: "https://github.com/autimatisering/VaporSMTPKit.git", from: "1.0.0"),
     ],
     targets: [
         .target(
@@ -31,6 +32,7 @@ let package = Package(
                 .product(name: "Markdown", package: "Markdown"),
 //                .product(name: "SwiftMarkdown", package: "SwiftMarkdown"),
 //                .product(name: "LeafMarkdown", package: "LeafMarkdown"),
+                .product(name: "VaporSMTPKit", package: "VaporSMTPKit"),
             ],
             swiftSettings: [
                 // Enable better optimizations when building in Release configuration. Despite the use of

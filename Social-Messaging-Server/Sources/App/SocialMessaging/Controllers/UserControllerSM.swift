@@ -7,12 +7,14 @@
 
 import Vapor
 import MongoKitten
+import SMTPKitten
 
 struct UserControllerSM: RouteCollection {
   func boot(routes: RoutesBuilder) throws {
     let usersRoutes = routes.grouped("api", "users")
     usersRoutes.post(use: signUp)
     usersRoutes.get(use: getAllUsers)
+    usersRoutes.get("mailgun", use: sendEmail)
 //    acronymsRoutes.get(":acronymID", use: getHandler)
 //    acronymsRoutes.get("search", use: searchHandler)
 //    acronymsRoutes.get("first", use: getFirstHandler)
