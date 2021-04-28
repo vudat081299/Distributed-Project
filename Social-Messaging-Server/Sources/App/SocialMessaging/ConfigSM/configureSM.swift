@@ -22,6 +22,10 @@ public func configureSM(_ app: Application) throws {
     // connectionString should be MONGODB=mongodb://localhost:27017,localhost:27018,localhost:27019/server
     try app.initializeMongoDBSM(connectionString: connectionString)
     
+    // MARK: - Config http server.
+    app.http.server.configuration.hostname = "172.20.10.5"
+    app.http.server.configuration.port = 8080
+    
     // Refer: /Users/vudat81299/Desktop/DiplomaProject/Server/Sources/App/routes.swift
     try routesSM(app) // Uncomment to run this service.
     
