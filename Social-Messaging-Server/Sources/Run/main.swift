@@ -40,5 +40,9 @@ import Vapor
 
 
 // MARK: - Social Messaging app.
-try makeSMApp().run()
+//try makeSMApp().run()
 
+
+
+// MARK: - RSMApp.
+try makeRSMApp().run()

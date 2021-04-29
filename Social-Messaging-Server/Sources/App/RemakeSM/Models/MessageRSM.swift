@@ -1,33 +1,35 @@
 //
-//  Message.swift
+//  File.swift
 //  
 //
-//  Created by Vũ Quý Đạt  on 25/04/2021.
+//  Created by Vũ Quý Đạt  on 28/04/2021.
 //
 
 import Foundation
 import Vapor
 import MongoKitten
 
-struct Message: Codable {
-    static let collection = "message"
+struct MessageRSM: Codable {
+    static let collection = "messagersm"
     
     let _id: ObjectId
     let text: String
     let creationDate: Date
     let fileId: ObjectId?
-    let creator: ObjectId
+    let creator: UUID
+    let sendTo: UUID
 }
 
-struct ResolvedMessage: Codable {
+struct ResolvedMessageRSM: Codable {
     let _id: ObjectId
     let text: String
     let creationDate: Date
     let fileId: ObjectId?
-    let creator: UserSM
+    let creator: UserRSM
+    let sendTo: UserRSM
 }
 
-struct CreateMessage: Codable {
+struct CreateMessageRSM: Codable {
     let text: String
     let file: Data?
 }
