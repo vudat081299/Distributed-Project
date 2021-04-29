@@ -17,16 +17,10 @@ func routesSM(_ app: Application) throws {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    app.webSocket("echo") { req, ws in
+        // Connected WebSocket.
+        print(ws)
+    }
     
     
     
