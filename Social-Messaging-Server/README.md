@@ -105,3 +105,8 @@ app.leaf.tags["markdown"] = Markdown()
 ```
 
 Don't forget to import LeafMarkdown in the file you register the tag with `import LeafMarkdown`.
+
+
+
+### generate swift .xcodeprj file for swift package
+$ swift package generate-xcodeproj

@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ConfigureRSM.swift
 //  
 //
 //  Created by Vũ Quý Đạt  on 28/04/2021.

@@ -41,6 +41,9 @@ final class UserRSM: Model, Content {
     @Field(key: "bio")
     var bio: String?
     
+    @Field(key: "privacy")
+    var privacy: String?
+    
     @Field(key: "profilePicture")
     var profilePicture: String?
     
@@ -53,8 +56,8 @@ final class UserRSM: Model, Content {
     
     init(id: UUID? = nil, name: String, username: String, password: String,
          lastName: String? = nil, phoneNumber: String? = nil, email: String? = nil,
-         dateOfBirth: String? = nil, bio: String? = nil, profilePicture: String? = nil,
-         idDevice: String? = nil
+         dateOfBirth: String? = nil, bio: String? = nil, privacy: String = "public",
+         profilePicture: String? = nil, idDevice: String? = nil
     ) {
         self.name = name
         self.username = username
@@ -65,6 +68,7 @@ final class UserRSM: Model, Content {
         self.email = email
         self.dateOfBirth = dateOfBirth
         self.bio = bio
+        self.privacy = privacy
         self.profilePicture = profilePicture
         self.idDevice = idDevice
     }
@@ -79,13 +83,14 @@ final class UserRSM: Model, Content {
         var email: String?
         var dateOfBirth: String?
         var bio: String?
+        var privacy: String
         var profilePicture: String?
         var idDevice: String?
         
         init(id: UUID?, name: String, username: String,
              lastName: String? = nil, phoneNumber: String? = nil, email: String? = nil,
-             dateOfBirth: String? = nil, bio: String? = nil, profilePicture: String? = nil,
-             idDevice: String? = nil
+             dateOfBirth: String? = nil, bio: String? = nil, privacy: String,
+             profilePicture: String? = nil, idDevice: String? = nil
         ) {
             self.id = id
             self.name = name
@@ -96,6 +101,7 @@ final class UserRSM: Model, Content {
             self.email = email
             self.dateOfBirth = dateOfBirth
             self.bio = bio
+            self.privacy = privacy
             self.profilePicture = profilePicture
             self.idDevice = idDevice
         }
@@ -106,7 +112,7 @@ extension UserRSM {
     func convertToPublic() -> UserRSM.Public {
         return UserRSM.Public(id: id, name: name, username: username,
                            lastName: lastName, phoneNumber: phoneNumber, email: email,
-                           dateOfBirth: dateOfBirth, bio: bio, profilePicture: profilePicture,
+                           dateOfBirth: dateOfBirth, bio: bio, privacy: privacy, profilePicture: profilePicture,
                            idDevice: idDevice)
     }
 }

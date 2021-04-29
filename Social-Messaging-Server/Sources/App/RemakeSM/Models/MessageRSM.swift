@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MessageRSM.swift
 //  
 //
 //  Created by Vũ Quý Đạt  on 28/04/2021.
@@ -13,20 +13,20 @@ struct MessageRSM: Codable {
     static let collection = "messagersm"
     
     let _id: ObjectId
+    let box: ObjectId
     let text: String
     let creationDate: Date
     let fileId: ObjectId?
     let creator: UUID
-    let sendTo: UUID
 }
 
 struct ResolvedMessageRSM: Codable {
     let _id: ObjectId
+    let box: Box
     let text: String
     let creationDate: Date
     let fileId: ObjectId?
     let creator: UserRSM
-    let sendTo: UserRSM
 }
 
 struct CreateMessageRSM: Codable {

@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  UsersControllerRSM.swift
 //  
 //
 //  Created by Vũ Quý Đạt  on 28/04/2021.
@@ -13,22 +13,36 @@ struct UsersControllerRSM: RouteCollection {
         usersRoute.get(use: getAllHandler)
         usersRoute.get(":userID", use: getHandler)
         
-        usersRoute.post("create", use: createHandler)
+        // Main
+        usersRoute.post("signup", use: signUp)
+        usersRoute.post("login", use: login)
         
         let basicAuthMiddleware = UserRSM.authenticator()
         let basicAuthGroup = usersRoute.grouped(basicAuthMiddleware)
-        basicAuthGroup.post("login", use: loginHandler)
+        basicAuthGroup.post("login", use: login)
         
         let tokenAuthMiddleware = Token.authenticator()
         let guardAuthMiddleware = UserRSM.guardMiddleware()
         let tokenAuthGroup = usersRoute.grouped(tokenAuthMiddleware, guardAuthMiddleware)
-        tokenAuthGroup.post(use: createHandler)
+        tokenAuthGroup.post(use: signUp)
     }
     
-    func createHandler(_ req: Request) throws -> EventLoopFuture<UserRSM.Public> {
+    func signUp(_ req: Request) throws -> EventLoopFuture<UserRSM.Public> {
         let user = try req.content.decode(UserRSM.self)
         user.password = try Bcrypt.hash(user.password)
         return user.save(on: req.db).map { user.convertToPublic() }
+    }
+    
+    func signIn(_ req: Request) throws -> EventLoopFuture<TokenRSM> {
+        let user = try req.auth.require(UserRSM.self)
+        let token = try TokenRSM.generate(for: user)
+        return token.save(on: req.db).map { token }
+    }
+    
+    func login(_ req: Request) throws -> EventLoopFuture<TokenRSM> {
+        let user = try req.auth.require(UserRSM.self)
+        let token = try TokenRSM.generate(for: user)
+        return token.save(on: req.db).map { token }
     }
     
     func getAllHandler(_ req: Request) -> EventLoopFuture<[UserRSM.Public]> {
@@ -37,11 +51,5 @@ struct UsersControllerRSM: RouteCollection {
     
     func getHandler(_ req: Request) -> EventLoopFuture<UserRSM.Public> {
         UserRSM.find(req.parameters.get("userID"), on: req.db).unwrap(or: Abort(.notFound)).convertToPublicRSM()
-    }
-    
-    func loginHandler(_ req: Request) throws -> EventLoopFuture<TokenRSM> {
-        let user = try req.auth.require(UserRSM.self)
-        let token = try TokenRSM.generate(for: user)
-        return token.save(on: req.db).map { token }
     }
 }
