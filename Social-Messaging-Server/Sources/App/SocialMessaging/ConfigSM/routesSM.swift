@@ -27,7 +27,7 @@ func routesSM(_ app: Application) throws {
     app.post("login") { request -> EventLoopFuture<Response> in
         let credentials = try request.content.decode(CredentialsSM.self)
         
-        return CoreEngine.findUser(
+        return CoreEngineSM.findUser(
             byUsername: credentials.username,
             inDatabase: request.mongoDBSM
         ).flatMap { user -> EventLoopFuture<Response> in
@@ -61,7 +61,7 @@ func routesSM(_ app: Application) throws {
     app.post("signup") { request -> EventLoopFuture<Response> in
         let credentials = try request.content.decode(CredentialsSM.self)
         
-        return CoreEngine.findUser(
+        return CoreEngineSM.findUser(
             byUsername: credentials.username,
             inDatabase: request.mongoDBSM
         ).flatMap { user -> EventLoopFuture<Response> in

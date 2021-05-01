@@ -13,7 +13,7 @@ struct UserProfileSM: Codable {
     let lastName: String
     let phoneNumber: String
     let email: String
-    let dateOfBirth: String
+    let dob: String
     let bio: String
 }
 
@@ -81,7 +81,7 @@ struct SignUpUser: Codable {
     let lastName: String
     let phoneNumber: String
     let email: String
-    let dateOfBirth: String
+    let dob: String
     let bio: String
     let username: String
     let password: String

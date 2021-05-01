@@ -35,14 +35,14 @@ final class UserRSM: Model, Content {
     @Field(key: "email")
     var email: String?
     
-    @Field(key: "dateOfBirth")
-    var dateOfBirth: String?
+    @Field(key: "dob")
+    var dob: String?
     
     @Field(key: "bio")
     var bio: String?
     
     @Field(key: "privacy")
-    var privacy: String?
+    var privacy: Privacy?
     
     @Field(key: "profilePicture")
     var profilePicture: String?
@@ -56,7 +56,7 @@ final class UserRSM: Model, Content {
     
     init(id: UUID? = nil, name: String, username: String, password: String,
          lastName: String? = nil, phoneNumber: String? = nil, email: String? = nil,
-         dateOfBirth: String? = nil, bio: String? = nil, privacy: String = "public",
+         dob: String? = nil, bio: String? = nil, privacy: Privacy = .publicState,
          profilePicture: String? = nil, idDevice: String? = nil
     ) {
         self.name = name
@@ -66,7 +66,7 @@ final class UserRSM: Model, Content {
         self.lastName = lastName
         self.phoneNumber = phoneNumber
         self.email = email
-        self.dateOfBirth = dateOfBirth
+        self.dob = dob
         self.bio = bio
         self.privacy = privacy
         self.profilePicture = profilePicture
@@ -81,15 +81,15 @@ final class UserRSM: Model, Content {
         var lastName: String?
         var phoneNumber: String?
         var email: String?
-        var dateOfBirth: String?
+        var dob: String?
         var bio: String?
-        var privacy: String
+        var privacy: Privacy?
         var profilePicture: String?
         var idDevice: String?
         
         init(id: UUID?, name: String, username: String,
              lastName: String? = nil, phoneNumber: String? = nil, email: String? = nil,
-             dateOfBirth: String? = nil, bio: String? = nil, privacy: String,
+             dob: String? = nil, bio: String? = nil, privacy: Privacy? = nil,
              profilePicture: String? = nil, idDevice: String? = nil
         ) {
             self.id = id
@@ -99,7 +99,7 @@ final class UserRSM: Model, Content {
             self.lastName = lastName
             self.phoneNumber = phoneNumber
             self.email = email
-            self.dateOfBirth = dateOfBirth
+            self.dob = dob
             self.bio = bio
             self.privacy = privacy
             self.profilePicture = profilePicture
@@ -112,7 +112,7 @@ extension UserRSM {
     func convertToPublic() -> UserRSM.Public {
         return UserRSM.Public(id: id, name: name, username: username,
                            lastName: lastName, phoneNumber: phoneNumber, email: email,
-                           dateOfBirth: dateOfBirth, bio: bio, privacy: privacy, profilePicture: profilePicture,
+                           dob: dob, bio: bio, privacy: privacy, profilePicture: profilePicture,
                            idDevice: idDevice)
     }
 }
@@ -148,3 +148,9 @@ extension UserRSM: ModelAuthenticatable {
 
 extension UserRSM: ModelSessionAuthenticatable {}
 extension UserRSM: ModelCredentialsAuthenticatable {}
+
+
+
+enum Privacy: String, Content {
+    case publicState, privateState
+}

@@ -13,14 +13,5 @@ import Vapor
 public func makeRSMApp() throws -> Application {
     let app = Application()
     try configureRSM(app)
-    
-
-    
-//    a() {
-//        print("11111")
-//    } c: {
-//        print("22222")
-//    }()
-    
     return app
 }

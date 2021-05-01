@@ -52,7 +52,7 @@ public func makeApp() throws -> Application {
     guard let connectionString = Environment.get("MONGODB") else {
         fatalError("No MongoDB connection string is available in .env")
     }
-    // connectionString should be MONGODB=mongodb://localhost:27017,localhost:27018,localhost:27019/server
+    // connectionString should be MONGODB=mongodb://localhost:27017,localhost:27018,localhost:27019/social-messaging-server
     try app.initializeMongoDB(connectionString: connectionString)
     
     // Refer: /Users/vudat81299/Desktop/DiplomaProject/Server/Sources/App/routes.swift

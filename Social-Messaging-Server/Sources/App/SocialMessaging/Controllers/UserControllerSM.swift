@@ -41,7 +41,7 @@ struct UserControllerSM: RouteCollection {
             lastName: signUpUserData.lastName,
             phoneNumber: signUpUserData.phoneNumber,
             email: signUpUserData.email,
-            dateOfBirth: signUpUserData.dateOfBirth,
+            dob: signUpUserData.dob,
             bio: signUpUserData.bio
         )
         let encryptedCredentialsSM = try EncryptedCredentialsSM(
@@ -56,11 +56,11 @@ struct UserControllerSM: RouteCollection {
             followers: []
         )
         
-        return CoreEngine.createUser(user, inDatabase: req.mongoDBSM).transform(to: .created)
+        return CoreEngineSM.createUser(user, inDatabase: req.mongoDBSM).transform(to: .created)
     }
     
     func getAllUsers(_ req: Request) throws -> EventLoopFuture<[UserSMPublic]> {
-        return CoreEngine.findAllUsers(inDatabase: req.mongoDBSM).map { users in
+        return CoreEngineSM.findAllUsers(inDatabase: req.mongoDBSM).map { users in
             return users.convertToPublicData()
         }
     }

@@ -1,7 +1,3 @@
-// Change file name to User.swift to use.
-
-
-
 //    Copyright (c) 2020 Razeware LLC
 //
 //    Permission is hereby granted, free of charge, to any person

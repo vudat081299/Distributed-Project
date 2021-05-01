@@ -19,7 +19,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
         _id: ObjectId(),
         profile: UserProfileSM(
             firstName: "Tim", lastName: "Tim", phoneNumber: "Tim", email: "Tim",
-            dateOfBirth: "Ray",
+            dob: "Ray",
             bio: "Wenderlich"
         ),
         credentials: EncryptedCredentialsSM(
@@ -34,7 +34,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
         _id: ObjectId(),
         profile: UserProfileSM(
             firstName: "Tim", lastName: "Tim", phoneNumber: "Tim", email: "Tim",
-            dateOfBirth: "Tim",
+            dob: "Tim",
             bio: "Cordon"
         ),
         credentials: EncryptedCredentialsSM(
@@ -49,7 +49,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
         _id: ObjectId(),
         profile: UserProfileSM(
             firstName: "Joannis", lastName: "Joannis", phoneNumber: "Joannis", email: "Joannis",
-            dateOfBirth: "Joannis",
+            dob: "Joannis",
             bio: "Orlandos"
         ),
         credentials: EncryptedCredentialsSM(
@@ -70,7 +70,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
             _id: ObjectId(),
             profile: UserProfileSM(
                 firstName: "Tim", lastName: "Tim", phoneNumber: "Tim", email: "Tim",
-                dateOfBirth: firstName,
+                dob: firstName,
                 bio: lastName
             ),
             credentials: EncryptedCredentialsSM(
@@ -123,7 +123,7 @@ func createTestingUsersSM(inDatabase database: MongoDatabase) throws {
     let mainUser = try UserSM(
         _id: ObjectId(),
         profile: UserProfileSM(firstName: "Me", lastName: "Tim", phoneNumber: "Tim", email: "Tim",
-                               dateOfBirth: "Tim",
+                               dob: "Tim",
                                bio: "Tim"),
         credentials: EncryptedCredentialsSM(
             username: "me",

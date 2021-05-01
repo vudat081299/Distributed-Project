@@ -1,5 +1,5 @@
 //
-//  CoreEngine.swift
+//  CoreEngineSM.swift
 //  
 //
 //  Created by Vũ Quý Đạt  on 25/04/2021.
@@ -8,7 +8,7 @@
 import Vapor
 import MongoKitten
 
-struct CoreEngine {
+struct CoreEngineSM {
     
     static func findUser(
         byUsername username: String,
@@ -79,9 +79,9 @@ struct CoreEngine {
 
 
 extension MongoCollection {
-    public func findAll<D: Decodable>(_ query: Document = [:], as type: D.Type) -> EventLoopFuture<[D]> {
-        return find(query).decode(type).allResults()
-    }
+//    public func findAll<D: Decodable>(_ query: Document = [:], as type: D.Type) -> EventLoopFuture<[D]> {
+//        return find(query).decode(type).allResults()
+//    }
 
 
 

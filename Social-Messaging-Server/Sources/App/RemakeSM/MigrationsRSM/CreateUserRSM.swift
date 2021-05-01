@@ -18,16 +18,17 @@ struct CreateUserRSM: Migration {
             .field("lastName", .string)
             .field("phoneNumber", .string)
             .field("email", .string)
-            .field("dateOfBirth", .string)
+            .field("dob", .string)
             .field("bio", .string)
+            .field("privacy", .string)
             .field("profilePicture", .string)
             .field("idDevice", .string)
             
-            .unique(on: "username")
             
             .unique(on: "phoneNumber")
             .unique(on: "email")
             .unique(on: "idDevice")
+            .unique(on: "username")
             .create()
     }
     

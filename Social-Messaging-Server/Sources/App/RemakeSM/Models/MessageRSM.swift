@@ -17,7 +17,7 @@ struct MessageRSM: Codable {
     let text: String
     let creationDate: Date
     let fileId: ObjectId?
-    let creator: UUID
+    let sender: UUID
 }
 
 struct ResolvedMessageRSM: Codable {
@@ -26,7 +26,7 @@ struct ResolvedMessageRSM: Codable {
     let text: String
     let creationDate: Date
     let fileId: ObjectId?
-    let creator: UserRSM
+    let sender: UserRSM
 }
 
 struct CreateMessageRSM: Codable {

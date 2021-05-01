@@ -1,19 +1,19 @@
+////
+////  TrackingSession.swift
+////  App
+////
+////  Created by Vu Quy Dat on 15/12/2020.
+////
 //
-//  TrackingSession.swift
-//  App
+//import Vapor
 //
-//  Created by Vu Quy Dat on 15/12/2020.
+//struct TrackingSession: Content, Hashable {
+//    let id: String
+//}
 //
-
-import Vapor
-
-struct TrackingSession: Content, Hashable {
-    let id: String
-}
-
-extension TrackingSession: Parameter {
-    static func resolveParameter(_ parameter: String, on container: Container) throws -> TrackingSession {
-        return .init(id: parameter)
-    }
-}
-
+//extension TrackingSession: Parameter {
+//    static func resolveParameter(_ parameter: String, on container: Container) throws -> TrackingSession {
+//        return .init(id: parameter)
+//    }
+//}
+//

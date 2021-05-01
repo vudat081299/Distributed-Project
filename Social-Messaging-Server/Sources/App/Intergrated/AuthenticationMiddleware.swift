@@ -1,3 +1,7 @@
+// For MongoDB app.
+
+
+
 //    Copyright (c) 2020 Razeware LLC
 //
 //    Permission is hereby granted, free of charge, to any person
@@ -35,32 +39,46 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 //    DEALINGS IN THE SOFTWARE.
 
-import JWTKit
 import Vapor
-import MongoKitten
 
-struct AccessToken: JWTPayload {
-    let expiration: ExpirationClaim
-    let subject: ObjectId
-    
-    init(subject: UserMongoDB) {
-        // Expires in 24 hours
-//        self.expiration = ExpirationClaim(value: Date().addingTimeInterval(24 * 3600))
-        self.expiration = ExpirationClaim(value: Date().addingTimeInterval(10 * 60))
-        self.subject = subject._id
-    }
-    
-    func verify(using signer: JWTSigner) throws {
-        try expiration.verifyNotExpired()
+struct AuthenticationMiddleware: Middleware {
+    func respond(
+        to request: Request,
+        chainingTo next: Responder
+    ) -> EventLoopFuture<Response> {
+        // Get the first cookie's string value
+        guard let token = request.headers.cookie?.all.first?.value.string else {
+            return request.view.render("login").flatMap { view in
+                return view.encodeResponse(for: request)
+            }
+        }
+        
+        do {
+            // Only a valid token is needed
+            let accessToken = try request.application.jwt.verify(token, as: AccessToken.self)
+            request.accessToken = accessToken
+            
+            return next.respond(to: request)
+        } catch {
+            let response = request.redirect(to: "/")
+            response.cookies["server"] = .expired
+            
+            return request.eventLoop.makeSucceededFuture(response)
+        }
     }
 }
 
-extension Application {
-    var jwt: JWTSigner {
-        // Generate a random key and use that on production/
-        // If this key is known by attackers, they can impersonate all users
-        return JWTSigner.hs512(
-            key: Array("yoursupersecretsecuritykey".utf8)
-        )
+extension Request {
+    var accessToken: AccessToken? {
+        get {
+            return self.storage[TokenStorageKey.self]
+        }
+        set {
+            self.storage[TokenStorageKey.self] = newValue
+        }
     }
+}
+
+private struct TokenStorageKey: StorageKey {
+    typealias Value = AccessToken
 }

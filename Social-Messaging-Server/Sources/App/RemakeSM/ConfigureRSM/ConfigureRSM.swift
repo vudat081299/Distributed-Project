@@ -9,6 +9,7 @@ import Fluent
 import FluentPostgresDriver
 import Leaf
 import Vapor
+import MongoKitten
 
 // configures your application
 public func configureRSM(_ app: Application) throws {
@@ -23,8 +24,8 @@ public func configureRSM(_ app: Application) throws {
 //    app.middleware.use(fileMiddleware)
     
     // MARK: - Config http server.
-//    app.http.server.configuration.hostname = "localhost"
-//    app.http.server.configuration.port = 8081
+    app.http.server.configuration.hostname = "localhost"
+    app.http.server.configuration.port = 8080
     
     // MARK: - Config DB.
     let databaseName: String
@@ -51,8 +52,12 @@ public func configureRSM(_ app: Application) throws {
         database: Environment.get("DATABASE_NAME") ?? databaseName
     ), as: .psql)
     
-    //
-//    try app.databases.use(.mongo(connectionString: "<connection string>"), as: .mongo)
+    // MARK: - Connect MongoDB.
+    guard let connectionString = Environment.get("MONGODB") else {
+        fatalError("No MongoDB connection string is available in .env")
+    }
+    // connectionString should be MONGODB=mongodb://localhost:27017,localhost:27018,localhost:27019/social-messaging-server
+    try app.initializeMongoDB(connectionString: connectionString)
 
     // MARK: - Table of DB.
     app.migrations.add(CreateUserRSM())
@@ -75,4 +80,60 @@ public func configureRSM(_ app: Application) throws {
 
     // register routes
     try routesRSM(app)
+//    try createTestingUserRSMNoSQL(inDatabase: app.mongoDB)
+}
+
+func createTestingUserRSMNoSQL(inDatabase database: MongoDatabase) throws {
+    let userCount = try database[UserRSMNoSQL.collection].count().wait()
+    if userCount > 0 {
+        // The testing users have already been created
+        return
+    }
+    
+    let ray = UserRSMNoSQL(
+        _id: ObjectId(),
+        idOnRDBMS: UUID(uuidString: "kljshval2h34klj2h")!,
+        name: "vudat81299",
+        username: "vudat81299",
+        lastName: "vudat81299",
+        bio: "vudat81299",
+        privacy: .publicState,
+        profilePicture: "vudat81299",
+        personalData: PersonalData(
+            phoneNumber: "vudat81299",
+            email: "vudat81299",
+            dob: "vudat81299",
+            idDevice: "vudat81299",
+            block: []),
+        following: [],
+        box: []
+    )
+    
+    
+    
+    let mainUser = UserRSMNoSQL(
+        _id: ObjectId(),
+        idOnRDBMS: UUID(uuidString: "trangsdfaksdflas")!,
+        name: "trang",
+        username: "trang",
+        lastName: "trang",
+        bio: "trang",
+        privacy: .publicState,
+        profilePicture: "trang",
+        personalData: PersonalData(
+            phoneNumber: "trang",
+            email: "trang",
+            dob: "trang",
+            idDevice: "trang",
+            block: []),
+        following: [],
+        box: []
+    )
+    
+    let createdAdmin = database[UserRSMNoSQL.collection].insertEncoded(mainUser)
+    let createdUsers = database[UserRSMNoSQL.collection].insertManyEncoded([
+        ray
+    ])
+    
+    _ = try createdAdmin.and(createdUsers).wait()
 }
