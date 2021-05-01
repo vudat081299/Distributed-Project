@@ -101,4 +101,11 @@ struct UsersControllerRSM: RouteCollection {
     func getHandler(_ req: Request) -> EventLoopFuture<UserRSM.Public> {
         UserRSM.find(req.parameters.get("userID"), on: req.db).unwrap(or: Abort(.notFound)).convertToPublicRSM()
     }
+    
+    
+    
+    // MARK: - Log out.
+    func logout(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        return try req.auth.require(Token.self).delete(on: req.db).transform(to: .noContent)
+    }
 }
