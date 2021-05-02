@@ -28,8 +28,10 @@ struct UserRSMNoSQL: Codable, Content {
     var username: String
     
     var lastName: String?
+    var gender: Gender?
     var bio: String?
     var privacy: Privacy?
+    var defaultAvartar: DefaultAvartar?
     var profilePicture: String?
     var personalData: PersonalData?
     
@@ -37,7 +39,7 @@ struct UserRSMNoSQL: Codable, Content {
     var box: [ObjectId]
     
     func convertToPublicData() -> UserRSMNoSQLPublic {
-        return UserRSMNoSQLPublic(_id: _id, personalData: personalData, idOnRDBMS: idOnRDBMS, name: name, username: username, lastName: lastName, bio: bio, privacy: privacy, profilePicture: profilePicture, following: following, box: box)
+        return UserRSMNoSQLPublic(_id: _id, personalData: personalData, idOnRDBMS: idOnRDBMS, name: name, username: username, lastName: lastName, gender: gender, bio: bio, privacy: privacy, defaultAvartar: DefaultAvartar, profilePicture: profilePicture, following: following, box: box)
     }
 }
 
@@ -63,8 +65,10 @@ struct UserRSMNoSQLPublic: Codable, Content {
     let username: String
     
     let lastName: String?
+    let gender: Gender?
     let bio: String?
     let privacy: Privacy?
+    let defaultAvartar: DefaultAvartar?
     let profilePicture: String?
     
     let following: [ObjectId]
@@ -81,8 +85,10 @@ struct CreateUserRSMNoSQL: Codable {
     var phoneNumber: String?
     var email: String?
     var dob: String?
+    var gender: Gender?
     var bio: String?
     var privacy: Privacy?
+    var defaultAvartar: DefaultAvartar?
     var profilePicture: String?
     var idDevice: String?
 }

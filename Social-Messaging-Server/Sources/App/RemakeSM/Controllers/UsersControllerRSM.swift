@@ -30,6 +30,7 @@ struct UsersControllerRSM: RouteCollection {
         tokenAuthGroup.post(use: signUp)
         tokenAuthGroup.delete(":userId", use: logout)
         tokenAuthGroup.delete("clearsessionuser", use: logoutAllDevices)
+        tokenAuthGroup.put(":userId", use: updateHandler)
     }
     
     // MARK: - Sign up.
@@ -56,8 +57,10 @@ struct UsersControllerRSM: RouteCollection {
             name: user.name,
             username: user.username,
             lastName: user.lastName,
+            gender: user.gender,
             bio: user.bio,
             privacy: user.privacy!,
+            defaultAvartar: user.defaultAvartar,
             profilePicture: user.profilePicture,
             personalData: personalData,
             following: [],
@@ -87,6 +90,31 @@ struct UsersControllerRSM: RouteCollection {
         return token.save(on: req.db).map { token }
     }
     
+    
+    
+    // MARK: - Edit profile.
+    func updateHandler(_ req: Request) throws -> EventLoopFuture<UserRSM.Public> {
+        let updateData = try req.content.decode(UpdateUserRSM.self)
+//        let user = try req.auth.require(User.self)
+//        let userID = try user.requireID()
+        return UserRSM.find(req.parameters.get("userId"), on: req.db)
+            .unwrap(or: Abort(.notFound)).flatMap { user in
+                user.name = updateData.name
+                user.username = updateData.username
+                user.lastName = updateData.lastName
+                user.phoneNumber = updateData.phoneNumber
+                user.email = updateData.email
+                user.dob = updateData.dob
+                user.gender = updateData.gender
+                user.bio = updateData.bio
+                user.privacy = updateData.privacy
+                user.defaultAvartar = updateData.defaultAvartar
+                user.idDevice = updateData.idDevice
+                return user.save(on: req.db).map {
+                    user.convertToPublic()
+                }
+            }
+    }
     
     
     

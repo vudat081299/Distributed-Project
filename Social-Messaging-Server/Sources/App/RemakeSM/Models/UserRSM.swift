@@ -38,11 +38,17 @@ final class UserRSM: Model, Content {
     @Field(key: "dob")
     var dob: String?
     
+    @Field(key: "gender")
+    var gender: Gender?
+    
     @Field(key: "bio")
     var bio: String?
     
     @Field(key: "privacy")
     var privacy: Privacy?
+    
+    @Field(key: "defaultAvartar")
+    var defaultAvartar: DefaultAvartar?
     
     @Field(key: "profilePicture")
     var profilePicture: String?
@@ -65,10 +71,20 @@ final class UserRSM: Model, Content {
     
     init() {}
     
-    init(id: UUID? = nil, name: String, username: String, password: String,
-         lastName: String? = nil, phoneNumber: String? = nil, email: String? = nil,
-         dob: String? = nil, bio: String? = nil, privacy: Privacy = .publicState,
-         profilePicture: String? = nil, idDevice: String? = nil, otp: String? = nil,
+    init(id: UUID? = nil,
+         name: String,
+         username: String,
+         password: String,
+         lastName: String? = nil,
+         phoneNumber: String? = nil,
+         email: String? = nil,
+         dob: String? = nil,
+         bio: String? = nil,
+         privacy: Privacy = .publicState,
+         defaultAvartar: DefaultAvartar = .female,
+         profilePicture: String? = nil,
+         idDevice: String? = nil,
+         otp: String? = nil,
          tsotp: String? = nil
     ) {
         self.name = name
@@ -81,6 +97,7 @@ final class UserRSM: Model, Content {
         self.dob = dob
         self.bio = bio
         self.privacy = privacy
+        self.defaultAvartar = defaultAvartar
         self.profilePicture = profilePicture
         self.idDevice = idDevice
         self.otp = otp
@@ -96,14 +113,17 @@ final class UserRSM: Model, Content {
         var phoneNumber: String?
         var email: String?
         var dob: String?
+        var gender: Gender?
         var bio: String?
         var privacy: Privacy?
+        var defaultAvartar: DefaultAvartar?
         var profilePicture: String?
         var idDevice: String?
         
         init(id: UUID?, name: String, username: String,
              lastName: String? = nil, phoneNumber: String? = nil, email: String? = nil,
-             dob: String? = nil, bio: String? = nil, privacy: Privacy? = nil,
+             dob: String? = nil, gender: Gender? = nil, bio: String? = nil, privacy: Privacy? = nil,
+             defaultAvartar: DefaultAvartar? = nil,
              profilePicture: String? = nil, idDevice: String? = nil
         ) {
             self.id = id
@@ -114,20 +134,48 @@ final class UserRSM: Model, Content {
             self.phoneNumber = phoneNumber
             self.email = email
             self.dob = dob
+            self.gender = gender
             self.bio = bio
             self.privacy = privacy
+            self.defaultAvartar = defaultAvartar
             self.profilePicture = profilePicture
             self.idDevice = idDevice
         }
     }
 }
 
+struct UpdateUserRSM: Content {
+    let name: String
+    let username: String
+    
+    let lastName: String?
+    let phoneNumber: String?
+    let email: String?
+    let dob: String?
+    let gender: Gender?
+    let bio: String?
+    let privacy: Privacy?
+    let defaultAvartar: DefaultAvartar?
+    let profilePicture: String?
+    let idDevice: String?
+}
+
 extension UserRSM {
     func convertToPublic() -> UserRSM.Public {
-        return UserRSM.Public(id: id, name: name, username: username,
-                           lastName: lastName, phoneNumber: phoneNumber, email: email,
-                           dob: dob, bio: bio, privacy: privacy, profilePicture: profilePicture,
-                           idDevice: idDevice)
+        return UserRSM.Public(id: id,
+                              name: name,
+                              username: username,
+                              lastName: lastName,
+                              phoneNumber: phoneNumber,
+                              email: email,
+                              dob: dob,
+                              gender: gender,
+                              bio: bio,
+                              privacy: privacy,
+                              defaultAvartar: defaultAvartar,
+                              profilePicture: profilePicture,
+                              idDevice: idDevice
+        )
     }
 }
 
@@ -165,6 +213,14 @@ extension UserRSM: ModelCredentialsAuthenticatable {}
 
 
 
-enum Privacy: String, Content {
+enum Privacy: Int, Content {
     case publicState, privateState
+}
+
+enum Gender: Int, Content {
+    case male, female, other
+}
+
+enum DefaultAvartar: Int, Content {
+    case engineer, pianist, male, female, other
 }
