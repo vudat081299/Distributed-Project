@@ -39,7 +39,7 @@ struct UserRSMNoSQL: Codable, Content {
     var box: [ObjectId]
     
     func convertToPublicData() -> UserRSMNoSQLPublic {
-        return UserRSMNoSQLPublic(_id: _id, personalData: personalData, idOnRDBMS: idOnRDBMS, name: name, username: username, lastName: lastName, gender: gender, bio: bio, privacy: privacy, defaultAvartar: DefaultAvartar, profilePicture: profilePicture, following: following, box: box)
+        return UserRSMNoSQLPublic(_id: _id, personalData: personalData, idOnRDBMS: idOnRDBMS, name: name, username: username, lastName: lastName, gender: gender, bio: bio, privacy: privacy, defaultAvartar: defaultAvartar, profilePicture: profilePicture, following: following, box: box)
     }
 }
 
