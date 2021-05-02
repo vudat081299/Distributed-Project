@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import Fluent
 import MongoKitten
 
 struct UsersControllerRSM: RouteCollection {
@@ -17,7 +18,6 @@ struct UsersControllerRSM: RouteCollection {
         
         // Main
         usersRoute.post("signup", use: signUp)
-        usersRoute.post("login", use: login)
         
         let basicAuthMiddleware = UserRSM.authenticator()
         let basicAuthGroup = usersRoute.grouped(basicAuthMiddleware)
@@ -26,7 +26,10 @@ struct UsersControllerRSM: RouteCollection {
         let tokenAuthMiddleware = TokenRSM.authenticator()
         let guardAuthMiddleware = UserRSM.guardMiddleware()
         let tokenAuthGroup = usersRoute.grouped(tokenAuthMiddleware, guardAuthMiddleware)
+        usersRoute.get("token", use: getAllToken)
         tokenAuthGroup.post(use: signUp)
+        tokenAuthGroup.delete(":userId", use: logout)
+        tokenAuthGroup.delete("clearsessionuser", use: logoutAllDevices)
     }
     
     // MARK: - Sign up.
@@ -65,7 +68,7 @@ struct UsersControllerRSM: RouteCollection {
     
     
     
-    // MARK: - Sign in.
+    // MARK: - Log in.
     func signIn(_ req: Request) throws -> EventLoopFuture<TokenRSM> {
         let user = try req.auth.require(UserRSM.self)
         let token = try TokenRSM.generate(for: user)
@@ -91,6 +94,9 @@ struct UsersControllerRSM: RouteCollection {
     func getAllHandler(_ req: Request) -> EventLoopFuture<[UserRSM.Public]> {
         UserRSM.query(on: req.db).all().convertToPublicRSM()
     }
+    func getAllToken(_ req: Request) -> EventLoopFuture<[TokenRSM]> {
+        TokenRSM.query(on: req.db).all()
+    }
     
     func getAllUserData(_ req: Request) -> EventLoopFuture<[UserRSMNoSQL]> {
         return CoreEngine.findAllUsers(inDatabase: req.mongoDB).map { users in
@@ -106,6 +112,27 @@ struct UsersControllerRSM: RouteCollection {
     
     // MARK: - Log out.
     func logout(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
-        return try req.auth.require(Token.self).delete(on: req.db).transform(to: .noContent)
+        let token = try req.auth.require(TokenRSM.self)
+        return TokenRSM.find(req.parameters.get("tokenId"), on: req.db)
+          .unwrap(or: Abort(.notFound))
+          .flatMap { token in
+            token.delete(on: req.db)
+              .transform(to: .noContent)
+        }
+    }
+    func logoutAllDevices(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+//        guard let userId = req.query[String.self, at: "userid"] else {
+//            throw Abort(.badRequest)
+//        }
+        let token = try req.auth.require(TokenRSM.self)
+        let user = try req.auth.require(UserRSM.self)
+        
+//        TokenRSM.query(on: req.db).filter(\.$type == .gasGiant)
+//        TokenRSM.query(on: req.db).filter(\.$user == token)
+        return TokenRSM.query(on: req.db).group(.or) { or in
+            or.filter(\.$user.$id == user.id!)
+        }.delete()
+        .transform(to: .ok)
+        
     }
 }

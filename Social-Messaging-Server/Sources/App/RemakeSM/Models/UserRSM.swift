@@ -50,14 +50,26 @@ final class UserRSM: Model, Content {
     @Field(key: "idDevice")
     var idDevice: String?
     
+    @Field(key: "otp")
+    var otp: String?
+    
+    @Field(key: "tsotp")
+    var tsotp: String?
+    
+    
+    
+//    @Timestamp(key: "created_at", on: .create)
+//    var createdAt: Date?
 
+    
     
     init() {}
     
     init(id: UUID? = nil, name: String, username: String, password: String,
          lastName: String? = nil, phoneNumber: String? = nil, email: String? = nil,
          dob: String? = nil, bio: String? = nil, privacy: Privacy = .publicState,
-         profilePicture: String? = nil, idDevice: String? = nil
+         profilePicture: String? = nil, idDevice: String? = nil, otp: String? = nil,
+         tsotp: String? = nil
     ) {
         self.name = name
         self.username = username
@@ -71,6 +83,8 @@ final class UserRSM: Model, Content {
         self.privacy = privacy
         self.profilePicture = profilePicture
         self.idDevice = idDevice
+        self.otp = otp
+        self.tsotp = tsotp
     }
     
     final class Public: Content {

@@ -23,6 +23,8 @@ struct CreateUserRSM: Migration {
             .field("privacy", .string)
             .field("profilePicture", .string)
             .field("idDevice", .string)
+            .field("otp", .string)
+            .field("tsotp", .string)
             
             
             .unique(on: "phoneNumber")
