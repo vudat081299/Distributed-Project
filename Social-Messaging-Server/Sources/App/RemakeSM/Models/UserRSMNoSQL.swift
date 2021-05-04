@@ -16,6 +16,8 @@ struct PersonalData: Codable {
     var block: [ObjectId]
     var otp: String?
     var tsotp: String?
+    
+    var gender: Gender?
 }
 
 struct UserRSMNoSQL: Codable, Content {
@@ -28,18 +30,34 @@ struct UserRSMNoSQL: Codable, Content {
     var username: String
     
     var lastName: String?
-    var gender: Gender?
     var bio: String?
+    var profilePicture: String?
+    
     var privacy: Privacy?
     var defaultAvartar: DefaultAvartar?
-    var profilePicture: String?
     var personalData: PersonalData?
     
     var following: [ObjectId]
     var box: [ObjectId]
     
     func convertToPublicData() -> UserRSMNoSQLPublic {
-        return UserRSMNoSQLPublic(_id: _id, personalData: personalData, idOnRDBMS: idOnRDBMS, name: name, username: username, lastName: lastName, gender: gender, bio: bio, privacy: privacy, defaultAvartar: defaultAvartar, profilePicture: profilePicture, following: following, box: box)
+        return UserRSMNoSQLPublic(_id: _id,
+                                  idOnRDBMS: idOnRDBMS,
+                                  
+                                  name: name,
+                                  username: username,
+                                  
+                                  lastName: lastName,
+                                  bio: bio,
+                                  profilePicture: profilePicture,
+                                  
+                                  privacy: privacy,
+                                  defaultAvartar: defaultAvartar,
+//                                  personalData: personalData,
+//
+//                                  following: following,
+//                                  box: box
+        )
     }
 }
 
@@ -56,23 +74,23 @@ extension EventLoopFuture where Value == Array<UserRSMNoSQL> {
 }
 
 struct UserRSMNoSQLPublic: Codable, Content {
-    let _id: ObjectId
-    let personalData: PersonalData?
     
+    let _id: ObjectId
     let idOnRDBMS: UUID
     
     let name: String
     let username: String
     
     let lastName: String?
-    let gender: Gender?
     let bio: String?
-    let privacy: Privacy?
-    let defaultAvartar: DefaultAvartar?
     let profilePicture: String?
     
-    let following: [ObjectId]
-    let box: [ObjectId]
+    let privacy: Privacy?
+    let defaultAvartar: DefaultAvartar?
+//    let personalData: PersonalData?
+    
+//    let following: [ObjectId]
+//    let box: [ObjectId]
 }
 
 struct CreateUserRSMNoSQL: Codable {
@@ -85,16 +103,18 @@ struct CreateUserRSMNoSQL: Codable {
     var phoneNumber: String?
     var email: String?
     var dob: String?
-    var gender: Gender?
     var bio: String?
-    var privacy: Privacy?
-    var defaultAvartar: DefaultAvartar?
     var profilePicture: String?
     var idDevice: String?
+    
+    var gender: Gender?
+    var privacy: Privacy?
+    var defaultAvartar: DefaultAvartar?
 }
 
 
 
+//
 // time handler
 func returnDistanceTime(distanceTime: TimeInterval) -> String{
 

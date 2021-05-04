@@ -25,7 +25,7 @@ final class UserRSM: Model, Content {
     
     
     
-    // MARK: -
+    // MARK: - .
     @Field(key: "lastName")
     var lastName: String?
     
@@ -38,17 +38,8 @@ final class UserRSM: Model, Content {
     @Field(key: "dob")
     var dob: String?
     
-    @Field(key: "gender")
-    var gender: Gender?
-    
     @Field(key: "bio")
     var bio: String?
-    
-    @Field(key: "privacy")
-    var privacy: Privacy?
-    
-    @Field(key: "defaultAvartar")
-    var defaultAvartar: DefaultAvartar?
     
     @Field(key: "profilePicture")
     var profilePicture: String?
@@ -64,6 +55,16 @@ final class UserRSM: Model, Content {
     
     
     
+    // MARK: - .
+    @Field(key: "gender")
+    var gender: Gender?
+
+    @Field(key: "privacy")
+    var privacy: Privacy?
+    
+    @Field(key: "defaultAvartar")
+    var defaultAvartar: DefaultAvartar?
+    
 //    @Timestamp(key: "created_at", on: .create)
 //    var createdAt: Date?
 
@@ -72,20 +73,24 @@ final class UserRSM: Model, Content {
     init() {}
     
     init(id: UUID? = nil,
+
          name: String,
          username: String,
          password: String,
+         
          lastName: String? = nil,
          phoneNumber: String? = nil,
          email: String? = nil,
          dob: String? = nil,
          bio: String? = nil,
-         privacy: Privacy = .publicState,
-         defaultAvartar: DefaultAvartar = .female,
          profilePicture: String? = nil,
          idDevice: String? = nil,
          otp: String? = nil,
-         tsotp: String? = nil
+         tsotp: String? = nil,
+         
+         gender: Gender? = .nonee,
+         privacy: Privacy = .publicState,
+         defaultAvartar: DefaultAvartar = .nonee
     ) {
         self.name = name
         self.username = username
@@ -96,14 +101,19 @@ final class UserRSM: Model, Content {
         self.email = email
         self.dob = dob
         self.bio = bio
-        self.privacy = privacy
-        self.defaultAvartar = defaultAvartar
         self.profilePicture = profilePicture
         self.idDevice = idDevice
         self.otp = otp
         self.tsotp = tsotp
+
+        self.gender = gender
+        self.privacy = privacy
+        self.defaultAvartar = defaultAvartar
     }
     
+    
+    
+    // MARK: - Public info.
     final class Public: Content {
         var id: UUID?
         var name: String
@@ -113,18 +123,29 @@ final class UserRSM: Model, Content {
         var phoneNumber: String?
         var email: String?
         var dob: String?
-        var gender: Gender?
         var bio: String?
-        var privacy: Privacy?
-        var defaultAvartar: DefaultAvartar?
         var profilePicture: String?
         var idDevice: String?
         
-        init(id: UUID?, name: String, username: String,
-             lastName: String? = nil, phoneNumber: String? = nil, email: String? = nil,
-             dob: String? = nil, gender: Gender? = nil, bio: String? = nil, privacy: Privacy? = nil,
-             defaultAvartar: DefaultAvartar? = nil,
-             profilePicture: String? = nil, idDevice: String? = nil
+        var gender: Gender?
+        var privacy: Privacy?
+        var defaultAvartar: DefaultAvartar?
+        
+        init(id: UUID?,
+             name: String,
+             username: String,
+             
+             lastName: String? = nil,
+             phoneNumber: String? = nil,
+             email: String? = nil,
+             dob: String? = nil,
+             bio: String? = nil,
+             profilePicture: String? = nil,
+             idDevice: String? = nil,
+             
+             gender: Gender? = nil,
+             privacy: Privacy? = nil,
+             defaultAvartar: DefaultAvartar? = nil
         ) {
             self.id = id
             self.name = name
@@ -134,12 +155,13 @@ final class UserRSM: Model, Content {
             self.phoneNumber = phoneNumber
             self.email = email
             self.dob = dob
-            self.gender = gender
             self.bio = bio
             self.privacy = privacy
+            self.idDevice = idDevice
+            
+            self.gender = gender
             self.defaultAvartar = defaultAvartar
             self.profilePicture = profilePicture
-            self.idDevice = idDevice
         }
     }
 }
@@ -152,12 +174,13 @@ struct UpdateUserRSM: Content {
     let phoneNumber: String?
     let email: String?
     let dob: String?
-    let gender: Gender?
     let bio: String?
-    let privacy: Privacy?
-    let defaultAvartar: DefaultAvartar?
     let profilePicture: String?
     let idDevice: String?
+    
+    let gender: Gender?
+    let privacy: Privacy?
+    let defaultAvartar: DefaultAvartar?
 }
 
 extension UserRSM {
@@ -165,16 +188,18 @@ extension UserRSM {
         return UserRSM.Public(id: id,
                               name: name,
                               username: username,
+                              
                               lastName: lastName,
                               phoneNumber: phoneNumber,
                               email: email,
                               dob: dob,
-                              gender: gender,
                               bio: bio,
-                              privacy: privacy,
-                              defaultAvartar: defaultAvartar,
                               profilePicture: profilePicture,
-                              idDevice: idDevice
+                              idDevice: idDevice,
+                              
+                              gender: gender,
+                              privacy: privacy,
+                              defaultAvartar: defaultAvartar
         )
     }
 }
@@ -213,14 +238,15 @@ extension UserRSM: ModelCredentialsAuthenticatable {}
 
 
 
+// MARK: - Enumeration.
 enum Privacy: Int, Content {
     case publicState, privateState
 }
 
 enum Gender: Int, Content {
-    case male, female, other
+    case male, female, other, nonee
 }
 
 enum DefaultAvartar: Int, Content {
-    case engineer, pianist, male, female, other
+    case engineer, pianist, male, female, other, nonee
 }

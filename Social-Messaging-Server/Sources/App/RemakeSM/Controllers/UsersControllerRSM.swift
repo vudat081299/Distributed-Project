@@ -50,14 +50,17 @@ struct UsersControllerRSM: RouteCollection {
             email: user.email,
             dob: user.dob,
             idDevice: user.idDevice,
-            block: [])
-        let userNoSQL = UserRSMNoSQL(
+            block: [],
+            gender: user.gender
+        )
+        let userNoSQL = UserRSMNoSQL(_id: ObjectId(), idOnRDBMS: id, name: <#T##String#>, username: <#T##String#>, lastName: <#T##String?#>, bio: <#T##String?#>, profilePicture: <#T##String?#>, privacy: <#T##Privacy?#>, defaultAvartar: <#T##DefaultAvartar?#>, personalData: <#T##PersonalData?#>, following: <#T##[ObjectId]#>, box: <#T##[ObjectId]#>)
+            
+            UserRSMNoSQL(
             _id: ObjectId(),
             idOnRDBMS: id,
             name: user.name,
             username: user.username,
             lastName: user.lastName,
-            gender: user.gender,
             bio: user.bio,
             privacy: user.privacy!,
             defaultAvartar: user.defaultAvartar,
