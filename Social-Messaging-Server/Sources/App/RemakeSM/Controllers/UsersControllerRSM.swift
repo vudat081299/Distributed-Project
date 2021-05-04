@@ -53,22 +53,19 @@ struct UsersControllerRSM: RouteCollection {
             block: [],
             gender: user.gender
         )
-        let userNoSQL = UserRSMNoSQL(_id: ObjectId(), idOnRDBMS: id, name: <#T##String#>, username: <#T##String#>, lastName: <#T##String?#>, bio: <#T##String?#>, profilePicture: <#T##String?#>, privacy: <#T##Privacy?#>, defaultAvartar: <#T##DefaultAvartar?#>, personalData: <#T##PersonalData?#>, following: <#T##[ObjectId]#>, box: <#T##[ObjectId]#>)
-            
-            UserRSMNoSQL(
-            _id: ObjectId(),
-            idOnRDBMS: id,
-            name: user.name,
-            username: user.username,
-            lastName: user.lastName,
-            bio: user.bio,
-            privacy: user.privacy!,
-            defaultAvartar: user.defaultAvartar,
-            profilePicture: user.profilePicture,
-            personalData: personalData,
-            following: [],
-            box: [])
-        
+        let userNoSQL = UserRSMNoSQL(_id: ObjectId(),
+                                     idOnRDBMS: id,
+                                     name: user.name,
+                                     username: user.username,
+                                     lastName: user.lastName,
+                                     bio: user.bio,
+                                     profilePicture: user.profilePicture,
+                                     privacy: user.privacy!,
+                                     defaultAvartar: user.defaultAvartar,
+                                     personalData: personalData,
+                                     following: [],
+                                     box: []
+        )
         CoreEngine.createUser(userNoSQL, inDatabase: req.mongoDB)
     }
     
