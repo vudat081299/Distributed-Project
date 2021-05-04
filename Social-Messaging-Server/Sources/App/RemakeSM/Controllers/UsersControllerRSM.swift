@@ -148,6 +148,7 @@ struct UsersControllerRSM: RouteCollection {
               .transform(to: .noContent)
         }
     }
+    
     func logoutAllDevices(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
 //        guard let userId = req.query[String.self, at: "userid"] else {
 //            throw Abort(.badRequest)
