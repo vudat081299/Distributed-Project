@@ -40,6 +40,7 @@ struct UsersControllerRSM: RouteCollection {
         
         
         // Main
+        tokenAuthGroup.post("confirmgmail", use: confirmGmail)
         
         tokenAuthGroup.post(use: signUp)
         
@@ -204,8 +205,8 @@ struct UsersControllerRSM: RouteCollection {
     
     
     // MARK: - Get data.
-    func getAllHandler(_ req: Request) -> EventLoopFuture<[UserRSM.Public]> {
-        UserRSM.query(on: req.db).all().convertToPublicRSM()
+    func getAllHandler(_ req: Request) -> EventLoopFuture<[UserRSM]> {
+        UserRSM.query(on: req.db).all()
     }
     func getAllToken(_ req: Request) -> EventLoopFuture<[TokenRSM]> {
         TokenRSM.query(on: req.db).all()
@@ -274,4 +275,19 @@ struct UsersControllerRSM: RouteCollection {
                     .transform(to: .noContent)
             }
     }
+    
+    // Confirm Gmail.
+    ///
+    func confirmGmail(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        let user = try req.auth.require(UserRSM.self)
+        let otp = String(Int.random(in: 10000000...99999999))
+        user.otp = otp
+        user.tsotp = TimeInterval.
+//        return user.save(on: req.db).map {
+//            user.convertToPublic()
+//        }
+        return try CoreEngine.sendEmail(req, recipient: user.email!, name: user.name, otp: otp).transform(to: .ok)
+    }
 }
+
+

@@ -7,6 +7,8 @@
 
 import Vapor
 import MongoKitten
+import VaporSMTPKit
+import SMTPKitten
 
 struct CoreEngine {
     
@@ -101,6 +103,33 @@ struct CoreEngine {
     
     
     
+    // MARK: - Mail sender.
+    static func sendEmail(
+        _ req: Request,
+        recipient: String,
+        name: String, otp: String
+    ) throws -> EventLoopFuture<String> {
+        let email = Mail(
+            from: "vudat081299@gmail.com",
+            to: [
+                MailUser(name: name, email: recipient)
+            ],
+            subject: "SM confirm",
+            contentType: .html,
+            text: """
+                <h1>Mã bảo mật dùng 1 lần cho tài khoản SM của bạn</h1>
+                Xin chào \(name),
+                Mã bảo mật của bạn là: <strong>\(otp)</strong>
+
+            """
+        )
+        
+        return req.application.sendMail(email, withCredentials: .default).map {
+            return "Check your mail!"
+        }
+    }
+
+    
     
     
     
@@ -168,7 +197,17 @@ extension MongoCollection {
     public func findUsers<D: Decodable>(_ query: Document = [:], as type: D.Type) -> EventLoopFuture<[D]> {
         return find(query).decode(type).allResults()
     }
-    
-
 }
 
+
+// MARK: - Support mail sender.
+extension SMTPCredentials {
+    static var `default`: SMTPCredentials {
+        return SMTPCredentials(
+            hostname: "smtp.gmail.com",
+            ssl: .startTLS(configuration: .default),
+            email: "vudat081299@gmail.com",
+            password: "Iviundhacthi8987g"
+        )
+    }
+}
