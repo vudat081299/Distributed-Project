@@ -20,8 +20,8 @@ final class TokenRSM: Model, Content {
     @Parent(key: "userID")
     var user: UserRSM
     
-//    @Timestamp(key: "created_at", on: .create)
-//    var createdAt: Date?
+    @Timestamp(key: "created_at", on: .create)
+    var createdAt: Date?
     
     init() {}
     

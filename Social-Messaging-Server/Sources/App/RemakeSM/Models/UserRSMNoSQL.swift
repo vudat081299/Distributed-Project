@@ -14,6 +14,8 @@ struct PersonalData: Codable {
     var dob: String?
     var idDevice: String?
     var block: [ObjectId]
+    
+    // Should separate otp to a RDBMS table in future.
     var otp: String?
     var tsotp: String?
     
@@ -31,14 +33,15 @@ struct UserRSMNoSQL: Codable, Content {
     
     var lastName: String?
     var bio: String?
-    var profilePicture: String?
+    var profilePicture: ObjectId?
     
     var privacy: Privacy?
     var defaultAvartar: DefaultAvartar?
     var personalData: PersonalData?
     
-    var following: [ObjectId]
-    var box: [ObjectId]
+    var followers: [ObjectId]
+    var followings: [ObjectId]
+    var boxes: [ObjectId]
     
     func convertToPublicData() -> UserRSMNoSQLPublic {
         return UserRSMNoSQLPublic(_id: _id,
@@ -52,11 +55,12 @@ struct UserRSMNoSQL: Codable, Content {
                                   profilePicture: profilePicture,
                                   
                                   privacy: privacy,
-                                  defaultAvartar: defaultAvartar,
+                                  defaultAvartar: defaultAvartar
 //                                  personalData: personalData,
 //
-//                                  following: following,
-//                                  box: box
+//                                  followers: followers,
+//                                  followings: followings,
+//                                  boxes: boxes
         )
     }
 }
@@ -83,14 +87,15 @@ struct UserRSMNoSQLPublic: Codable, Content {
     
     let lastName: String?
     let bio: String?
-    let profilePicture: String?
+    let profilePicture: ObjectId?
     
     let privacy: Privacy?
     let defaultAvartar: DefaultAvartar?
 //    let personalData: PersonalData?
     
-//    let following: [ObjectId]
-//    let box: [ObjectId]
+//    let followers: [ObjectId]
+//    let followings: [ObjectId]
+//    let boxes: [ObjectId]
 }
 
 struct CreateUserRSMNoSQL: Codable {
@@ -104,7 +109,7 @@ struct CreateUserRSMNoSQL: Codable {
     var email: String?
     var dob: String?
     var bio: String?
-    var profilePicture: String?
+    var profilePicture: ObjectId?
     var idDevice: String?
     
     var gender: Gender?

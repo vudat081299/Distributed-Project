@@ -26,6 +26,7 @@ public func configureRSM(_ app: Application) throws {
     // MARK: - Config http server.
     app.http.server.configuration.hostname = "localhost"
     app.http.server.configuration.port = 8080
+    app.routes.defaultMaxBodySize = "5mb"
     
     // MARK: - Config DB.
     let databaseName: String
@@ -83,6 +84,7 @@ public func configureRSM(_ app: Application) throws {
 //    try createTestingUserRSMNoSQL(inDatabase: app.mongoDB)
 }
 
+/*
 func createTestingUserRSMNoSQL(inDatabase database: MongoDatabase) throws {
     let userCount = try database[UserRSMNoSQL.collection].count().wait()
     if userCount > 0 {
@@ -137,3 +139,4 @@ func createTestingUserRSMNoSQL(inDatabase database: MongoDatabase) throws {
     
     _ = try createdAdmin.and(createdUsers).wait()
 }
+*/

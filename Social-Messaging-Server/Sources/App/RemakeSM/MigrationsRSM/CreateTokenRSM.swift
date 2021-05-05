@@ -13,7 +13,8 @@ struct CreateTokenRSM: Migration {
             .id()
             .field("value", .string, .required)
             .field("userID", .uuid, .required, .references("usersrsm", "id", onDelete: .cascade))
-            
+            .field("created_at", .date, .required)
+        
             .unique(on: "value")
             .create()
     }

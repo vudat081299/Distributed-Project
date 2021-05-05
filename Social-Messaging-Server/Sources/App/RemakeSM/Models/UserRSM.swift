@@ -8,6 +8,9 @@
 import Fluent
 import Vapor
 
+
+
+// MARK: - UserRSM.
 final class UserRSM: Model, Content {
     static let schema = "usersrsm"
     
@@ -41,17 +44,14 @@ final class UserRSM: Model, Content {
     @Field(key: "bio")
     var bio: String?
     
-    @Field(key: "profilePicture")
-    var profilePicture: String?
-    
     @Field(key: "idDevice")
     var idDevice: String?
     
     @Field(key: "otp")
     var otp: String?
     
-    @Field(key: "tsotp")
-    var tsotp: String?
+    @Timestamp(key: "tsotp", on: .create)
+    var tsotp: Date?
     
     
     
@@ -83,14 +83,13 @@ final class UserRSM: Model, Content {
          email: String? = nil,
          dob: String? = nil,
          bio: String? = nil,
-         profilePicture: String? = nil,
          idDevice: String? = nil,
          otp: String? = nil,
-         tsotp: String? = nil,
+         tsotp: Date? = nil,
          
          gender: Gender? = .nonee,
-         privacy: Privacy = .publicState,
-         defaultAvartar: DefaultAvartar = .nonee
+         privacy: Privacy? = .publicState,
+         defaultAvartar: DefaultAvartar? = .nonee
     ) {
         self.name = name
         self.username = username
@@ -101,7 +100,6 @@ final class UserRSM: Model, Content {
         self.email = email
         self.dob = dob
         self.bio = bio
-        self.profilePicture = profilePicture
         self.idDevice = idDevice
         self.otp = otp
         self.tsotp = tsotp
@@ -124,7 +122,6 @@ final class UserRSM: Model, Content {
         var email: String?
         var dob: String?
         var bio: String?
-        var profilePicture: String?
         var idDevice: String?
         
         var gender: Gender?
@@ -140,7 +137,6 @@ final class UserRSM: Model, Content {
              email: String? = nil,
              dob: String? = nil,
              bio: String? = nil,
-             profilePicture: String? = nil,
              idDevice: String? = nil,
              
              gender: Gender? = nil,
@@ -156,16 +152,18 @@ final class UserRSM: Model, Content {
             self.email = email
             self.dob = dob
             self.bio = bio
-            self.privacy = privacy
             self.idDevice = idDevice
             
             self.gender = gender
+            self.privacy = privacy
             self.defaultAvartar = defaultAvartar
-            self.profilePicture = profilePicture
         }
     }
 }
 
+
+
+// MARK: - Structs.
 struct UpdateUserRSM: Content {
     let name: String
     let username: String
@@ -175,7 +173,6 @@ struct UpdateUserRSM: Content {
     let email: String?
     let dob: String?
     let bio: String?
-    let profilePicture: String?
     let idDevice: String?
     
     let gender: Gender?
@@ -194,7 +191,6 @@ extension UserRSM {
                               email: email,
                               dob: dob,
                               bio: bio,
-                              profilePicture: profilePicture,
                               idDevice: idDevice,
                               
                               gender: gender,
@@ -204,6 +200,9 @@ extension UserRSM {
     }
 }
 
+
+
+// MARK: - Extensions.
 extension EventLoopFuture where Value: UserRSM {
     func convertToPublicRSM() -> EventLoopFuture<UserRSM.Public> {
         return self.map { user in
@@ -244,9 +243,9 @@ enum Privacy: Int, Content {
 }
 
 enum Gender: Int, Content {
-    case male, female, other, nonee
+    case nonee, male, female, other
 }
 
 enum DefaultAvartar: Int, Content {
-    case engineer, pianist, male, female, other, nonee
+    case nonee, engineer, pianist, male, female, other
 }

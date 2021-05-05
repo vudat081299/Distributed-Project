@@ -12,28 +12,47 @@ import MongoKitten
 struct UsersControllerRSM: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let usersRoute = routes.grouped("api", "users")
+        
+        // Test
+        usersRoute.get("token", use: getAllToken)
         usersRoute.get(use: getAllHandler)
         usersRoute.get("nosql", use: getAllUserData)
-        usersRoute.get(":userID", use: getHandler)
+        usersRoute.get(":userId", use: getHandler)
+        usersRoute.delete(":userId", "deleteUser", use: deleteHandler)
+        
         
         // Main
         usersRoute.post("signup", use: signUp)
+        usersRoute.get("searchusersnosql", ":searchterm", ":searchfield", use: searchUsersNoSQL)
+        usersRoute.get("searchuserssql", ":term", use: searchUsersSQL)
+        usersRoute.get("getavatar", ":avatarid", use: getAvatar)
         
         let basicAuthMiddleware = UserRSM.authenticator()
         let basicAuthGroup = usersRoute.grouped(basicAuthMiddleware)
+        // Main
         basicAuthGroup.post("login", use: login)
+        basicAuthGroup.post("signin", use: signIn)
         
         let tokenAuthMiddleware = TokenRSM.authenticator()
         let guardAuthMiddleware = UserRSM.guardMiddleware()
         let tokenAuthGroup = usersRoute.grouped(tokenAuthMiddleware, guardAuthMiddleware)
-        usersRoute.get("token", use: getAllToken)
+        // Test
+        
+        
+        // Main
+        
         tokenAuthGroup.post(use: signUp)
-        tokenAuthGroup.delete(":userId", use: logout)
+        
+        tokenAuthGroup.put("editprofile", use: editProfile)
+        tokenAuthGroup.put("updateavatar", use: updateAvatar)
+        
+        tokenAuthGroup.delete("logout", use: logout)
         tokenAuthGroup.delete("clearsessionuser", use: logoutAllDevices)
-        tokenAuthGroup.put(":userId", use: updateHandler)
+        
     }
     
     // MARK: - Sign up.
+    ///
     func signUp(_ req: Request) throws -> EventLoopFuture<UserRSM.Public> {
         let user = try req.content.decode(UserRSM.self)
         let userNoSQL = try req.content.decode(CreateUserRSMNoSQL.self)
@@ -55,16 +74,20 @@ struct UsersControllerRSM: RouteCollection {
         )
         let userNoSQL = UserRSMNoSQL(_id: ObjectId(),
                                      idOnRDBMS: id,
+                                     
                                      name: user.name,
                                      username: user.username,
+                                     
                                      lastName: user.lastName,
                                      bio: user.bio,
-                                     profilePicture: user.profilePicture,
-                                     privacy: user.privacy!,
+                                     
+                                     privacy: user.privacy,
                                      defaultAvartar: user.defaultAvartar,
                                      personalData: personalData,
-                                     following: [],
-                                     box: []
+                                     
+                                     followers: [],
+                                     followings: [],
+                                     boxes: []
         )
         CoreEngine.createUser(userNoSQL, inDatabase: req.mongoDB)
     }
@@ -72,48 +95,110 @@ struct UsersControllerRSM: RouteCollection {
     
     
     // MARK: - Log in.
+    ///
     func signIn(_ req: Request) throws -> EventLoopFuture<TokenRSM> {
         let user = try req.auth.require(UserRSM.self)
         let token = try TokenRSM.generate(for: user)
         return token.save(on: req.db).map { token }
     }
     
+    ///
     func login(_ req: Request) throws -> EventLoopFuture<TokenRSM> {
         let user = try req.auth.require(UserRSM.self)
         let token = try TokenRSM.generate(for: user)
         return token.save(on: req.db).map { token }
     }
     
-    func editProfile(_ req: Request) throws -> EventLoopFuture<TokenRSM> {
-        let user = try req.auth.require(UserRSM.self)
-        let token = try TokenRSM.generate(for: user)
-        return token.save(on: req.db).map { token }
+    
+    
+    // MARK: - Search users.
+    /// SQL
+    func searchUsersSQL(_ req: Request) throws -> EventLoopFuture<[UserRSM]> {
+        guard let searchTerm = req
+                .query[String.self, at: "term"] else {
+            throw Abort(.badRequest)
+        }
+        return UserRSM.query(on: req.db).group(.or) { or in
+            or.filter(\.$name == searchTerm)
+            or.filter(\.$lastName == searchTerm)
+            or.filter(\.$phoneNumber == searchTerm)
+            or.filter(\.$email == searchTerm)
+            or.filter(\.$dob == searchTerm)
+        }.all()
+    }
+    /// NoSQL
+    func searchUsersNoSQL(_ req: Request) throws -> EventLoopFuture<[UserRSMNoSQLPublic]> {
+        guard let searchTerm = req.parameters.get("searchterm"),
+              let searchField = req.parameters.get("searchfield"),
+              let searchCase = SearchUserCases(rawValue: searchField) else {
+            throw Abort(.badRequest)
+        }
+        return CoreEngine.findUsers(has: searchTerm, of: searchCase, inDatabase: req.mongoDB).convertToPublicData()
     }
     
     
     
     // MARK: - Edit profile.
-    func updateHandler(_ req: Request) throws -> EventLoopFuture<UserRSM.Public> {
+    ///
+    func editProfile(_ req: Request) throws -> EventLoopFuture<UserRSM.Public> {
         let updateData = try req.content.decode(UpdateUserRSM.self)
-//        let user = try req.auth.require(User.self)
+        let user = try req.auth.require(UserRSM.self)
 //        let userID = try user.requireID()
-        return UserRSM.find(req.parameters.get("userId"), on: req.db)
-            .unwrap(or: Abort(.notFound)).flatMap { user in
-                user.name = updateData.name
-                user.username = updateData.username
-                user.lastName = updateData.lastName
-                user.phoneNumber = updateData.phoneNumber
-                user.email = updateData.email
-                user.dob = updateData.dob
-                user.gender = updateData.gender
-                user.bio = updateData.bio
-                user.privacy = updateData.privacy
-                user.defaultAvartar = updateData.defaultAvartar
-                user.idDevice = updateData.idDevice
-                return user.save(on: req.db).map {
-                    user.convertToPublic()
-                }
+        
+//        return UserRSM
+//            .find(req.parameters.get("userId"), on: req.db)
+//            .unwrap(or: Abort(.notFound)).flatMap { user in
+//                user.name = updateData.name
+//                user.username = updateData.username
+//                user.lastName = updateData.lastName
+//                user.phoneNumber = updateData.phoneNumber
+//                user.email = updateData.email
+//                user.dob = updateData.dob
+//                user.gender = updateData.gender
+//                user.bio = updateData.bio
+//                user.privacy = updateData.privacy
+//                user.defaultAvartar = updateData.defaultAvartar
+//                user.idDevice = updateData.idDevice
+//                return user.save(on: req.db).map {
+//                    user.convertToPublic()
+//                }
+//            }
+        
+        user.name = updateData.name
+        user.username = updateData.username
+        user.lastName = updateData.lastName
+        user.phoneNumber = updateData.phoneNumber
+        user.email = updateData.email
+        user.dob = updateData.dob
+        user.gender = updateData.gender
+        user.bio = updateData.bio
+        user.privacy = updateData.privacy
+        user.defaultAvartar = updateData.defaultAvartar
+        user.idDevice = updateData.idDevice
+        
+        return user.save(on: req.db).map {
+            user.convertToPublic()
+        }
+    }
+    
+    ///
+    func updateAvatar(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        let user = try req.auth.require(UserRSM.self)
+        let updateAvatar = try req.content.decode(Avatar.self)
+        let fileId: EventLoopFuture<ObjectId?>
+        
+        if let file = updateAvatar.file, !file.isEmpty {
+            // Upload the attached file to GridFS
+            fileId = CoreEngine.uploadFile(file, inDatabase: req.mongoDB).map { fileId in
+                // This is needed to map the EventLoopFuture from `ObjectId` to `ObjectId?`
+                return fileId
             }
+        } else {
+            fileId = req.eventLoop.makeSucceededFuture(nil)
+        }
+        return fileId.flatMap { id in
+            return CoreEngine.updateAvatar(of: user.id!, with: id!, inDatabase: req.mongoDB)
+        }.transform(to: .ok)
     }
     
     
@@ -133,35 +218,60 @@ struct UsersControllerRSM: RouteCollection {
     }
     
     func getHandler(_ req: Request) -> EventLoopFuture<UserRSM.Public> {
-        UserRSM.find(req.parameters.get("userID"), on: req.db).unwrap(or: Abort(.notFound)).convertToPublicRSM()
+        UserRSM.find(req.parameters.get("userId"), on: req.db).unwrap(or: Abort(.notFound)).convertToPublicRSM()
+    }
+    
+    ///
+    func getAvatar(_ req: Request) throws -> EventLoopFuture<Response> {
+        guard let fileId = req.parameters.get("avatarid", as: ObjectId.self) else {
+            throw Abort(.notFound)
+        }
+        
+        return CoreEngine.readFile(byId: fileId, inDatabase: req.mongoDB).map { data in
+            return Response(body: Response.Body(data: data))
+        }
     }
     
     
     
     // MARK: - Log out.
+    ///
     func logout(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
         let token = try req.auth.require(TokenRSM.self)
-        return TokenRSM.find(req.parameters.get("tokenId"), on: req.db)
-          .unwrap(or: Abort(.notFound))
-          .flatMap { token in
-            token.delete(on: req.db)
-              .transform(to: .noContent)
-        }
+        try req.auth.logout(User.self)
+//        return TokenRSM.find(req.parameters.get("tokenId"), on: req.db)
+//          .unwrap(or: Abort(.notFound))
+//          .flatMap { token in
+//            token.delete(on: req.db)
+//              .transform(to: .noContent)
+//        }
+        
+        return token.delete(on: req.db).transform(to: .ok)
     }
     
+    ///
     func logoutAllDevices(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
-//        guard let userId = req.query[String.self, at: "userid"] else {
-//            throw Abort(.badRequest)
-//        }
         let token = try req.auth.require(TokenRSM.self)
+        try req.auth.logout(User.self)
         let user = try req.auth.require(UserRSM.self)
+        return TokenRSM
+            .query(on: req.db)
+            .group(.or) { or in
+                or.filter(\.$user.$id == user.id!)
+            }
+            .delete()
+            .transform(to: .ok)
         
-//        TokenRSM.query(on: req.db).filter(\.$type == .gasGiant)
-//        TokenRSM.query(on: req.db).filter(\.$user == token)
-        return TokenRSM.query(on: req.db).group(.or) { or in
-            or.filter(\.$user.$id == user.id!)
-        }.delete()
-        .transform(to: .ok)
-        
+    }
+    
+    func deleteHandler(_ req: Request) -> EventLoopFuture<HTTPStatus> {
+        UserRSM
+            .find(req.parameters.get("userId"), on: req.db)
+            .unwrap(or: Abort(.notFound))
+            .flatMap { acronym in
+                acronym
+                    .delete(on: req.db)
+                    .transform(to: .noContent)
+            }
     }
 }
