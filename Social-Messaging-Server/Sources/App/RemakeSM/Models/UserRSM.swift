@@ -26,6 +26,9 @@ final class UserRSM: Model, Content {
     @Field(key: "password")
     var password: String
     
+    @Timestamp(key: "created_at", on: .create)
+    var createdAt: Date?
+    
     
     
     // MARK: - .
@@ -50,8 +53,8 @@ final class UserRSM: Model, Content {
     @Field(key: "otp")
     var otp: String?
     
-    @Timestamp(key: "tsotp", on: .create)
-    var tsotp: Date?
+    @Field(key: "tsotp")
+    var tsotp: String?
     
     
     
@@ -85,7 +88,7 @@ final class UserRSM: Model, Content {
          bio: String? = nil,
          idDevice: String? = nil,
          otp: String? = nil,
-         tsotp: Date? = nil,
+         tsotp: String? = nil,
          
          gender: Gender? = .nonee,
          privacy: Privacy? = .publicState,

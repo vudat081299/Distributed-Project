@@ -14,6 +14,7 @@ struct CreateUserRSM: Migration {
             .field("name", .string, .required)
             .field("username", .string, .required)
             .field("password", .string, .required)
+            .field("created_at", .datetime, .required)
             
             .field("lastName", .string)
             .field("phoneNumber", .string)
@@ -22,7 +23,7 @@ struct CreateUserRSM: Migration {
             .field("bio", .string)
             .field("idDevice", .string)
             .field("otp", .string)
-            .field("tsotp", .date)
+            .field("tsotp", .string)
             
             .field("gender", .int)
             .field("privacy", .int)

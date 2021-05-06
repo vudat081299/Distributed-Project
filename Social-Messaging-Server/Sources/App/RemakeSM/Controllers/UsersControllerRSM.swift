@@ -41,6 +41,8 @@ struct UsersControllerRSM: RouteCollection {
         
         // Main
         tokenAuthGroup.post("confirmgmail", use: confirmGmail)
+        tokenAuthGroup.post("confirmotp", ":otp", use: confirmOTP)
+        
         
         tokenAuthGroup.post(use: signUp)
         
@@ -281,12 +283,37 @@ struct UsersControllerRSM: RouteCollection {
     func confirmGmail(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
         let user = try req.auth.require(UserRSM.self)
         let otp = String(Int.random(in: 10000000...99999999))
+
+        let formatter = DateFormatter()
+        formatter.dateStyle = .full
+        formatter.timeStyle = .full
+        formatter.timeZone = TimeZone.current
+        let current = formatter.string(from: Date())
+        let stringCurrent = formatter.date(from: current)
+        let inMillis = stringCurrent!.timeIntervalSince1970
+//        print(current)
+//        print(stringCurrent)
+        print(inMillis)
+
         user.otp = otp
-        user.tsotp = TimeInterval.
-//        return user.save(on: req.db).map {
-//            user.convertToPublic()
-//        }
-        return try CoreEngine.sendEmail(req, recipient: user.email!, name: user.name, otp: otp).transform(to: .ok)
+        user.tsotp = "\(inMillis)"
+        
+        return try CoreEngine.sendEmail(req, recipient: user.email!, name: user.name, otp: otp).map {_ in
+            user.save(on: req.db)
+            return .ok
+        }
+    }
+    
+    func confirmOTP(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        guard let otp = req.parameters.get("otp") else {
+            throw Abort(.badRequest)
+        }
+        let user = try req.auth.require(UserRSM.self)
+        if user.otp == otp {
+            throw Abort(.ok)
+        } else {
+            throw Abort(.notAcceptable)
+        }
     }
 }
 
