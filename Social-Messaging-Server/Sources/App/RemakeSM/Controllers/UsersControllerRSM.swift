@@ -278,7 +278,9 @@ struct UsersControllerRSM: RouteCollection {
             }
     }
     
-    // Confirm Gmail.
+    
+    
+    // MARK: - Confirm Gmail.
     ///
     func confirmGmail(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
         let user = try req.auth.require(UserRSM.self)
