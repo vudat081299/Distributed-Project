@@ -24,6 +24,8 @@ struct CreateUserRSM: Migration {
             .field("idDevice", .string)
             .field("otp", .string)
             .field("tsotp", .string)
+            .field("city", .string)
+            .field("country", .string)
             
             .field("gender", .int)
             .field("privacy", .int)

@@ -15,7 +15,6 @@ struct UsersControllerRSM: RouteCollection {
         
         // Test
         usersRoute.get("token", use: getAllToken)
-        usersRoute.get(use: getAllHandler)
         usersRoute.get("nosql", use: getAllUserData)
         usersRoute.get(":userId", use: getHandler)
         usersRoute.delete(":userId", "deleteUser", use: deleteHandler)
@@ -26,6 +25,7 @@ struct UsersControllerRSM: RouteCollection {
         usersRoute.get("searchusersnosql", ":searchterm", ":searchfield", use: searchUsersNoSQL)
         usersRoute.get("searchuserssql", ":term", use: searchUsersSQL)
         usersRoute.get("getavatar", ":avatarid", use: getAvatar)
+        usersRoute.get(use: getAllHandler) // load all users
         
         let basicAuthMiddleware = UserRSM.authenticator()
         let basicAuthGroup = usersRoute.grouped(basicAuthMiddleware)
@@ -42,7 +42,6 @@ struct UsersControllerRSM: RouteCollection {
         // Main
         tokenAuthGroup.post("confirmgmail", use: confirmGmail)
         tokenAuthGroup.post("confirmotp", ":otp", use: confirmOTP)
-        
         
         tokenAuthGroup.post(use: signUp)
         

@@ -57,7 +57,7 @@ struct UserRSMNoSQL: Codable, Content {
                                   privacy: privacy,
                                   defaultAvartar: defaultAvartar
 //                                  personalData: personalData,
-//
+
 //                                  followers: followers,
 //                                  followings: followings,
 //                                  boxes: boxes

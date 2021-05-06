@@ -56,6 +56,12 @@ final class UserRSM: Model, Content {
     @Field(key: "tsotp")
     var tsotp: String?
     
+    @Field(key: "city")
+    var city: String?
+    
+    @Field(key: "country")
+    var country: String?
+    
     
     
     // MARK: - .
