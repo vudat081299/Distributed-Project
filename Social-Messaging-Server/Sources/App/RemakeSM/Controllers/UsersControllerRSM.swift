@@ -21,11 +21,12 @@ struct UsersControllerRSM: RouteCollection {
         
         
         // Main
-        usersRoute.post("signup", use: signUp)
+        usersRoute.get(use: getAllHandler) // load all users
         usersRoute.get("searchusersnosql", ":searchterm", ":searchfield", use: searchUsersNoSQL)
         usersRoute.get("searchuserssql", ":term", use: searchUsersSQL)
         usersRoute.get("getavatar", ":avatarid", use: getAvatar)
-        usersRoute.get(use: getAllHandler) // load all users
+        
+        usersRoute.post("signup", use: signUp)
         
         let basicAuthMiddleware = UserRSM.authenticator()
         let basicAuthGroup = usersRoute.grouped(basicAuthMiddleware)
