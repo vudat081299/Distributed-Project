@@ -95,6 +95,8 @@ final class UserRSM: Model, Content {
          idDevice: String? = nil,
          otp: String? = nil,
          tsotp: String? = nil,
+         city: String? = nil,
+         country: String? = nil,
          
          gender: Gender? = .nonee,
          privacy: Privacy? = .publicState,
@@ -112,6 +114,8 @@ final class UserRSM: Model, Content {
         self.idDevice = idDevice
         self.otp = otp
         self.tsotp = tsotp
+        self.city = city
+        self.country = country
 
         self.gender = gender
         self.privacy = privacy
@@ -132,6 +136,8 @@ final class UserRSM: Model, Content {
         var dob: String?
         var bio: String?
         var idDevice: String?
+        var city: String?
+        var country: String?
         
         var gender: Gender?
         var privacy: Privacy?
@@ -147,6 +153,8 @@ final class UserRSM: Model, Content {
              dob: String? = nil,
              bio: String? = nil,
              idDevice: String? = nil,
+             city: String? = nil,
+             country: String? = nil,
              
              gender: Gender? = nil,
              privacy: Privacy? = nil,
@@ -183,6 +191,8 @@ struct UpdateUserRSM: Content {
     let dob: String?
     let bio: String?
     let idDevice: String?
+    let city: String?
+    let country: String?
     
     let gender: Gender?
     let privacy: Privacy?
@@ -201,6 +211,8 @@ extension UserRSM {
                               dob: dob,
                               bio: bio,
                               idDevice: idDevice,
+                              city: city,
+                              country: country,
                               
                               gender: gender,
                               privacy: privacy,
