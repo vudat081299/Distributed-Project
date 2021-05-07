@@ -5,19 +5,19 @@
 //  Created by Vũ Quý Đạt  on 28/04/2021.
 //
 
-import Foundation
 import Vapor
 import MongoKitten
 
-struct MessageRSM: Codable {
-    static let collection = "messagersm"
+struct Message: Codable, Content {
+    static let collection = "messages"
     
-    let _id: ObjectId
-    let box: ObjectId
-    let text: String
     let creationDate: Date
+    let text: String?
+    let boxId: ObjectId
     let fileId: ObjectId?
-    let sender: UUID
+    let type: MediaType?
+    let sender_id: ObjectId
+    let senderIdOnRDBMS: UUID
 }
 
 struct ResolvedMessageRSM: Codable {

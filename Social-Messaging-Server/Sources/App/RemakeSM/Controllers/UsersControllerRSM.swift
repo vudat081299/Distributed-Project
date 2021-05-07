@@ -179,8 +179,36 @@ struct UsersControllerRSM: RouteCollection {
         user.defaultAvartar = updateData.defaultAvartar
         user.idDevice = updateData.idDevice
         
+        let personalData = PersonalData(
+            phoneNumber: user.phoneNumber,
+            email: user.email,
+            dob: user.dob,
+            idDevice: user.idDevice,
+            block: [],
+            gender: user.gender
+        )
+        let userNoSQL = UserRSMNoSQL(_id: ObjectId(),
+                                     idOnRDBMS: user.id!,
+                                     
+                                     name: user.name,
+                                     username: user.username,
+                                     
+                                     lastName: user.lastName,
+                                     bio: user.bio,
+                                     
+                                     privacy: user.privacy,
+                                     defaultAvartar: user.defaultAvartar,
+                                     personalData: personalData,
+                                     
+                                     followers: [],
+                                     followings: [],
+                                     boxes: []
+        )
+        
+        
         return user.save(on: req.db).map {
-            user.convertToPublic()
+            CoreEngine.updateUserProfile(of: userNoSQL, inDatabase: req.mongoDB)
+            return user.convertToPublic()
         }
     }
     
@@ -215,7 +243,7 @@ struct UsersControllerRSM: RouteCollection {
     }
     
     func getAllUserData(_ req: Request) -> EventLoopFuture<[UserRSMNoSQL]> {
-        return CoreEngine.findAllUsers(inDatabase: req.mongoDB).map { users in
+        return CoreEngine.loadAllUsers(inDatabase: req.mongoDB).map { users in
             return users
         }
     }

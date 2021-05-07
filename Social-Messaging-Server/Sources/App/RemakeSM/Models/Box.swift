@@ -8,31 +8,28 @@
 import Vapor
 import MongoKitten
 
-struct BoxSpecification: Codable {
+struct BoxSpecification: Codable, Content {
     let name: String?
     let avartar: ObjectId?
     let creator: ObjectId
-    let createAt: Date
+    let createdAt: Date
 }
 
-struct Box: Codable {
+struct Box: Codable, Content {
     static let collection = "boxes"
 
     let _id: ObjectId
+    let type: BoxType
     let boxSpecification: BoxSpecification
     var members: [ObjectId]
-    var messages: [CreateMessageInBox]
+    var members_id: [UUID]
+//    var messages: [Messages]
 }
 
-struct CreateMessageInBox: Codable {
-    let creationDate: Date
-    let text: String?
-    let fileId: ObjectId?
-//    let type: MediaType?
-    let sender_id: ObjectId
-    let senderIdOnRDBMS: UUID
-}
-
-enum MediaType: String {
+enum MediaType: Int, Content {
     case png, text, jpg, mp4
+}
+
+enum BoxType: Int, Content {
+    case privateChat, group
 }

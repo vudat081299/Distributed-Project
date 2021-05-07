@@ -8,7 +8,7 @@
 import Vapor
 import MongoKitten
 
-struct PersonalData: Codable {
+struct PersonalData: Codable, Content {
     var phoneNumber: String?
     var email: String?
     var dob: String?
@@ -119,7 +119,7 @@ struct CreateUserRSMNoSQL: Codable {
 
 
 
-//
+// deprecated
 // time handler
 func returnDistanceTime(distanceTime: TimeInterval) -> String{
 

@@ -7,6 +7,8 @@
 
 import Vapor
 
+let sessionManager = TrackingSessionManager()
+
 final class TrackingSessionManager {
     // MARK: Member Variables
     
@@ -46,13 +48,13 @@ final class TrackingSessionManager {
 //        }
 //    }
     
-    func createTrackingSessionForIndivisualUser(for userID: String) -> ResponseCreateWS {
+    func createTrackingSessionForIndivisualUser(for userID: String) -> HTTPStatus {
         let session = TrackingSession(id: userID)
         guard self.sessions[session] == nil else {
-            return ResponseCreateWS(code: 1010, message: "Session already exist!", data: InFoWS(id: userID, roomID: 0))
+            return .ok
         }
         self.sessions[session] = []
-        return ResponseCreateWS(code: 1000, message: "Successful!", data: InFoWS(id: userID, roomID: 0))
+        return .ok
     }
     
     func createTrackingSession(for form: CreatedSocketForm, roomID: Int, userID: String) -> ResponseCreateWS {

@@ -12,34 +12,186 @@ import SMTPKitten
 
 struct CoreEngine {
     
+    
+    
+    // MARK: - Box
+    static func createBox(_ box: Box, inDatabase database: MongoDatabase) -> EventLoopFuture<Void> {
+        return database[UserRSMNoSQL.collection].insertEncoded(box).map { _ in }
+    }
+    
+    /// Load all boxes of User.
+    static func loadAllBoxesOfUser(
+        of userId: ObjectId,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<[Box]> {
+        return findUser(has: String(userId), of: "_id", inDatabase: database).flatMap { user in
+            let boxes = user.boxes
+            let boxesOfUserQuey: Document = [
+              "_id": [
+                "$in": boxes
+              ]
+            ]
+            return database[Box.collection].buildAggregate {
+                match(boxesOfUserQuey)
+                sort([
+                    "boxSpecification.createdAt": .descending
+                ])
+                project("messages")
+            }.decode(Box.self).allResults()
+        }
+    }
+    
+    static func findBox(
+        id: ObjectId,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<Box> {
+        return database[Box.collection]
+            .findOne(
+                "_id" == id,
+                as: Box.self
+            ).flatMapThrowing { box in
+                guard let box = box else {
+                    throw Abort(.notFound)
+                }
+                return box
+            }
+    }
+
+    
+    
+    
+    
+    
+    
+    // MARK: - Mess.
+    // load all messages of box.
+    static func loadAllMessagesInBox(
+        of boxId: ObjectId,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<[Message]> {
+        // method 1.
+//        return database[Message.collection]
+//            .findAll(
+//                "boxId" == boxId,
+//                as: Message.self
+//            )
+        
+        // method 2.
+        let queryMessages: Document = [
+            "boxId": [
+                "$eq": boxId
+            ]
+        ]
+        return database[Message.collection].aggregate([
+            .match(queryMessages),
+            sort([
+                "creationDate": .descending
+            ])
+        ]).decode(Message.self).allResults()
+        
+        // all messages in all boxes
+//        let usersCollection = database[Message.collection]
+//        let result = usersCollection.findAll(as: Message.self)
+//        return result
+    }
+    
+    static func loadMessagesInBoxInRange(
+        of boxId: ObjectId,
+        before: Date,
+        limit: Int,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<[Message]> {
+        let queryMessages: Document = [
+            "creationDate": [
+                "$gt": before
+            ]
+        ]
+        print(before)
+        return database[Message.collection].aggregate([
+            .match(queryMessages),
+            sort([
+                "creationDate": .descending
+            ]),
+            .limit(limit)
+        ]).decode(Message.self).allResults()
+    }
+    
+    
+    // create a mess in [].
+    //    static func mess(box id: ObjectId, mess content: Message, inDatabase database: MongoDatabase) -> EventLoopFuture<Void> {
+    //        return database[Box.collection].updateOne(
+    //            where: "_id" == id,
+    //            to: [
+    //                "$push": [
+    //                    "messages": content
+    //                ]
+    //            ]
+    //        ).map { _ in }
+    //    }
+    static func mess(_ content: Message, inDatabase database: MongoDatabase) -> EventLoopFuture<Void> {
+        return database[Message.collection].insertEncoded(content).map { _ in }
+    }
+    
+    /// Send file in mess.
+    static func uploadMediaOfMess(
+        _ file: Data,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<ObjectId> {
+        let id = ObjectId() // 1
+        let gridFS = GridFSBucket(in: database) // 2
+        return gridFS.upload(file, id: id).map { // 3
+          return id // 4
+        }
+    }
+    
+    static func readMediaOfMess(
+        byId id: ObjectId,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<Data> {
+        let gridFS = GridFSBucket(in: database)
+        
+        return gridFS.findFile(byId: id).flatMap { file in
+            guard let file = file else {
+                return database.eventLoop.makeFailedFuture(Abort(.notFound))
+            }
+            
+            return file.reader.readData()
+        }
+    }
+    
+    
+    
+    
+    
     // MARK: - User.
     static func createUser(_ user: UserRSMNoSQL, inDatabase database: MongoDatabase) -> EventLoopFuture<Void> {
         return database[UserRSMNoSQL.collection].insertEncoded(user).map { _ in }
     }
     
     static func findUser(
-        of id: UUID,
+        has searchTerm: String,
+        of field: String,
         inDatabase database: MongoDatabase
-    ) -> EventLoopFuture<[UserRSMNoSQL]> {
+    ) -> EventLoopFuture<UserRSMNoSQL> {
         return database[UserRSMNoSQL.collection]
-            .findUsers(
-                [
-                    "idOnRDBMS": [
-                        "$regex": id.uuidString
-                    ]
-                 
-                ],
-            as: UserRSMNoSQL.self
-        )
+            .findOne(
+                field == searchTerm,
+                as: UserRSMNoSQL.self
+            ).flatMapThrowing { user in
+                guard let user = user else {
+                    throw Abort(.notFound)
+                }
+                return user
+            }
     }
-    
+        
     static func findUsers(
         has searchTerm: String,
         of field: SearchUserCases,
         inDatabase database: MongoDatabase
     ) -> EventLoopFuture<[UserRSMNoSQL]> {
         return database[UserRSMNoSQL.collection]
-            .findUsers(
+            .findAll(
                 [
                     field.rawValue: [
                         "$regex": searchTerm
@@ -50,7 +202,32 @@ struct CoreEngine {
         )
     }
     
-    static func findAllUsers(
+    static func updateUserProfile(
+        of user: UserRSMNoSQL,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<Void> {
+        database[UserRSMNoSQL.collection]
+            .updateOne(
+                where: "idOnRDBMS" == user.idOnRDBMS.uuidString,
+                to: [
+                    "$set": [
+                        "name": user.name,
+                        "username": user.username,
+                        "lastName": user.lastName,
+                        "phoneNumber": user.personalData?.phoneNumber,
+                        "email": user.personalData?.email,
+                        "dob": user.personalData?.dob,
+                        "gender": "\(String(describing: user.personalData?.gender))",
+                        "bio": user.bio,
+                        "privacy": "\(String(describing: user.privacy))",
+                        "defaultAvartar": "\(String(describing: user.defaultAvartar))",
+                        "idDevice": user.personalData?.idDevice
+                    ]
+                ]
+            ).map { _ in }
+    }
+    
+    static func loadAllUsers(
         inDatabase database: MongoDatabase
     ) -> EventLoopFuture<[UserRSMNoSQL]> {
         let usersCollection = database[UserRSMNoSQL.collection]
@@ -192,9 +369,6 @@ struct CoreEngine {
 
 extension MongoCollection {
     public func findAll<D: Decodable>(_ query: Document = [:], as type: D.Type) -> EventLoopFuture<[D]> {
-        return find(query).decode(type).allResults()
-    }
-    public func findUsers<D: Decodable>(_ query: Document = [:], as type: D.Type) -> EventLoopFuture<[D]> {
         return find(query).decode(type).allResults()
     }
 }

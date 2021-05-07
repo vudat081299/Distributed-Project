@@ -1,5 +1,5 @@
 ////
-////  Message.swift
+////  MessageSM.swift
 ////  
 ////
 ////  Created by Vũ Quý Đạt  on 25/04/2021.
@@ -9,7 +9,7 @@
 //import Vapor
 //import MongoKitten
 //
-//struct Message: Codable {
+//struct MessageSM: Codable {
 //    static let collection = "message"
 //    
 //    let _id: ObjectId
