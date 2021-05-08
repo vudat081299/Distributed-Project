@@ -14,7 +14,7 @@ struct CoreEngine {
     
     
     
-    // MARK: - Box
+    // MARK: - Box handler.
     static func createBox(_ box: Box, inDatabase database: MongoDatabase) -> EventLoopFuture<Void> {
         return database[UserRSMNoSQL.collection].insertEncoded(box).map { _ in }
     }
@@ -59,11 +59,7 @@ struct CoreEngine {
 
     
     
-    
-    
-    
-    
-    // MARK: - Mess.
+    // MARK: - Mess handler.
     // load all messages of box.
     static func loadAllMessagesInBox(
         of boxId: ObjectId,
@@ -161,9 +157,7 @@ struct CoreEngine {
     
     
     
-    
-    
-    // MARK: - User.
+    // MARK: - User handler.
     static func createUser(_ user: UserRSMNoSQL, inDatabase database: MongoDatabase) -> EventLoopFuture<Void> {
         return database[UserRSMNoSQL.collection].insertEncoded(user).map { _ in }
     }
@@ -251,7 +245,9 @@ struct CoreEngine {
         ).map { _ in }
     }
     
-    // MARK: - File interact.
+    
+    
+    // MARK: - File handler.
     static func uploadFile(
         _ file: Data,
         inDatabase database: MongoDatabase
@@ -280,7 +276,7 @@ struct CoreEngine {
     
     
     
-    // MARK: - Mail sender.
+    // MARK: - Mail Handler.
     static func sendEmail(
         _ req: Request,
         recipient: String,
