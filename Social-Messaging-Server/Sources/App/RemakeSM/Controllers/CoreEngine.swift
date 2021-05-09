@@ -133,7 +133,7 @@ struct CoreEngine {
     static func loadMessagesInBoxInRange(
         of boxId: ObjectId,
         before: Date,
-        limit: Int,
+        limit: Int = 60,
         inDatabase database: MongoDatabase
     ) -> EventLoopFuture<[Message]> {
         let queryMessages: Document = [
