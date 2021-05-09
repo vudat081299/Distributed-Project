@@ -56,17 +56,18 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket) {
 //        }
         
         do {
-            let mess = try JSONDecoder().decode(CreateMessage.self, from: jsonData)
-            print(mess)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+//
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+//            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+            let mess = try decoder.decode(CreateMessage.self, from: jsonData)
             
-            let box = CoreEngine.findBox(
-                id: mess.boxId,
-                inDatabase: req.mongoDB
-            )
             
             // Save mess.
             let createMessageInBox = Message(
-                creationDate:mess.creationDate,
+                creationDate: mess.creationDate,
                 text: mess.text,
                 boxId: mess.boxId,
                 fileId: mess.fileId,
@@ -79,6 +80,12 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket) {
                 inDatabase: req.mongoDB
             )
             
+//            CoreEngine.findBox(
+//                id: mess.boxId,
+//                inDatabase: req.mongoDB
+//            ).map { box in
+                webSocketPerUserManager.notifyMess(to: mess.members, content: createMessageInBox)
+//            }
             
         } catch {
             print(error.localizedDescription)
@@ -109,4 +116,6 @@ struct CreateMessage: Codable {
     let type: MediaType
     let sender_id: ObjectId
     let senderIdOnRDBMS: UUID
+    
+    let members: [UUID]
 }

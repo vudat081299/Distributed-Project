@@ -14,18 +14,20 @@ final class WebSocketPerUserManager {
     var listWS: [WebSocket] = []
     // MARK: Observer Interactions
     
+    var dictionary: [String: WebSocket] = [:]
+    
     func add(ws: WebSocket, to userId: String) {
-        sessions[userId] = ws
+        dictionary[userId] = ws
         listWS.append(ws)
     }
     
     func notifyMess(to userIds: [UUID], content: Message) {
         userIds.forEach { id in
-            sessions[id.uuidString]!.send(content)
+            dictionary[id.uuidString]!.send(content)
         }
-        listWS.forEach { ws in
-            ws.send(content)
-        }
+//        listWS.forEach { ws in
+//            ws.send(content)
+//        }
     }
     
 //    func remove(listener: WebSocket, from session: TrackingSession) {

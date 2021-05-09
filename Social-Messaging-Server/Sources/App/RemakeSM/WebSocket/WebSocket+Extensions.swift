@@ -18,6 +18,6 @@ extension WebSocket {
 //            [UInt8](UnsafeBufferPointer(start: $0, count: data.count))
 //        }
         
-        send(raw: data, opcode: .text, fin: false)
+        send(raw: data, opcode: .text, fin: true)
     }
 }

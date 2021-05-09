@@ -13,18 +13,49 @@ struct MessagesController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let acronymsRoutes = routes.grouped("api", "mess")
         
-        let tokenAuthMiddleware = Token.authenticator()
-        let guardAuthMiddleware = User.guardMiddleware()
+        let tokenAuthMiddleware = TokenRSM.authenticator()
+        let guardAuthMiddleware = UserRSM.guardMiddleware()
         let tokenAuthGroup = acronymsRoutes.grouped(tokenAuthMiddleware, guardAuthMiddleware)
         
         
         
         // Main
-        acronymsRoutes.get(use: loadAllBoxesOfUser)
+        tokenAuthGroup.post("box", use: createBox)
+        
+        
+        tokenAuthGroup.get(use: loadAllBoxesOfUser)
+        acronymsRoutes.get("all", use: loadAllBoxes)
+        
         acronymsRoutes.get(":boxId", use: loadAllMessagesInBox)
         acronymsRoutes.get("getmessageinrange", ":boxId", ":before", ":limit", use: loadAllMessagesInBoxInRange)
         
         
+    }
+    
+    func createBox(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        let user = try req.auth.require(UserRSM.self)
+        let data = try req.content.decode(CreateBox.self)
+        var members = data.members
+        members.append(user.id!)
+        
+        let boxSpecification = BoxSpecification(
+            name: "", avartar: nil,
+            creator: user.id!,
+            creator_id: data.creator_id,
+            createdAt: data.createdAt
+        )
+        let box = Box(
+            _id: ObjectId(),
+            type: data.type,
+            boxSpecification: boxSpecification,
+            members: members,
+            members_id: data.members_id
+        )
+        return CoreEngine.createBox(box, inDatabase: req.mongoDB)
+    }
+    
+    func loadAllBoxes(_ req: Request) throws -> EventLoopFuture<[Box]> {
+        return CoreEngine.loadAllBoxes(inDatabase: req.mongoDB)
     }
     
     func loadAllBoxesOfUser(_ req: Request) throws -> EventLoopFuture<[Box]> {
@@ -57,7 +88,7 @@ struct MessagesController: RouteCollection {
         print(myNSDate)
         return CoreEngine.loadMessagesInBoxInRange(
             of: boxId,
-            before: Date(),
+            before: myNSDate,
             limit: limit,
             inDatabase: req.mongoDB
         )

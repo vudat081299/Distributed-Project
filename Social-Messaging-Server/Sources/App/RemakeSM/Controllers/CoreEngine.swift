@@ -15,8 +15,16 @@ struct CoreEngine {
     
     
     // MARK: - Box
-    static func createBox(_ box: Box, inDatabase database: MongoDatabase) -> EventLoopFuture<Void> {
-        return database[UserRSMNoSQL.collection].insertEncoded(box).map { _ in }
+    static func createBox(_ box: Box, inDatabase database: MongoDatabase) -> EventLoopFuture<HTTPStatus> {
+        return database[Box.collection].insertEncoded(box).map { _ in }.transform(to: .ok)
+    }
+    
+    static func loadAllBoxes(
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<[Box]> {
+        let usersCollection = database[Box.collection]
+        let result = usersCollection.findAll(as: Box.self)
+        return result
     }
     
     /// Load all boxes of User.
@@ -56,7 +64,38 @@ struct CoreEngine {
                 return box
             }
     }
-
+    
+//    static func updateBoxInfo(
+//        of box: Box,
+//        inDatabase database: MongoDatabase
+//    ) -> EventLoopFuture<Void> {
+//        database[Box.collection]
+//            .updateOne(
+//                where: "_id" == box._id,
+//                to: [
+//                    "$set": [
+//                        "type": box.type
+////                        "boxSpecification.name": box.boxSpecification.name,
+////                        "boxSpecification.avatar": box.boxSpecification.avartar
+//                    ]
+//                ]
+//            ).map { _ in }
+//    }
+    
+//    static func followUser(
+//        _ account: UserMongoDB,
+//        fromAccount follower: UserMongoDB,
+//        inDatabase database: MongoDatabase
+//    ) -> EventLoopFuture<Void> {
+//        return database[UserMongoDB.collection].updateOne(
+//            where: "_id" == follower._id,
+//            to: [
+//                "$push": [
+//                    "following": account._id
+//                ]
+//            ]
+//        ).map { _ in }
+//    }
     
     
     
@@ -103,10 +142,12 @@ struct CoreEngine {
     ) -> EventLoopFuture<[Message]> {
         let queryMessages: Document = [
             "creationDate": [
-                "$gt": before
+                "$lt": before
+            ],
+            "boxId": [
+                "$eq": boxId
             ]
         ]
-        print(before)
         return database[Message.collection].aggregate([
             .match(queryMessages),
             sort([
@@ -128,8 +169,8 @@ struct CoreEngine {
     //            ]
     //        ).map { _ in }
     //    }
-    static func mess(_ content: Message, inDatabase database: MongoDatabase) -> EventLoopFuture<Void> {
-        return database[Message.collection].insertEncoded(content).map { _ in }
+    static func mess(_ content: Message, inDatabase database: MongoDatabase) {
+        database[Message.collection].insertEncoded(content).map { _ in }
     }
     
     /// Send file in mess.
@@ -170,7 +211,7 @@ struct CoreEngine {
     
     static func findUser(
         has searchTerm: String,
-        of field: String,
+        of field: String = "idOnRDBMS",
         inDatabase database: MongoDatabase
     ) -> EventLoopFuture<UserRSMNoSQL> {
         return database[UserRSMNoSQL.collection]

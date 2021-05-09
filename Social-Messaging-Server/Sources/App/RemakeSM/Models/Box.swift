@@ -11,7 +11,8 @@ import MongoKitten
 struct BoxSpecification: Codable, Content {
     let name: String?
     let avartar: ObjectId?
-    let creator: ObjectId
+    let creator: UUID
+    let creator_id: ObjectId?
     let createdAt: Date
 }
 
@@ -21,9 +22,18 @@ struct Box: Codable, Content {
     let _id: ObjectId
     let type: BoxType
     let boxSpecification: BoxSpecification
-    var members: [ObjectId]
-    var members_id: [UUID]
+    var members: [UUID]
+    var members_id: [ObjectId]
 //    var messages: [Messages]
+}
+
+struct CreateBox: Codable {
+    let type: BoxType
+    var members: [UUID]
+    var members_id: [ObjectId]
+    
+    let creator_id: ObjectId?
+    let createdAt: Date
 }
 
 enum MediaType: Int, Content {
