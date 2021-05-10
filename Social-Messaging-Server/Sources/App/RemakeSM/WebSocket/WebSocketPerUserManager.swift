@@ -18,7 +18,13 @@ final class WebSocketPerUserManager {
     
     func add(ws: WebSocket, to userId: String) {
         dictionary[userId] = ws
-        listWS.append(ws)
+//        listWS.append(ws)
+        print(dictionary)
+    }
+    
+    func log() {
+        print(dictionary.count)
+        print(dictionary)
     }
     
     func notifyMess(to userIds: [UUID], content: Message) {
