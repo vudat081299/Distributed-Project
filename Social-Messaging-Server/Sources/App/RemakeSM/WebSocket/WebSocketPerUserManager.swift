@@ -18,16 +18,18 @@ final class WebSocketPerUserManager {
     
     func add(ws: WebSocket, to userId: String) {
         dictionary[userId] = ws
-//        listWS.append(ws)
-        print(dictionary)
+        
+    }
+    
+    func removeSession(of userId: String) {
+        dictionary.removeValue(forKey: userId)
     }
     
     func log() {
-        print(dictionary.count)
-        print(dictionary)
+        
     }
     
-    func notifyMess(to userIds: [UUID], content: Message) {
+    func notifyMess(to userIds: [UUID], content: WSEncodeContext) {
         userIds.forEach { id in
             if let ws = dictionary[id.uuidString] {
                 ws.send(content)
@@ -38,6 +40,20 @@ final class WebSocketPerUserManager {
 //        }
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Deprecated.
 //    func remove(listener: WebSocket, from session: TrackingSession) {
 //        guard var listeners = sessions[session] else { return }
 //        listeners = listeners.filter { $0 !== listener }

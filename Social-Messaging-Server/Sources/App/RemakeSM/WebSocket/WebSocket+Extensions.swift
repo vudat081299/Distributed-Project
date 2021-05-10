@@ -9,7 +9,7 @@ import Vapor
 import Foundation
 
 extension WebSocket {
-    func send(_ content: Message) {
+    func send(_ content: WSEncodeContext) {
         let encoder = JSONEncoder()
         guard let data = try? encoder.encode(content) else { return }
         

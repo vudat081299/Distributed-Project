@@ -47,8 +47,8 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userId: String
         
         // sample to post in ws.
 //        {
-//            "type": 0,
-//            "data": "{\"boxId\": \"6097a490021b77cd7434dd2e\", \"creationDate\": 1620184184.11111111111111, \"text\": \"********************************\", \"fileId\": \"6094d82ddba87b2eb8b413f3\", \"type\": 3, \"sender_id\": \"6094d82ddba87b2eb8b413f3\", \"senderIdOnRDBMS\": \"C697A624-052D-48F3-9FB9-C823BDD246D7\", \"members\": [\"DBD54018-97DA-4888-B87A-D2E8403A9845\", \"C697A624-052D-48F3-9FB9-C823BDD246D7\"]}"
+//            "type": 1,
+//            "majorData": "{\"boxId\": \"6097a490021b77cd7434dd2e\", \"creationDate\": 1620184184.11111111111111, \"text\": \"********************************\", \"fileId\": \"6094d82ddba87b2eb8b413f3\", \"type\": 3, \"sender_id\": \"6094d82ddba87b2eb8b413f3\", \"senderIdOnRDBMS\": \"C697A624-052D-48F3-9FB9-C823BDD246D7\", \"members\": [\"DBD54018-97DA-4888-B87A-D2E8403A9845\", \"C697A624-052D-48F3-9FB9-C823BDD246D7\"]}"
 //        }
         
         // new design.
@@ -60,13 +60,13 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userId: String
 //            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
 //            decoder.dateDecodingStrategy = .formatted(dateFormatter)
             
-            let resolvedData = try decoder.decode(ResolvedWSData.self, from: jsonData)
+            let resolvedData = try decoder.decode(WSResolvedData.self, from: jsonData)
             switch resolvedData.type {
             case .notify:
                 break
                 
             case .newMess:
-                try messingHandler(data: resolvedData.meaningData, of: req, using: decoder)
+                try messingHandler(data: resolvedData.majorData, of: req, using: decoder)
                 break
                 
             case .newBox: // new box
@@ -132,18 +132,16 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userId: String
     
     socket.onClose.whenComplete { result in
         // Succeeded or failed to close.
-        let wsOnCloseResult = result
         switch result {
         case .success:
-//            webSocketPerUserManager.dictionary
+            webSocketPerUserManager.removeSession(of: userId)
             print("close ws successful!")
             break
+            
         case .failure:
             print("close ws unsuccessful!")
             break
         }
-        webSocketPerUserManager.dictionary.removeValue(forKey: userId)
-        webSocketPerUserManager.log()
     }
 }
 
@@ -151,22 +149,27 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userId: String
 
 // MARK: - Handlers.
 func messingHandler(data: String, of req: Request, using decoder: JSONDecoder) throws {
-        // Save mess.
-        let mess = try decoder.decode(CreateMessage.self, from: data.data(using: .utf8)!)
-        let createMessageInBox = Message(
-            creationDate: mess.creationDate,
-            text: mess.text,
-            boxId: mess.boxId,
-            fileId: mess.fileId,
-            type: mess.type,
-            sender_id: mess.sender_id,
-            senderIdOnRDBMS: mess.senderIdOnRDBMS
-        )
-        CoreEngine.mess(
-            createMessageInBox,
-            inDatabase: req.mongoDB
-        )
-        webSocketPerUserManager.notifyMess(to: mess.members, content: createMessageInBox)
+    // Save mess.
+    let mess = try decoder.decode(WSResolvedMessage.self, from: data.data(using: .utf8)!)
+    let createMessageInBox = Message(
+        creationDate: mess.creationDate,
+        text: mess.text,
+        boxId: mess.boxId,
+        fileId: mess.fileId,
+        type: mess.type,
+        sender_id: mess.sender_id,
+        senderIdOnRDBMS: mess.senderIdOnRDBMS
+    )
+    
+    // save into db
+    CoreEngine.mess(
+        createMessageInBox,
+        inDatabase: req.mongoDB
+    )
+    
+    // notify to all recipients of box.
+    let context = WSEncodeContext(type: .newMess, majorData: createMessageInBox)
+    webSocketPerUserManager.notifyMess(to: mess.members, content: context)
 }
 
 
@@ -178,16 +181,16 @@ func messingHandler(data: String, of req: Request, using decoder: JSONDecoder) t
 
 
 // MARK: - Structure.
-struct ResolvedWSData: Codable, Content {
-    let type: ResolvedWSDataType
-    let meaningData: String
+struct WSResolvedData: Decodable {
+    let type: WSResolvedMajorDataType
+    let majorData: String
 }
 
-enum ResolvedWSDataType: Int, Content {
+enum WSResolvedMajorDataType: Int, Codable {
     case notify, newMess, newBox, userTyping
 }
 
-struct CreateMessage: Codable {
+struct WSResolvedMessage: Decodable {
     let boxId: ObjectId
     let creationDate: Date
     let text: String?
@@ -197,4 +200,9 @@ struct CreateMessage: Codable {
     let senderIdOnRDBMS: UUID
     
     let members: [UUID]
+}
+
+struct WSEncodeContext: Encodable {
+    let type: WSResolvedMajorDataType
+    let majorData: Message
 }
