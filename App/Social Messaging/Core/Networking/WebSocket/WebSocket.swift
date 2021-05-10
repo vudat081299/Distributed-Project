@@ -8,6 +8,7 @@
 * of the MIT license.  See the LICENSE file for details.
 *
 */
+// MARK: - Reference: https://github.com/tidwall/SwiftWebSocket.git
 
 import Foundation
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SuccessRequestServerView" customModule="MyMapKit" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k6Y-Rt-N4o">
+                    <rect key="frame" x="34" y="319" width="240" height="128"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XOa-k1-w2X" customClass="NVActivityIndicatorView" customModule="MyMapKit" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="Ig9-Ij-HYT"/>
+                                <constraint firstAttribute="width" constant="200" id="izs-v5-KEb"/>
+                            </constraints>
+                        </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sucessful create your account!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vJY-Yy-vpB">
+                            <rect key="frame" x="120" y="64" width="0.0" height="0.0"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="XOa-k1-w2X" firstAttribute="bottom" secondItem="vJY-Yy-vpB" secondAttribute="top" id="7Cr-d1-kS0"/>
+                        <constraint firstItem="vJY-Yy-vpB" firstAttribute="leading" secondItem="k6Y-Rt-N4o" secondAttribute="leading" constant="30" id="iN0-H2-4Yw"/>
+                        <constraint firstAttribute="trailing" secondItem="vJY-Yy-vpB" secondAttribute="trailing" constant="30" id="wxt-vB-jVB"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="k6Y-Rt-N4o" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="YF0-u8-vKU"/>
+                <constraint firstItem="vJY-Yy-vpB" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="aNG-SL-ael"/>
+                <constraint firstItem="k6Y-Rt-N4o" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="cSj-sL-WNC"/>
+                <constraint firstItem="vJY-Yy-vpB" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="g5h-AB-lIb"/>
+                <constraint firstAttribute="bottom" secondItem="k6Y-Rt-N4o" secondAttribute="bottom" id="hTO-nz-qHN"/>
+                <constraint firstAttribute="trailing" secondItem="k6Y-Rt-N4o" secondAttribute="trailing" id="oT3-8a-RFb"/>
+                <constraint firstItem="XOa-k1-w2X" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="smA-8m-f5L"/>
+            </constraints>
+            <connections>
+                <outlet property="animationView" destination="XOa-k1-w2X" id="UJY-Bt-3T5"/>
+                <outlet property="title" destination="vJY-Yy-vpB" id="cA9-CW-goP"/>
+            </connections>
+            <point key="canvasLocation" x="-52" y="62"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

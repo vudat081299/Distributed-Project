@@ -25,8 +25,8 @@
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
+// MARK: - Reference: From Raywenderlich's vapor-swift project of Vapor swift server-side bundle.
 
-/*
 import Foundation
 
 struct TrackingSession: Codable {
@@ -63,7 +63,7 @@ final class WebServices {
       success: @escaping (TrackingSession) -> Void,
       failure: @escaping (Error) -> Void
       ) {
-        let reqURL = URL(string: baseURL + "create/\(String(describing: currentUserID!))")
+        let reqURL = URL(string: baseURL + "create/\(String(describing: currentUserID))")
         var request = URLRequest(url: reqURL!) // createURL
       request.httpMethod = "POST"
       URLSession.shared.objectRequest(with: request, success: success, failure: failure)
@@ -133,6 +133,5 @@ extension URLRequest {
     setValue("application/json", forHTTPHeaderField: "Content-Type")
   }
 }
-*/
 
  

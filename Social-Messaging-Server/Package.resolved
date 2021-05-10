@@ -101,15 +101,6 @@
         }
       },
       {
-        "package": "Markdown",
-        "repositoryURL": "https://github.com/vudat81299/Markdown.git",
-        "state": {
-          "branch": null,
-          "revision": "31acd30867ee2e41b27de4b8029fd6db2757100d",
-          "version": "0.5.0"
-        }
-      },
-      {
         "package": "MongoKitten",
         "repositoryURL": "https://github.com/OpenKitten/MongoKitten.git",
         "state": {

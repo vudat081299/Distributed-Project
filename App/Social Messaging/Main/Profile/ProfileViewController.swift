@@ -23,6 +23,10 @@ class ProfileViewController: UIViewController {
         tableView.register(UINib(nibName: "Cell", bundle: nil), forCellReuseIdentifier: "Cell")
         tableView.register(UINib(nibName: "HeaderTableViewCell", bundle: nil), forCellReuseIdentifier: "HeaderTableViewCell")
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        Auth().logout(on: self)
+    }
 
 
     /*

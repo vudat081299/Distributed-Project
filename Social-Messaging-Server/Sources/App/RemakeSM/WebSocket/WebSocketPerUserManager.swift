@@ -23,7 +23,9 @@ final class WebSocketPerUserManager {
     
     func notifyMess(to userIds: [UUID], content: Message) {
         userIds.forEach { id in
-            dictionary[id.uuidString]!.send(content)
+            if let ws = dictionary[id.uuidString] {
+                ws.send(content)
+            }
         }
 //        listWS.forEach { ws in
 //            ws.send(content)

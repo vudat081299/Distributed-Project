@@ -97,6 +97,7 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket) {
         let wsOnCloseResult = result
         switch result {
         case .success:
+//            webSocketPerUserManager.dictionary
             print("close ws successful!")
             break
         case .failure:

@@ -31,7 +31,7 @@ import Vapor
 //import SwiftMarkdown
 //import cmark
 //import Ink
-import Markdown
+//import Markdown
 
 struct WebsiteController: RouteCollection {
   func boot(routes: RoutesBuilder) throws {
@@ -49,7 +49,7 @@ struct WebsiteController: RouteCollection {
     authSessionsRoutes.get("users", use: allUsersHandler)
     authSessionsRoutes.get("categories", use: allCategoriesHandler)
     authSessionsRoutes.get("categories", ":categoryID", use: categoryHandler)
-    authSessionsRoutes.get("testleaf", use: testleaf)
+//    authSessionsRoutes.get("testleaf", use: testleaf)
     
     let protectedRoutes = authSessionsRoutes.grouped(User.redirectMiddleware(path: "/login"))
     protectedRoutes.get("acronyms", "create", use: createAcronymHandler)
@@ -61,21 +61,21 @@ struct WebsiteController: RouteCollection {
     
     
     // Test rendering markdown.
-    func testleaf (_ req: Request) throws -> EventLoopFuture<View> {
-        let html: String
-//        html = try markdownToHTMLTest(markdown)
-        var parser = MarkdownParser()
-        let modifier = Modifier(target: .headings) { html, markdown in
-            return html
-        }
-
-        parser.addModifier(modifier)
-        let html1 = parser.html(from: markdown)
-        return req.view.render("hello", [
-                                "name": "Leaf",
-                                "md": html1
-        ])
-    }
+//    func testleaf (_ req: Request) throws -> EventLoopFuture<View> {
+//        let html: String
+////        html = try markdownToHTMLTest(markdown)
+//        var parser = MarkdownParser()
+//        let modifier = Modifier(target: .headings) { html, markdown in
+//            return html
+//        }
+//
+//        parser.addModifier(modifier)
+//        let html1 = parser.html(from: markdown)
+//        return req.view.render("hello", [
+//                                "name": "Leaf",
+//                                "md": html1
+//        ])
+//    }
 
     // Using cmark for parse markdown to html.
 //    public enum MarkdownError: Error {
