@@ -41,6 +41,8 @@ struct UsersControllerRSM: RouteCollection {
         
         
         // Main
+        tokenAuthGroup.get("loadusers", use: getAllHandler)
+        
         tokenAuthGroup.post("confirmgmail", use: confirmGmail)
         tokenAuthGroup.post("confirmotp", ":otp", use: confirmOTP)
         

@@ -193,16 +193,15 @@ class ViewController: UIViewController {
         configureHierarchy()
         configureDataSource()
         
-        fetchUserData()
+        fetchUsersData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchUserData()
+        fetchUsersData()
     }
     
-    func fetchUserData() {
-        
+    func fetchUsersData() {
         let getAll = ResourceRequest<UserRSMNoSQLPublic>(resourcePath: "users/nosql")
         getAll.get() { [weak self] result in
             switch result {

@@ -24,7 +24,7 @@ public func configureRSM(_ app: Application) throws {
 //    app.middleware.use(fileMiddleware)
     
     // MARK: - Config http server.
-    app.http.server.configuration.hostname = "192.168.1.65"
+    app.http.server.configuration.hostname = "10.2.75.16"
     app.http.server.configuration.port = 8080
     app.routes.defaultMaxBodySize = "5mb"
     

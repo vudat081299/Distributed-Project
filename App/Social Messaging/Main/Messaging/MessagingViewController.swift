@@ -42,14 +42,16 @@ class MessagingViewController: UIViewController {
 //        url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "?", with: "%3F")
 //        print(url.string!)
         
-        let getAllBoxesOfUserRequest = ResourceRequest<DataMessage>(resourcePath: "")
-        getAllBoxesOfUserRequest.get() { [weak self] result in
+    }
+    
+    func fetchBoxesData() {
+        let getAll = ResourceRequest<UserRSMNoSQLPublic>(resourcePath: "users/nosql")
+        getAll.get() { [weak self] result in
             switch result {
             case .success(let data):
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     // async code here
-                    
                 }
             case .failure:
                 ErrorPresenter.showError(message: "There was an error getting the textModels", on: self)

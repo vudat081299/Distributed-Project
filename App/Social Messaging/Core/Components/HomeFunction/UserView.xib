@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -79,14 +80,26 @@
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JnE-Dn-9VV">
+                                <rect key="frame" x="278" y="10" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="7wl-tM-0W4"/>
+                                    <constraint firstAttribute="width" constant="40" id="ObG-SH-crp"/>
+                                </constraints>
+                                <state key="normal">
+                                    <imageReference key="image" image="message.circle" catalog="system" symbolScale="large"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="separatorColor"/>
                         <constraints>
                             <constraint firstItem="zJv-fW-VEg" firstAttribute="leading" secondItem="iE8-Lc-yAI" secondAttribute="leading" constant="10" id="5gB-8w-M5G"/>
                             <constraint firstItem="kdJ-ZU-bX3" firstAttribute="leading" secondItem="Inu-uL-20W" secondAttribute="leading" id="Jhw-UJ-StT"/>
                             <constraint firstItem="Inu-uL-20W" firstAttribute="leading" secondItem="zJv-fW-VEg" secondAttribute="trailing" constant="10" id="dcN-gY-NgG"/>
+                            <constraint firstItem="qTs-cX-pA2" firstAttribute="leading" secondItem="JnE-Dn-9VV" secondAttribute="trailing" constant="8" id="f7z-XJ-XaI"/>
                             <constraint firstAttribute="trailing" secondItem="qTs-cX-pA2" secondAttribute="trailing" constant="8" id="gIp-fn-Wds"/>
                             <constraint firstAttribute="trailing" secondItem="HFb-Je-TL4" secondAttribute="trailing" constant="10" id="irl-bX-h2A"/>
+                            <constraint firstItem="JnE-Dn-9VV" firstAttribute="centerY" secondItem="qTs-cX-pA2" secondAttribute="centerY" id="jDf-uZ-emf"/>
                             <constraint firstItem="HFb-Je-TL4" firstAttribute="top" secondItem="zJv-fW-VEg" secondAttribute="bottom" constant="8" id="mov-Ca-JFc"/>
                             <constraint firstItem="kdJ-ZU-bX3" firstAttribute="top" secondItem="Inu-uL-20W" secondAttribute="bottom" constant="-12" id="rnd-dW-NoI"/>
                             <constraint firstItem="zJv-fW-VEg" firstAttribute="top" secondItem="iE8-Lc-yAI" secondAttribute="top" constant="10" id="s2G-c4-suh"/>
@@ -123,6 +136,7 @@
     </objects>
     <resources>
         <image name="avatar_1" width="812" height="804"/>
+        <image name="message.circle" catalog="system" width="128" height="121"/>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
