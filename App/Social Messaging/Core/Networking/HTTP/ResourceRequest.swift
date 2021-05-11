@@ -37,36 +37,145 @@ enum SaveResultsCreateUser<ResponseType> {
   case failure
 }
 
-struct ResourceRequest<ResourceType, ResponseType> where ResourceType: Codable, ResponseType: Codable {
 
-  let baseURL = "http://\(ip)/api/"
-  let resourceURL: URL
 
-  init(resourcePath: String) {
-    guard let resourceURL = URL(string: baseURL) else {
-      fatalError()
-    }
 
-    self.resourceURL = resourceURL.appendingPathComponent(resourcePath)
-  }
+
+
+
+enum ResourcesRequest<ResourceType> {
+    case success(ResourceType)
+    case failure
+}
+
+struct ResourceRequest<ResourceType> where ResourceType: Codable {
     
-    func getAll(completion: @escaping (GetResourcesRequest<ResourceType>) -> Void) {
-      let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, response, error) in
-        guard let jsonData = data else {
-          completion(.failure)
-          return
+    let baseURL = "http://\(ip)/api/"
+    let resourceURL: URL
+    
+    init(resourcePath: String) {
+        guard let resourceURL = URL(string: baseURL) else {
+            fatalError()
         }
-
-        do {
-          let decoder = JSONDecoder()
-          let resources: [ResourceType] = try decoder.decode([ResourceType].self, from: jsonData)
-          completion(.success(resources))
-        } catch {
-          completion(.failure)
-        }
-      }
-      dataTask.resume()
+        self.resourceURL = resourceURL.appendingPathComponent(resourcePath)
     }
+    
+    func get(completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+        let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, response, error) in
+            guard let jsonData = data else {
+                completion(.failure)
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let resources: ResourceType = try decoder.decode(ResourceType.self, from: jsonData)
+                completion(.success(resources))
+            } catch {
+                completion(.failure)
+            }
+        }
+        dataTask.resume()
+    }
+    
+    func post(_ resource: ResourceType, completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+        do {
+            var urlRequest = URLRequest(url: resourceURL)
+            urlRequest.httpMethod = "POST"
+            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpBody = try JSONEncoder().encode(resource)
+            let dataTask = URLSession.shared.dataTask(with: urlRequest) { data, response, _ in
+                guard
+                    let httpResponse = response as? HTTPURLResponse,
+                    httpResponse.statusCode == 200,
+                    let jsonData = data
+                else {
+                    completion(.failure)
+                    return
+                }
+                print(data!)
+                print(response!)
+                do {
+                    let decoder = JSONDecoder()
+                    let resource = try decoder.decode(ResourceType.self, from: jsonData)
+                    completion(.success(resource))
+                } catch {
+                    completion(.failure)
+                }
+            }
+            dataTask.resume()
+        } catch {
+            completion(.failure)
+        }
+    }
+    
+    func getFile(completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+        let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, response, error) in
+            guard let jsonData = data else {
+                completion(.failure)
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let resources: ResourceType = try decoder.decode(ResourceType.self, from: jsonData)
+                completion(.success(resources))
+            } catch {
+                completion(.failure)
+            }
+        }
+        dataTask.resume()
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+    
+    
+//    func getAll(completion: @escaping (GetResourcesRequest<ResourceType>) -> Void) {
+//      let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, response, error) in
+//        guard let jsonData = data else {
+//          completion(.failure)
+//          return
+//        }
+//
+//        do {
+//          let decoder = JSONDecoder()
+//          let resources: [ResourceType] = try decoder.decode([ResourceType].self, from: jsonData)
+//          completion(.success(resources))
+//        } catch {
+//          completion(.failure)
+//        }
+//      }
+//      dataTask.resume()
+//    }
     
     func getAllMessages(url: URLComponents, completion: @escaping (GetAllMessagesRequest<ResponseType>) -> Void) {
         let urlReq = url.url!
@@ -185,4 +294,5 @@ struct ResourceRequest<ResourceType, ResponseType> where ResourceType: Codable, 
         completion(.failure)
       }
     }
+ */
 }

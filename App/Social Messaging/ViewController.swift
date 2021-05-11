@@ -74,22 +74,22 @@ class ViewController: UIViewController {
     private lazy var listItems: [SectionItem] = {
         let listCell: [CellItem] = {
             var list: [CellItem] = []
-            for i in 0...10 {
+            for i in 0...100 {
                 let customCell = CellItem(data: ("\(i)", "\(i + 1)"), select: triggerCellAction)
                 list.append(customCell)
             }
             return list
         }()
         return [
-            SectionItem(cell: listCell, sectionType: .collection, behavior: .paging),
-            SectionItem(cell: listCell, sectionType: .collection, behavior: .groupPaging),
-            SectionItem(cell: listCell, sectionType: .collection, behavior: .continuousGroupLeadingBoundary),
-            SectionItem(cell: listCell, sectionType: .list, behavior: .noneType),
-            SectionItem(cell: listCell, sectionType: .collection, behavior: .groupPagingCentered),
-            SectionItem(cell: listCell, sectionType: .list, behavior: .noneType),
-            SectionItem(cell: listCell, sectionType: .collection, behavior: .continuous),
-            SectionItem(cell: listCell, sectionType: .collection, behavior: .paging),
-            SectionItem(cell: [CellItem(data: ("1", "2"), select: triggerCellAction, viewControllerType: UITableViewController.self)], sectionType: .collection, behavior: .groupPaging),
+            SectionItem(cell: listCell, sectionType: .collection, behavior: .noneType),
+//            SectionItem(cell: listCell, sectionType: .collection, behavior: .groupPaging),
+//            SectionItem(cell: listCell, sectionType: .collection, behavior: .continuousGroupLeadingBoundary),
+//            SectionItem(cell: listCell, sectionType: .list, behavior: .noneType),
+//            SectionItem(cell: listCell, sectionType: .collection, behavior: .groupPagingCentered),
+//            SectionItem(cell: listCell, sectionType: .list, behavior: .noneType),
+//            SectionItem(cell: listCell, sectionType: .collection, behavior: .continuous),
+//            SectionItem(cell: listCell, sectionType: .collection, behavior: .paging),
+//            SectionItem(cell: [CellItem(data: ("1", "2"), select: triggerCellAction, viewControllerType: UITableViewController.self)], sectionType: .collection, behavior: .groupPaging),
         ]
     }()
     
@@ -118,7 +118,8 @@ class ViewController: UIViewController {
         }
     }
     var dataSource: UICollectionViewDiffableDataSource<Int, Int>! = nil
-    var collectionView: UICollectionView! = nil
+//    var collectionView: UICollectionView! = nil
+    @IBOutlet weak var collectionView: UICollectionView!
     
     
     
@@ -232,8 +233,8 @@ extension ViewController {
             switch sectionType {
             case .collection:
                 let leadingItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
-                                                            widthDimension: .fractionalWidth(0.7), heightDimension: .fractionalHeight(1.0)))
-                leadingItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                                                            widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(150)))
+//                leadingItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 20, trailing: 10)
                 
                 let trailingItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
                                                             widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.3)))
@@ -245,10 +246,14 @@ extension ViewController {
                 
                 let orthogonallyScrolls = sectionKind.orthogonalScrollingBehavior() != .none
                 let containerGroupFractionalWidth = orthogonallyScrolls ? CGFloat(0.85) : CGFloat(1.0)
+//                let containerGroup = NSCollectionLayoutGroup.horizontal(
+//                    layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(containerGroupFractionalWidth),
+//                                                       heightDimension: .fractionalHeight(0.4)),
+//                    subitems: [leadingItem, trailingGroup])
                 let containerGroup = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(containerGroupFractionalWidth),
-                                                       heightDimension: .fractionalHeight(0.4)),
-                    subitems: [leadingItem, trailingGroup])
+                    layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                       heightDimension: .estimated(150)),
+                    subitems: [leadingItem])
                 let section = NSCollectionLayoutSection(group: containerGroup)
                 section.orthogonalScrollingBehavior = sectionKind.orthogonalScrollingBehavior()
                 
@@ -257,7 +262,7 @@ extension ViewController {
                                                        heightDimension: .estimated(44)),
                     elementKind: ViewController.headerElementKind,
                     alignment: .top)
-                section.boundarySupplementaryItems = [sectionHeader]
+//                section.boundarySupplementaryItems = [sectionHeader]
                 return section
             case .list:
                 let section: NSCollectionLayoutSection
@@ -295,13 +300,17 @@ extension ViewController {
 // MARK: - CV DataSource.
 extension ViewController {
     func configureHierarchy() {
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+//        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        collectionView.frame = view.bounds
+        collectionView.collectionViewLayout = createLayout()
+        
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .systemGroupedBackground
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.register(UINib(nibName: CustomCollectionViewListCell.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: CustomCollectionViewListCell.reuseIdentifier)
         collectionView.register(UINib(nibName: CustomSupplementaryView.reuseIdentifier, bundle: nil), forSupplementaryViewOfKind: ViewController.headerElementKind, withReuseIdentifier: CustomSupplementaryView.reuseIdentifier)
+        collectionView.register(UINib(nibName: UserView.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: UserView.reuseIdentifier)
     }
     func configureDataSource() {
         
@@ -352,7 +361,17 @@ extension ViewController {
                 return cell
 //                return collectionView.dequeueConfiguredReusableCell(using: customCellRegistration, for: indexPath, item: identifier)
             case .collection:
-                return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
+                guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: UserView.reuseIdentifier,
+                        for: indexPath) as? UserView else { fatalError("Cannot create new cell") }
+                cell.avatar.image = UIImage(named: "avatar_8")
+                cell.followActionClosure = {
+                    cell.layoutIfNeeded()
+                    cell.updateConstraintsIfNeeded()
+                }
+                return cell
+                
+//                return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
             default:
                 return nil
             }
@@ -364,7 +383,9 @@ extension ViewController {
             (supplementaryView, string, indexPath) in
 //            let sectionKind = SectionKind(rawValue: indexPath.section)!
 //            supplementaryView.label.text = "." + String(describing: sectionKind)
-            supplementaryView.label.text = "." + String(describing: listItems[indexPath.section].behavior!)
+            
+//            supplementaryView.label.text = "." + String(describing: listItems[indexPath.section].behavior!)
+            supplementaryView.label.text = ""
         }
         let customSupplementaryRegistration = UICollectionView.SupplementaryRegistration
         <CustomSupplementaryView>(elementKind: ViewController.headerElementKind) { [self]
@@ -379,6 +400,7 @@ extension ViewController {
 //            return self.collectionView.dequeueConfiguredReusableSupplementary(
 //                using: customSupplementaryRegistration, for: index)
             guard let cell = view.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CustomSupplementaryView.reuseIdentifier, for: index) as? CustomSupplementaryView else { fatalError("Cannot create new cell") }
+            cell.label.text = ""
             return cell
         }
 

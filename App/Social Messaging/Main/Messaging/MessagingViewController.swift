@@ -30,6 +30,31 @@ class MessagingViewController: UIViewController {
         configureDataSource()
     
         navigationItem.searchController = searchController
+        
+        
+        
+//        var url = URLComponents(string: "http://\(ip)/api/users/getMessagesOfRoom/")!
+//
+//        url.queryItems = [
+//            URLQueryItem(name: "sum", value: "\(currentUserID! > to ? "\(String(describing: currentUserID!))\(to)" : "\(to)\(String(describing: currentUserID!))")")
+//        ]
+//
+//        url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "?", with: "%3F")
+//        print(url.string!)
+        
+        let getAllBoxesOfUserRequest = ResourceRequest<DataMessage>(resourcePath: "")
+        getAllBoxesOfUserRequest.get() { [weak self] result in
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    // async code here
+                    
+                }
+            case .failure:
+                ErrorPresenter.showError(message: "There was an error getting the textModels", on: self)
+            }
+        }
     }
 
 
@@ -44,6 +69,16 @@ class MessagingViewController: UIViewController {
     */
 
 }
+
+struct ResolvedBoxesData: Decodable {
+    
+}
+
+
+
+
+
+
 
 extension MessagingViewController {
     private func createLayout() -> UICollectionViewLayout {

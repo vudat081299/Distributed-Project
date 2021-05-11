@@ -14,7 +14,6 @@ class MessContentCell: UICollectionViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var constraint: NSLayoutConstraint!
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

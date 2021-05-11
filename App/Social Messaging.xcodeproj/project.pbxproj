@@ -46,6 +46,8 @@
 		6BBFDE73264921E1001AA9D9 /* MessagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE71264921E1001AA9D9 /* MessagePresenter.swift */; };
 		6BBFDE74264921E1001AA9D9 /* SuccessRequestServerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BBFDE72264921E1001AA9D9 /* SuccessRequestServerView.xib */; };
 		6BBFDE7626492221001AA9D9 /* SuccessRequestServerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE7526492221001AA9D9 /* SuccessRequestServerView.swift */; };
+		6BBFDE7A264A22A6001AA9D9 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE78264A22A6001AA9D9 /* UserView.swift */; };
+		6BBFDE7B264A22A6001AA9D9 /* UserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BBFDE79264A22A6001AA9D9 /* UserView.xib */; };
 		6BCCA268262B3A420075A2A3 /* Note2.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA267262B3A420075A2A3 /* Note2.txt */; };
 		6BCCA276262B3A930075A2A3 /* Note1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA275262B3A930075A2A3 /* Note1.txt */; };
 		6BCF0912263324CB00311C41 /* UICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCF0911263324CB00311C41 /* UICollectionViewCell.swift */; };
@@ -144,6 +146,8 @@
 		6BBFDE71264921E1001AA9D9 /* MessagePresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagePresenter.swift; sourceTree = "<group>"; };
 		6BBFDE72264921E1001AA9D9 /* SuccessRequestServerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SuccessRequestServerView.xib; sourceTree = "<group>"; };
 		6BBFDE7526492221001AA9D9 /* SuccessRequestServerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuccessRequestServerView.swift; sourceTree = "<group>"; };
+		6BBFDE78264A22A6001AA9D9 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		6BBFDE79264A22A6001AA9D9 /* UserView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserView.xib; sourceTree = "<group>"; };
 		6BCCA267262B3A420075A2A3 /* Note2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note2.txt; sourceTree = "<group>"; };
 		6BCCA275262B3A930075A2A3 /* Note1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note1.txt; sourceTree = "<group>"; };
 		6BCF0911263324CB00311C41 /* UICollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewCell.swift; sourceTree = "<group>"; };
@@ -401,6 +405,15 @@
 			path = "Presentỏ";
 			sourceTree = "<group>";
 		};
+		6BBFDE77264A219D001AA9D9 /* HomeFunction */ = {
+			isa = PBXGroup;
+			children = (
+				6BBFDE78264A22A6001AA9D9 /* UserView.swift */,
+				6BBFDE79264A22A6001AA9D9 /* UserView.xib */,
+			);
+			path = HomeFunction;
+			sourceTree = "<group>";
+		};
 		6BCCA274262B3A930075A2A3 /* References */ = {
 			isa = PBXGroup;
 			children = (
@@ -515,6 +528,7 @@
 		C491766B2624546D00253070 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				6BBFDE77264A219D001AA9D9 /* HomeFunction */,
 				6BBFDE6F26492155001AA9D9 /* Definitions */,
 				6BBFDE482649072C001AA9D9 /* MessagingFunction */,
 			);
@@ -692,6 +706,7 @@
 				6BCCA276262B3A930075A2A3 /* Note1.txt in Resources */,
 				6B89CB0E26306B3C007FCAE5 /* HeaderSessionChat.xib in Resources */,
 				6B5AC2BF262C8510003B8F93 /* CustomListCell.xib in Resources */,
+				6BBFDE7B264A22A6001AA9D9 /* UserView.xib in Resources */,
 				C4917648262451D100253070 /* MessagingViewController.xib in Resources */,
 				6B04825E2627CF4B0031D15B /* TextCell.xib in Resources */,
 			);
@@ -738,6 +753,7 @@
 				C49176732624546D00253070 /* URLSession+Extensions.swift in Sources */,
 				6B8FF0592622024000F813C6 /* Social_Messaging.xcdatamodeld in Sources */,
 				C491766F2624546D00253070 /* WebSocket.swift in Sources */,
+				6BBFDE7A264A22A6001AA9D9 /* UserView.swift in Sources */,
 				6BBFDE6C2649205E001AA9D9 /* NVActivityIndicatorView.swift in Sources */,
 				6BBFDE4E264908FD001AA9D9 /* User.swift in Sources */,
 				C491766D2624546D00253070 /* CitiesDataSource.swift in Sources */,

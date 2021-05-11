@@ -269,20 +269,20 @@ class SignUpViewController: UIViewController {
             return
         }
         let user = createUserFormData
-        ResourceRequest<CreateUserFormData, ResponseCreateUser>(resourcePath: "users").saveuser(user) { [weak self] result in
-            switch result {
-            case .failure:
-                print("upload fail")
-                ErrorPresenter.showError(message: "There was a problem creating user!", on: self) {_ in
-                    self!.confirmButton.isEnabled = true
-                }
-            case .success:
-                DispatchQueue.main.async { [weak self] in
-                    print("successful created annotation!")
-                    DidRequestServer.successful(on: self, title: "Sucessful create your account!")
-                }
-            }
-        }
+//        ResourceRequest<CreateUserFormData>(resourcePath: "users").saveuser(user) { [weak self] result in
+//            switch result {
+//            case .failure:
+//                print("upload fail")
+//                ErrorPresenter.showError(message: "There was a problem creating user!", on: self) {_ in
+//                    self!.confirmButton.isEnabled = true
+//                }
+//            case .success:
+//                DispatchQueue.main.async { [weak self] in
+//                    print("successful created annotation!")
+//                    DidRequestServer.successful(on: self, title: "Sucessful create your account!")
+//                }
+//            }
+//        }
     }
     
 }
