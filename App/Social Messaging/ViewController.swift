@@ -11,6 +11,17 @@ class ViewController: UIViewController {
     
     
     
+    var resolvedUser: [UserRSMNoSQLPublic] = [] {
+        didSet {
+            configureDataSource()
+            collectionView.reloadData()
+        }
+    }
+    
+    
+    
+    
+    
     // MARK: - Collection view setting up.
     static let headerElementKind = "header-element-kind"
     
@@ -182,6 +193,29 @@ class ViewController: UIViewController {
         configureHierarchy()
         configureDataSource()
         
+        fetchUserData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchUserData()
+    }
+    
+    func fetchUserData() {
+        
+        let getAll = ResourceRequest<UserRSMNoSQLPublic>(resourcePath: "users/nosql")
+        getAll.get() { [weak self] result in
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    // async code here
+                    self.resolvedUser = data
+                }
+            case .failure:
+                ErrorPresenter.showError(message: "There was an error getting the textModels", on: self)
+            }
+        }
     }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -364,7 +398,9 @@ extension ViewController {
                 guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: UserView.reuseIdentifier,
                         for: indexPath) as? UserView else { fatalError("Cannot create new cell") }
-                cell.avatar.image = UIImage(named: "avatar_8")
+                cell.name.text = self.resolvedUser[indexPath.row].name
+                cell.username.text = "@\(self.resolvedUser[indexPath.row].username)"
+                cell.bio.text = self.resolvedUser[indexPath.row].bio
                 cell.followActionClosure = {
                     cell.layoutIfNeeded()
                     cell.updateConstraintsIfNeeded()
@@ -413,12 +449,16 @@ extension ViewController {
 //            snapshot.appendItems(Array(identifierOffset..<maxIdentifier))
 //            identifierOffset += itemsPerSection
 //        }
-        listItems.forEach {
-            let itemsPerSection = $0.cell.count
-            snapshot.appendSections([snapshot.numberOfSections])
-            snapshot.appendItems(Array(identifierOffset..<(identifierOffset + itemsPerSection)))
-            identifierOffset += $0.cell.count
-        }
+        
+//        listItems.forEach {
+//            let itemsPerSection = $0.cell.count
+//            snapshot.appendSections([snapshot.numberOfSections])
+//            snapshot.appendItems(Array(identifierOffset..<(identifierOffset + itemsPerSection)))
+//            identifierOffset += $0.cell.count
+//        }
+        
+        snapshot.appendSections([0])
+        snapshot.appendItems(Array(0 ..< self.resolvedUser.count))
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
@@ -447,4 +487,48 @@ extension ViewController: UICollectionViewDelegate {
 //        }
     }
     
+}
+
+struct UserRSMNoSQLPublic: Codable {
+    
+    let _id: String
+    let idOnRDBMS: UUID
+    
+    let name: String
+    let username: String
+    
+    let lastName: String?
+    let bio: String?
+    var profilePicture: String?
+    
+    let privacy: Privacy?
+    let defaultAvartar: DefaultAvartar?
+    
+    let personalData: PersonalData
+    let followings: [String]
+    let boxes: [String]
+    let followers: [String]
+}
+
+struct PersonalData: Codable {
+    let email: String
+    let dob: String
+    let block: [String]
+    let gender: Gender
+    let phoneNumber: String
+}
+
+
+
+// MARK: - Enumeration.
+enum Privacy: Int, Codable {
+    case publicState, privateState
+}
+
+enum Gender: Int, Codable {
+    case nonee, male, female, other
+}
+
+enum DefaultAvartar: Int, Codable {
+    case nonee, engineer, pianist, male, female, other
 }

@@ -48,6 +48,11 @@ enum ResourcesRequest<ResourceType> {
     case failure
 }
 
+enum ResourcesRequestGetArray<ResourceType> {
+    case success([ResourceType])
+    case failure
+}
+
 struct ResourceRequest<ResourceType> where ResourceType: Codable {
     
     let baseURL = "http://\(ip)/api/"
@@ -60,7 +65,7 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
         self.resourceURL = resourceURL.appendingPathComponent(resourcePath)
     }
     
-    func get(completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+    func get(completion: @escaping (ResourcesRequestGetArray<ResourceType>) -> Void) {
         let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, response, error) in
             guard let jsonData = data else {
                 completion(.failure)
@@ -68,7 +73,7 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
             }
             do {
                 let decoder = JSONDecoder()
-                let resources: ResourceType = try decoder.decode(ResourceType.self, from: jsonData)
+                let resources: [ResourceType] = try decoder.decode([ResourceType].self, from: jsonData)
                 completion(.success(resources))
             } catch {
                 completion(.failure)
