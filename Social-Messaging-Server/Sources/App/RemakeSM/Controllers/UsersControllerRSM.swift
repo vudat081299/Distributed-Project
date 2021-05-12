@@ -41,7 +41,7 @@ struct UsersControllerRSM: RouteCollection {
         
         // Main
         tokenAuthGroup.get("loadusers", use: getAllHandler)
-        tokenAuthGroup.get("getuserprofile", ":searchterm", use: getUserProfile)
+        tokenAuthGroup.get("getauthuserdata", use: getAuthUserData)
         tokenAuthGroup.get("getuserprofileidnosql", ":searchterm", use: getUserProfileIdNoSQL)
         tokenAuthGroup.get("searchusersnosql", ":searchterm", ":searchfield", use: searchUsersNoSQL)
         
@@ -143,12 +143,9 @@ struct UsersControllerRSM: RouteCollection {
         return CoreEngine.findUsers(has: searchTerm, of: searchCase, inDatabase: req.mongoDB).convertToPublicData()
     }
     
-    func getUserProfile(_ req: Request) throws -> EventLoopFuture<UserRSMNoSQL> {
-        guard let searchTerm = req.parameters.get("searchterm")
-        else {
-            throw Abort(.badRequest)
-        }
-        return CoreEngine.findUser(has: searchTerm, inDatabase: req.mongoDB)
+    func getAuthUserData(_ req: Request) throws -> EventLoopFuture<UserRSMNoSQL> {
+        let user = try req.auth.require(UserRSM.self)
+        return CoreEngine.findUser(has: user.id!.uuidString, inDatabase: req.mongoDB)
     }
     
     func getUserProfileIdNoSQL(_ req: Request) throws -> EventLoopFuture<String> {

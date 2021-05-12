@@ -11,7 +11,7 @@ class ViewController: UIViewController {
     
     
     
-    var resolvedUser: [UserRSMNoSQLPublic] = [] {
+    var resolvedUser: [User] = [] {
         didSet {
             configureDataSource()
             collectionView.reloadData()
@@ -202,8 +202,8 @@ class ViewController: UIViewController {
     }
     
     func fetchUsersData() {
-        let getAll = ResourceRequest<UserRSMNoSQLPublic>(resourcePath: "users/nosql")
-        getAll.getArray() { [weak self] result in
+        let request = ResourceRequest<User>(resourcePath: "users/nosql")
+        request.getArray() { [weak self] result in
             switch result {
             case .success(let data):
                 DispatchQueue.main.async { [weak self] in
@@ -397,6 +397,7 @@ extension ViewController {
                 guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: UserView.reuseIdentifier,
                         for: indexPath) as? UserView else { fatalError("Cannot create new cell") }
+                cell.userProfileData = self.resolvedUser[indexPath.row]
                 cell.name.text = self.resolvedUser[indexPath.row].name
                 cell.username.text = "@\(self.resolvedUser[indexPath.row].username)"
                 cell.bio.text = self.resolvedUser[indexPath.row].bio
@@ -486,48 +487,4 @@ extension ViewController: UICollectionViewDelegate {
 //        }
     }
     
-}
-
-struct UserRSMNoSQLPublic: Codable {
-    
-    let _id: String
-    let idOnRDBMS: UUID
-    
-    let name: String
-    let username: String
-    
-    let lastName: String?
-    let bio: String?
-    var profilePicture: String?
-    
-    let privacy: Privacy?
-    let defaultAvartar: DefaultAvartar?
-    
-    let personalData: PersonalData
-    let followings: [String]
-    let boxes: [String]
-    let followers: [String]
-}
-
-struct PersonalData: Codable {
-    let email: String
-    let dob: String
-    let block: [String]
-    let gender: Gender
-    let phoneNumber: String
-}
-
-
-
-// MARK: - Enumeration.
-enum Privacy: Int, Codable {
-    case publicState, privateState
-}
-
-enum Gender: Int, Codable {
-    case nonee, male, female, other
-}
-
-enum DefaultAvartar: Int, Codable {
-    case nonee, engineer, pianist, male, female, other
 }

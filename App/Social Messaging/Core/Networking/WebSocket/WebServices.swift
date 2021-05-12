@@ -63,7 +63,7 @@ final class WebServices {
       success: @escaping (TrackingSession) -> Void,
       failure: @escaping (Error) -> Void
       ) {
-        let reqURL = URL(string: baseURL + "create/\(String(describing: currentUserID))")
+        let reqURL = URL(string: baseURL + "create/\(String(describing: Auth.currentUserID))")
         var request = URLRequest(url: reqURL!) // createURL
       request.httpMethod = "POST"
       URLSession.shared.objectRequest(with: request, success: success, failure: failure)
@@ -123,14 +123,6 @@ final class WebServices {
       success: { _ in completion(true) },
       failure: { _ in completion(false) }
     )
-  }
-}
-
-extension URLRequest {
-  mutating func addJSONBody<C: Codable>(_ object: C) throws {
-    let encoder = JSONEncoder()
-    httpBody = try encoder.encode(object)
-    setValue("application/json", forHTTPHeaderField: "Content-Type")
   }
 }
 

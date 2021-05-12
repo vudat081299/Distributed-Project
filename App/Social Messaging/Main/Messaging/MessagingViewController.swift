@@ -45,7 +45,7 @@ class MessagingViewController: UIViewController {
     }
     
     func fetchBoxesData() {
-        let getAll = ResourceRequest<UserRSMNoSQLPublic>(resourcePath: "users/nosql")
+        let getAll = ResourceRequest<User>(resourcePath: "users/nosql")
         getAll.get() { [weak self] result in
             switch result {
             case .success(let data):

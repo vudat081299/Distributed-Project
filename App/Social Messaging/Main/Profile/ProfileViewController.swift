@@ -25,7 +25,7 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        Auth().logout(on: self)
+        Auth.logout(on: self)
     }
 
 

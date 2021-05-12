@@ -7,7 +7,7 @@
 
 import Foundation
 
-var ip = "10.2.75.16:8080"
+var ip = "192.168.1.65:8080"
 
 enum GetResourcesRequest<ResourceType> {
   case success([ResourceType])
@@ -42,7 +42,7 @@ enum SaveResultsCreateUser<ResponseType> {
 
 
 
-
+// Remake ResourcesRequest
 enum ResourcesRequest<ResourceType> {
     case success(ResourceType)
     case failure
@@ -68,14 +68,18 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
     
     
     // MARK: - Get.
-    func get(token: String? = nil, completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+    func get(token: String? = nil,
+             completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
         var urlRequest = URLRequest(url: resourceURL)
         if token != nil {
             urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
 //            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         }
         let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            guard let jsonData = data else {
+            guard let httpResponse = response as? HTTPURLResponse,
+                  httpResponse.statusCode == 200,
+                  let jsonData = data
+            else {
                 completion(.failure)
                 return
             }
@@ -90,14 +94,18 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
         dataTask.resume()
     }
     
-    func getArray(token: String? = nil, completion: @escaping (ResourcesRequestGetArray<ResourceType>) -> Void) {
+    func getArray(token: String? = nil,
+                  completion: @escaping (ResourcesRequestGetArray<ResourceType>) -> Void) {
         var urlRequest = URLRequest(url: resourceURL)
         if token != nil {
             urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
 //            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         }
         let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            guard let jsonData = data else {
+            guard let httpResponse = response as? HTTPURLResponse,
+                  httpResponse.statusCode == 200,
+                  let jsonData = data
+            else {
                 completion(.failure)
                 return
             }
@@ -112,9 +120,18 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
         dataTask.resume()
     }
     
-    func getFile(completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
-        let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, response, error) in
-            guard let jsonData = data else {
+    func getFile(token: String? = nil,
+                 completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+        var urlRequest = URLRequest(url: resourceURL)
+        if token != nil {
+            urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+//            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            guard let httpResponse = response as? HTTPURLResponse,
+                  httpResponse.statusCode == 200,
+                  let jsonData = data
+            else {
                 completion(.failure)
                 return
             }
@@ -132,19 +149,20 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
     
     
     // MARK: - Post.
-    
-    func post(token: String? = nil, _ resource: ResourceType, completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+    func post(token: String? = nil,
+              _ resource: ResourceType,
+              completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
         do {
             var urlRequest = URLRequest(url: resourceURL)
             urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
             urlRequest.httpMethod = "POST"
             urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = try JSONEncoder().encode(resource)
+            
             let dataTask = URLSession.shared.dataTask(with: urlRequest) { data, response, _ in
-                guard
-                    let httpResponse = response as? HTTPURLResponse,
-                    httpResponse.statusCode == 200,
-                    let jsonData = data
+                guard let httpResponse = response as? HTTPURLResponse,
+                      httpResponse.statusCode == 200,
+                      let jsonData = data
                 else {
                     completion(.failure)
                     return

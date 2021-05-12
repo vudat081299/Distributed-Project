@@ -32,13 +32,6 @@ enum NetworkError: Error {
   case failedResponse(URLResponse)
 }
 
-extension URLResponse {
-  fileprivate var isSuccess: Bool {
-    guard let response = self as? HTTPURLResponse else { return false }
-    return (200...299).contains(response.statusCode)
-  }
-}
-
 extension URLSession {
   func objectRequest<C: Codable>(
     with request: URLRequest,
@@ -80,12 +73,5 @@ extension URLSession {
         success(data)
       }
       }.resume()
-  }
-}
-
-extension Data {
-  fileprivate func decode<D: Decodable>(_ type: D.Type) throws -> D {
-    let decoder = JSONDecoder()
-    return try decoder.decode(D.self, from: self)
   }
 }

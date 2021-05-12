@@ -20,6 +20,7 @@ struct Box: Codable, Content {
     static let collection = "boxes"
 
     let _id: ObjectId
+    let generatedString: String?
     let type: BoxType
     let boxSpecification: BoxSpecification
     var members: [UUID]
@@ -28,6 +29,7 @@ struct Box: Codable, Content {
 }
 
 struct CreateBox: Codable {
+    let generatedString: String?
     let type: BoxType
     var members: [UUID]
     var members_id: [ObjectId]

@@ -17,45 +17,63 @@ class Auth {
     static let userIdKey = "userIdKey"
     static let _idKey = "_idKey"
     static let userRSMNoSQLPublic = "userRSMNoSQLPublic"
-    let defaults = UserDefaults.standard
+    static let userDefaults = UserDefaults.standard
     
-    var token: String? {
+    static var token: String? {
         get {
-            return defaults.string(forKey: Auth.defaultsKey)
+            return userDefaults.string(forKey: Auth.defaultsKey)
         }
         set {
-            defaults.set(newValue, forKey: Auth.defaultsKey)
+            userDefaults.set(newValue, forKey: Auth.defaultsKey)
         }
     }
     
-    var _id: String? {
+    static var _id: String? {
         get {
-            return defaults.string(forKey: Auth._idKey)
+            return userDefaults.string(forKey: Auth._idKey)
         }
         set {
-            defaults.set(newValue, forKey: Auth._idKey)
+            userDefaults.set(newValue, forKey: Auth._idKey)
         }
     }
     
-    var userId: String? {
+    static var userId: String? {
         get {
-            return defaults.string(forKey: Auth.userIdKey)
+            return userDefaults.string(forKey: Auth.userIdKey)
         }
         set {
-            defaults.set(newValue, forKey: Auth.userIdKey)
+            userDefaults.set(newValue, forKey: Auth.userIdKey)
         }
     }
     
-    var currentUserID: String {
+    static var currentUserID: String? {
         get {
-            return defaults.string(forKey: "UserID")!
+            return userDefaults.string(forKey: "UserID")!
         }
         set {
-            defaults.set(newValue, forKey: "UserID")
+            userDefaults.set(newValue, forKey: "UserID")
         }
     }
     
-    func logout(on viewController: UIViewController?) {
+    static var userProfileData: User? {
+        get {
+            if let savedData = userDefaults.object(forKey: user_profile_data_Key) as? Data {
+                if let loadedUserProfileData = try? JSONDecoder().decode(User.self, from: savedData) {
+                    print(loadedUserProfileData)
+                    return loadedUserProfileData
+                }
+            }
+            return nil
+        }
+        set {
+            if let encoded = try? JSONEncoder().encode(newValue) {
+                userDefaults.set(encoded, forKey: user_profile_data_Key)
+                print(encoded)
+            }
+        }
+    }
+    
+    static func logout(on viewController: UIViewController?) {
         self.token = nil
         DispatchQueue.main.async {
 //      guard let applicationDelegate = UIApplication.shared.delegate as? SceneDelegate else {
@@ -70,7 +88,7 @@ class Auth {
         }
     }
     
-    func login(username: String, password: String, completion: @escaping (AuthResult) -> Void) {
+    static func login(username: String, password: String, completion: @escaping (AuthResult) -> Void) {
         let path = "http://\(ip)/api/users/login"
         guard let url = URL(string: path) else {
             fatalError()
@@ -94,9 +112,11 @@ class Auth {
             do {
                 let token = try JSONDecoder()
                     .decode(Token.self, from: jsonData)
-                self.token = token.value
-                self.userId = token.user.id.uuidString
-                self.currentUserID = token.user.id.uuidString
+                Auth.token = token.value
+                Auth.userId = token.user.id.uuidString
+                Auth.currentUserID = token.user.id.uuidString
+                Auth.prepareUserProfileData()
+                
                 completion(.success)
             } catch {
                 completion(.failure)
@@ -105,31 +125,47 @@ class Auth {
         dataTask.resume()
     }
     
-    func preparePrivateData(completion: @escaping (AuthResult) -> Void) {
-        let path = "http://\(ip)/api/users/getuserprofileidnosql/\(userId!)"
-        guard let url = URL(string: path) else {
-            fatalError()
-        }
-
-        var urlRequest = URLRequest(url: url)
-        urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
-
-        let dataTask = URLSession.shared.dataTask(with: urlRequest) { data, response, _ in
-
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200,
-                  let jsonData = data else {
-                completion(.failure)
-                return
-            }
-
-            do {
-                let decoder = JSONDecoder()
-                self._id = String(decoding: jsonData, as: UTF8.self)
-                completion(.success)
-            } catch {
-                completion(.failure)
+    static func prepareUserProfileData() {
+        // method 1
+        let request = ResourceRequest<User>(resourcePath: "users/getauthuserdata")
+        request.get(token: Auth.token) { result in
+            switch result {
+            case .success(let data):
+                Auth.userProfileData = data
+            case .failure:
+                break
             }
         }
-        dataTask.resume()
+        
+        // method 2
+//        let path = "http://\(ip)/api/users/getauthuserdata"
+//        guard let url = URL(string: path) else {
+////            fatalError()
+//            completion(.failure)
+//            return
+//        }
+//        var urlRequest = URLRequest(url: url)
+//        urlRequest.addValue("Bearer \(Auth.token!)", forHTTPHeaderField: "Authorization")
+//
+//        let dataTask = URLSession.shared.dataTask(with: urlRequest) { data, response, _ in
+//            guard let httpResponse = response as? HTTPURLResponse,
+//                  httpResponse.statusCode == 200,
+//                  let jsonData = data
+//            else {
+//                completion(.failure)
+//                return
+//            }
+//
+//            do {
+//                let userProfileData: User = try JSONDecoder().decode(User.self, from: jsonData)
+////                userDefaults.set(jsonData, forKey: user_profile_data_Key)
+//                Auth.userProfileData = userProfileData
+//
+//                completion(.success)
+//            } catch {
+//                completion(.failure)
+//            }
+//        }
+//        dataTask.resume()
     }
 }

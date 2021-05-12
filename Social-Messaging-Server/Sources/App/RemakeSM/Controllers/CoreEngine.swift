@@ -15,7 +15,11 @@ struct CoreEngine {
     
     
     // MARK: - Box
-    static func createBox(_ box: Box, inDatabase database: MongoDatabase) -> EventLoopFuture<HTTPStatus> {
+    static func createBox(_ box: Box, generatedString: String?, inDatabase database: MongoDatabase) -> EventLoopFuture<HTTPStatus> {
+        "a" > "b"
+        if generatedString != nil {
+            checkPrivateBox(generatedString: generatedString!, inDatabase: database)
+        }
         return database[Box.collection].insertEncoded(box).map { _ in }.transform(to: .ok)
     }
     
@@ -59,6 +63,25 @@ struct CoreEngine {
                 as: Box.self
             ).flatMapThrowing { box in
                 guard let box = box else {
+                    throw Abort(.notFound)
+                }
+                return box
+            }
+    }
+    
+    static func checkPrivateBox(
+        generatedString: String,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<Box> {
+        return database[Box.collection]
+            .findOne(
+                "generatedString" == generatedString,
+                as: Box.self
+            ).flatMapThrowing { box in
+                guard let box = box else {
+                    throw Abort(.notFound)
+                }
+                if box != nil {
                     throw Abort(.notFound)
                 }
                 return box

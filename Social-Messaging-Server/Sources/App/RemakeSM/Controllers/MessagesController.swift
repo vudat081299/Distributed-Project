@@ -34,6 +34,7 @@ struct MessagesController: RouteCollection {
     func createBox(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
         let user = try req.auth.require(UserRSM.self)
         let data = try req.content.decode(CreateBox.self)
+        
         var members = data.members
         members.append(user.id!)
         
@@ -45,12 +46,13 @@ struct MessagesController: RouteCollection {
         )
         let box = Box(
             _id: ObjectId(),
+            generatedString: data.generatedString,
             type: data.type,
             boxSpecification: boxSpecification,
             members: members,
             members_id: data.members_id
         )
-        return CoreEngine.createBox(box, inDatabase: req.mongoDB)
+        return CoreEngine.createBox(box, generatedString: data.generatedString, inDatabase: req.mongoDB)
     }
     
     func loadAllBoxes(_ req: Request) throws -> EventLoopFuture<[Box]> {

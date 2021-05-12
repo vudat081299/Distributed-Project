@@ -129,18 +129,10 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
             return
         }
         
-        Auth().login(username: username, password: password) { result in
+        Auth.login(username: username, password: password) { result in
             switch result {
             case .success:
                 
-                Auth().preparePrivateData() { result2 in
-                    switch result2 {
-                    case .success:
-                        break
-                    case .failure:
-                        break
-                    }
-                }
                 DispatchQueue.main.async { [self] in
                     startLoading {
 //                        let appDelegate = UIApplication.shared.delegate as? SceneDelegate
