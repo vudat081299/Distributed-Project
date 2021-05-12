@@ -89,6 +89,9 @@
                                 <state key="normal">
                                     <imageReference key="image" image="message.circle" catalog="system" symbolScale="large"/>
                                 </state>
+                                <connections>
+                                    <action selector="messToUserAction:" destination="dE0-VG-55r" eventType="touchUpInside" id="iNQ-0C-L16"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="separatorColor"/>
@@ -128,6 +131,7 @@
                 <outlet property="avatar" destination="zJv-fW-VEg" id="4Fy-Ie-tjM"/>
                 <outlet property="bio" destination="HFb-Je-TL4" id="Ige-3q-6BG"/>
                 <outlet property="followButton" destination="qTs-cX-pA2" id="BJW-iQ-Qh9"/>
+                <outlet property="messButton" destination="JnE-Dn-9VV" id="VlC-9L-KFF"/>
                 <outlet property="name" destination="Inu-uL-20W" id="T3H-yT-f62"/>
                 <outlet property="username" destination="kdJ-ZU-bX3" id="uDL-Bv-nzI"/>
             </connections>

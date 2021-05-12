@@ -17,6 +17,7 @@ class UserView: UICollectionViewCell {
     @IBOutlet weak var messButton: UIButton!
     @IBOutlet weak var bio: UILabel!
     var followActionClosure: (() -> Void)?
+    var messToUserActionClosure: (() -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -32,8 +33,10 @@ class UserView: UICollectionViewCell {
         }
     }
     
-    @IBAction func messWithUserAction(_ sender: UIButton) {
-        
+    @IBAction func messToUserAction(_ sender: UIButton) {
+        if let action = messToUserActionClosure {
+            action()
+        }
     }
     
 }

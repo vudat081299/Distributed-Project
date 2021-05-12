@@ -17,11 +17,10 @@ struct MessagesController: RouteCollection {
         let guardAuthMiddleware = UserRSM.guardMiddleware()
         let tokenAuthGroup = acronymsRoutes.grouped(tokenAuthMiddleware, guardAuthMiddleware)
         
-        
+        //
         
         // Main
         tokenAuthGroup.post("box", use: createBox)
-        
         
         tokenAuthGroup.get(use: loadAllBoxesOfUser)
         acronymsRoutes.get("all", use: loadAllBoxes)

@@ -132,6 +132,15 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
         Auth().login(username: username, password: password) { result in
             switch result {
             case .success:
+                
+                Auth().preparePrivateData() { result2 in
+                    switch result2 {
+                    case .success:
+                        break
+                    case .failure:
+                        break
+                    }
+                }
                 DispatchQueue.main.async { [self] in
                     startLoading {
 //                        let appDelegate = UIApplication.shared.delegate as? SceneDelegate
@@ -142,7 +151,6 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
 //                        startLoading {
 //                            self.performSegue(withIdentifier: "didLogin", sender: nil)
 //                        }
-                        
                         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!
                         vc.modalPresentationStyle = .fullScreen
                         self.present(vc, animated:true, completion:nil)
@@ -153,6 +161,7 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
                 ErrorPresenter.showError(message: message, on: self)
             }
         }
+        
         
 //        DidRequestServer.successful(on:self)
 //        startLoading {

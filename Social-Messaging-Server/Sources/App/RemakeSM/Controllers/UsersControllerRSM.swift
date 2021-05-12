@@ -22,7 +22,6 @@ struct UsersControllerRSM: RouteCollection {
         
         // Main
         usersRoute.get(use: getAllHandler) // load all users
-        usersRoute.get("searchusersnosql", ":searchterm", ":searchfield", use: searchUsersNoSQL)
         usersRoute.get("searchuserssql", ":term", use: searchUsersSQL)
         usersRoute.get("getavatar", ":avatarid", use: getAvatar)
         
@@ -42,6 +41,9 @@ struct UsersControllerRSM: RouteCollection {
         
         // Main
         tokenAuthGroup.get("loadusers", use: getAllHandler)
+        tokenAuthGroup.get("getuserprofile", ":searchterm", use: getUserProfile)
+        tokenAuthGroup.get("getuserprofileidnosql", ":searchterm", use: getUserProfileIdNoSQL)
+        tokenAuthGroup.get("searchusersnosql", ":searchterm", ":searchfield", use: searchUsersNoSQL)
         
         tokenAuthGroup.post("confirmgmail", use: confirmGmail)
         tokenAuthGroup.post("confirmotp", ":otp", use: confirmOTP)
@@ -139,6 +141,24 @@ struct UsersControllerRSM: RouteCollection {
             throw Abort(.badRequest)
         }
         return CoreEngine.findUsers(has: searchTerm, of: searchCase, inDatabase: req.mongoDB).convertToPublicData()
+    }
+    
+    func getUserProfile(_ req: Request) throws -> EventLoopFuture<UserRSMNoSQL> {
+        guard let searchTerm = req.parameters.get("searchterm")
+        else {
+            throw Abort(.badRequest)
+        }
+        return CoreEngine.findUser(has: searchTerm, inDatabase: req.mongoDB)
+    }
+    
+    func getUserProfileIdNoSQL(_ req: Request) throws -> EventLoopFuture<String> {
+        guard let searchTerm = req.parameters.get("searchterm")
+        else {
+            throw Abort(.badRequest)
+        }
+        return CoreEngine.findUser(has: searchTerm, inDatabase: req.mongoDB).map { user in
+            return user._id.hexString
+        }
     }
     
     
@@ -240,6 +260,7 @@ struct UsersControllerRSM: RouteCollection {
     func getAllHandler(_ req: Request) -> EventLoopFuture<[UserRSM]> {
         UserRSM.query(on: req.db).all()
     }
+    
     func getAllToken(_ req: Request) -> EventLoopFuture<[TokenRSM]> {
         TokenRSM.query(on: req.db).all()
     }

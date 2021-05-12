@@ -12,6 +12,7 @@ struct Avatar: Content {
 }
 
 enum SearchUserCases: String {
+    case idOnRDBMS
     case name
     case lastName
     case phoneNumber

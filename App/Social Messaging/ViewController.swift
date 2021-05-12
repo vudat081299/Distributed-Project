@@ -203,7 +203,7 @@ class ViewController: UIViewController {
     
     func fetchUsersData() {
         let getAll = ResourceRequest<UserRSMNoSQLPublic>(resourcePath: "users/nosql")
-        getAll.get() { [weak self] result in
+        getAll.getArray() { [weak self] result in
             switch result {
             case .success(let data):
                 DispatchQueue.main.async { [weak self] in

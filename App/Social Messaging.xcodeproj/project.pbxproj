@@ -79,6 +79,7 @@
 		C4936D2A262AB4E90082CACC /* Cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4936D28262AB4E80082CACC /* Cell.xib */; };
 		C4936D30262AB5000082CACC /* HeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4936D2E262AB5000082CACC /* HeaderTableViewCell.swift */; };
 		C4936D31262AB5000082CACC /* HeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4936D2F262AB5000082CACC /* HeaderTableViewCell.xib */; };
+		C49377C1264B92A500216514 /* Non-classify.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49377C0264B92A500216514 /* Non-classify.swift */; };
 		C49F62792631A7780065798C /* FirstMessContentCellForSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49F62772631A7780065798C /* FirstMessContentCellForSection.swift */; };
 		C49F627A2631A7780065798C /* FirstMessContentCellForSection.xib in Resources */ = {isa = PBXBuildFile; fileRef = C49F62782631A7780065798C /* FirstMessContentCellForSection.xib */; };
 /* End PBXBuildFile section */
@@ -179,6 +180,7 @@
 		C4936D28262AB4E80082CACC /* Cell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Cell.xib; sourceTree = "<group>"; };
 		C4936D2E262AB5000082CACC /* HeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderTableViewCell.swift; sourceTree = "<group>"; };
 		C4936D2F262AB5000082CACC /* HeaderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderTableViewCell.xib; sourceTree = "<group>"; };
+		C49377C0264B92A500216514 /* Non-classify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Non-classify.swift"; sourceTree = "<group>"; };
 		C49F62772631A7780065798C /* FirstMessContentCellForSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstMessContentCellForSection.swift; sourceTree = "<group>"; };
 		C49F62782631A7780065798C /* FirstMessContentCellForSection.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FirstMessContentCellForSection.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -454,6 +456,7 @@
 				6BBFDE4C264908FD001AA9D9 /* Token.swift */,
 				6BBFDE4B264908FD001AA9D9 /* Upload.swift */,
 				6BBFDE4A264908FD001AA9D9 /* User.swift */,
+				C49377C0264B92A500216514 /* Non-classify.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -780,6 +783,7 @@
 				C4936D18262A71C40082CACC /* CustomListCell.swift in Sources */,
 				6BBFDE692649205E001AA9D9 /* NVActivityIndicatorViewable.swift in Sources */,
 				C4917644262451D100253070 /* MessagingViewController.swift in Sources */,
+				C49377C1264B92A500216514 /* Non-classify.swift in Sources */,
 				6B89CAEE26306215007FCAE5 /* ChattingViewController.swift in Sources */,
 				6BBFDE682649205E001AA9D9 /* NVActivityIndicatorPresenter.swift in Sources */,
 			);

@@ -65,8 +65,38 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
         self.resourceURL = resourceURL.appendingPathComponent(resourcePath)
     }
     
-    func get(completion: @escaping (ResourcesRequestGetArray<ResourceType>) -> Void) {
-        let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, response, error) in
+    
+    
+    // MARK: - Get.
+    func get(token: String? = nil, completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+        var urlRequest = URLRequest(url: resourceURL)
+        if token != nil {
+            urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+//            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            guard let jsonData = data else {
+                completion(.failure)
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let resources: ResourceType = try decoder.decode(ResourceType.self, from: jsonData)
+                completion(.success(resources))
+            } catch {
+                completion(.failure)
+            }
+        }
+        dataTask.resume()
+    }
+    
+    func getArray(token: String? = nil, completion: @escaping (ResourcesRequestGetArray<ResourceType>) -> Void) {
+        var urlRequest = URLRequest(url: resourceURL)
+        if token != nil {
+            urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+//            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             guard let jsonData = data else {
                 completion(.failure)
                 return
@@ -82,9 +112,31 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
         dataTask.resume()
     }
     
-    func post(_ resource: ResourceType, completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+    func getFile(completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+        let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, response, error) in
+            guard let jsonData = data else {
+                completion(.failure)
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let resources: ResourceType = try decoder.decode(ResourceType.self, from: jsonData)
+                completion(.success(resources))
+            } catch {
+                completion(.failure)
+            }
+        }
+        dataTask.resume()
+    }
+    
+    
+    
+    // MARK: - Post.
+    
+    func post(token: String? = nil, _ resource: ResourceType, completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
         do {
             var urlRequest = URLRequest(url: resourceURL)
+            urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
             urlRequest.httpMethod = "POST"
             urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = try JSONEncoder().encode(resource)
@@ -111,23 +163,6 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
         } catch {
             completion(.failure)
         }
-    }
-    
-    func getFile(completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
-        let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, response, error) in
-            guard let jsonData = data else {
-                completion(.failure)
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                let resources: ResourceType = try decoder.decode(ResourceType.self, from: jsonData)
-                completion(.success(resources))
-            } catch {
-                completion(.failure)
-            }
-        }
-        dataTask.resume()
     }
     
     
