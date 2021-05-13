@@ -339,7 +339,12 @@ extension ChattingViewController {
 
         // initial data
         let itemsPerSection = 1
-        let sections = Array(0..<messagesOfBox.count - 1)
+        var sections = Array(0..<0)
+        if (messagesOfBox.count > 0) {
+        sections = Array(0..<messagesOfBox.count - 1)
+        } else {
+            let sections = Array(0..<0)
+        }
         var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
         var itemOffset = 0
         sections.forEach {
