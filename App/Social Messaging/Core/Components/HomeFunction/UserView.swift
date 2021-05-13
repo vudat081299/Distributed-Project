@@ -35,38 +35,8 @@ class UserView: UICollectionViewCell {
     }
     
     @IBAction func messToUserAction(_ sender: UIButton) {
-        print(Auth.userBoxData)
-        let a = Auth.userBoxData
         if let action = messToUserActionClosure {
             action()
-        }
-        if userProfileData != nil {
-            let currentUser = Auth.userProfileData
-            let members = [userProfileData?.idOnRDBMS]
-            let id1 = currentUser?.idOnRDBMS.uuidString
-            let id2 = userProfileData?.idOnRDBMS.uuidString
-            let members_id = [currentUser?._id, userProfileData?._id]
-
-            let generatedString = id1! > id2! ? "\(id1)\(id2)" : "\(id2)\(id2)"
-
-            
-            let box = Box(
-                generatedString: generatedString,
-                type: .privateChat,
-                members: members,
-                members_id: members_id,
-                creator_id: currentUser?._id,
-                createdAt: Time.iso8601String
-            )
-            let request = ResourceRequest<Box>(resourcePath: "mess/box")
-            request.post(token: Auth.token, box) { result in
-                switch result {
-                case .success(let data):
-                    break
-                case .failure:
-                    break
-                }
-            }
         }
     }
     

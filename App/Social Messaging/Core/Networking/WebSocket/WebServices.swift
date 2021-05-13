@@ -87,28 +87,28 @@ final class WebServices {
         }
   }
   
-  static func update(
-    _ message: DataMessage,
-    for session: TrackingSession,
-    completion: @escaping (Bool) -> Void
-    ) {
-    let url = updateURL.appendingPathComponent(session.data.id)
-    var request = URLRequest(url: url)
-    request.httpMethod = "POST"
-    
-    do {
-      try request.addJSONBody(message)
-    } catch {
-      completion(false)
-      return
-    }
-    
-    URLSession.shared.dataRequest(
-      with: request,
-      success: { _ in completion(true) },
-      failure: { _ in completion(false) }
-    )
-  }
+//  static func update(
+//    _ message: DataMessage,
+//    for session: TrackingSession,
+//    completion: @escaping (Bool) -> Void
+//    ) {
+//    let url = updateURL.appendingPathComponent(session.data.id)
+//    var request = URLRequest(url: url)
+//    request.httpMethod = "POST"
+//
+//    do {
+//      try request.addJSONBody(message)
+//    } catch {
+//      completion(false)
+//      return
+//    }
+//
+//    URLSession.shared.dataRequest(
+//      with: request,
+//      success: { _ in completion(true) },
+//      failure: { _ in completion(false) }
+//    )
+//  }
   
   static func close(
     _ session: TrackingSession,

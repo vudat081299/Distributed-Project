@@ -13,6 +13,7 @@ struct BoxSpecification: Codable, Content {
     let avartar: ObjectId?
     let creator: UUID
     let creator_id: ObjectId?
+    let creatorName: String
     let createdAt: Date
     let lastestMess: String?
 }
@@ -26,6 +27,7 @@ struct Box: Codable, Content {
     let boxSpecification: BoxSpecification
     var members: [UUID]
     var members_id: [ObjectId]
+    var membersName: [String]
 //    var messages: [Messages]
 }
 
@@ -34,6 +36,7 @@ struct CreateBox: Codable {
     let type: BoxType
     var members: [UUID]
     var members_id: [ObjectId]
+    var membersName: [String]
     
     let creator_id: ObjectId?
     let createdAt: Date

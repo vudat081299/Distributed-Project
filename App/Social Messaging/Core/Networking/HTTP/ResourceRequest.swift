@@ -7,7 +7,7 @@
 
 import Foundation
 
-var ip = "192.168.1.65:8080"
+var ip = "10.2.75.16:8080"
 
 enum GetResourcesRequest<ResourceType> {
   case success([ResourceType])
@@ -120,6 +120,9 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
         }
         dataTask.resume()
     }
+    
+    
+    
     
     func getFile(token: String? = nil,
                  completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {

@@ -7,6 +7,8 @@
 
 import UIKit
 
+var messages: [String: [ResolvedMessage]] = [:] // map with box id.
+
 class ChattingViewController: UIViewController {
     
     // MARK: - CV config data.
@@ -40,7 +42,8 @@ class ChattingViewController: UIViewController {
     var keyboardHeight: CGFloat = 0.0
     var headersIndex = [IndexPath]()
     var touchPosition: CGPoint = CGPoint(x: 0, y: 0)
-    
+    var boxId: String = ""
+    var messagesOfBox: [ResolvedMessage] = []
     
     
     // MARK: - Closures.
@@ -85,10 +88,15 @@ class ChattingViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
+        messagesOfBox = messages[boxId]!
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        fetchBoxesData {
+            
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -106,6 +114,21 @@ class ChattingViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func fetchBoxesData(completion: @escaping () -> Void) {
+        let request_mess = ResourceRequest<ResolvedMessage>(resourcePath: "mess/\(boxId)")
+        request_mess.getArray(token: Auth.token) { result in
+            switch result {
+            case .success(let data):
+                data.forEach { message in
+                    (messages[message.boxId])!.append(message)
+                }
+                completion()
+            case .failure:
+                break
+            }
+        }
+    }
     
     
     
@@ -287,6 +310,7 @@ extension ChattingViewController {
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: MessContentCell.reuseIdentifier,
                 for: indexPath) as? MessContentCell else { fatalError("Cannot create new cell") }
+            cell.contentTextLabel.text = self.messagesOfBox[indexPath.row].text
             return cell
         }
         
@@ -306,14 +330,14 @@ extension ChattingViewController {
 
         // initial data
         let itemsPerSection = 5
-        let sections = Array(0..<5)
+//        let sections = Array(0..<5)
         var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
         var itemOffset = 0
-        sections.forEach {
-            snapshot.appendSections([$0])
+//        sections.forEach {
+            snapshot.appendSections([0])
             snapshot.appendItems(Array(itemOffset..<itemOffset + itemsPerSection))
             itemOffset += itemsPerSection
-        }
+//        }
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 }

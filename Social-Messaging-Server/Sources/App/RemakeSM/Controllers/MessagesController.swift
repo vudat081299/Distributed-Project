@@ -37,13 +37,19 @@ struct MessagesController: RouteCollection {
         
         var members = data.members
         members.append(user.id!)
+        var membersName = data.membersName
+        membersName.append(user.name)
         
         let boxSpecification = BoxSpecification(
             name: "", avartar: nil,
             creator: user.id!,
             creator_id: data.creator_id,
+            creatorName: user.name,
             createdAt: data.createdAt,
-            lastestMess: "Say hello to your friend!"
+            lastestMess: """
+🐝 I’m student at Ha Noi University of Science and Technology.
+            🐽 I'm currently learning and working on 🧠 AI (Machine Learning, Deep Learning, CNN, RNN on <Python, Swift>), Augmented-Reality (Swift), iOS (Swift, Objc-C, C/C++), full-stack developer (Vuejs, React, 💧Vapor-Swift, Nodejs, Golang), Cybersecurity - Computer Security.
+"""
         )
         let box = Box(
             _id: ObjectId(),
@@ -51,7 +57,8 @@ struct MessagesController: RouteCollection {
             type: data.type,
             boxSpecification: boxSpecification,
             members: members,
-            members_id: data.members_id
+            members_id: data.members_id,
+            membersName: membersName
         )
         
         return CoreEngine.createBox(box, of: user.id!.uuidString, generatedString: data.generatedString, inDatabase: req.mongoDB)

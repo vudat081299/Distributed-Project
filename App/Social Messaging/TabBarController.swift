@@ -17,7 +17,8 @@ struct ViewControllerData {
         let array = [
             ViewControllerData(title: "Notifications", iconNormal: "graduationcap", selectedIcon: "graduationcap.fill", viewController: UINavigationController(rootViewController: UITableViewController())),
             ViewControllerData(title: "Message", iconNormal: "message", selectedIcon: "message.fill", viewController: UINavigationController(rootViewController: MessagingViewController())),
-            ViewControllerData(title: "Profile", iconNormal: "person", selectedIcon: "person.fill", viewController: UINavigationController(rootViewController: ProfileViewController()))
+            ViewControllerData(title: "Profile", iconNormal: "person", selectedIcon: "person.fill", viewController: UINavigationController(rootViewController: ProfileViewController())),
+            ViewControllerData(title: "NewMessage", iconNormal: "person", selectedIcon: "person.fill", viewController: UINavigationController(rootViewController: MessagingViewControllerTableView()))
         ]
         var dataList: [ViewControllerData] = []
         array.forEach {

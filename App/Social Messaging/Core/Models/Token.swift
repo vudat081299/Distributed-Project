@@ -11,9 +11,9 @@ final class Token: Codable {
     var id: String
     var createdAt: Date
     var value: String
-    var user: ResolvedUser
+    var user: ResolvedUserId
     
-    init(id: String, createdAt: Date, value: String, user: ResolvedUser) {
+    init(id: String, createdAt: Date, value: String, user: ResolvedUserId) {
         self.id = id
         self.createdAt = createdAt
         self.value = value
@@ -21,6 +21,6 @@ final class Token: Codable {
     }
 }
 
-struct ResolvedUser: Codable {
+struct ResolvedUserId: Codable {
     let id: UUID
 }

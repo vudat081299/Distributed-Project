@@ -16,7 +16,6 @@ class Auth {
     static let defaultsKey = "AUTH-TOKEN"
     static let userIdKey = "userIdKey"
     static let _idKey = "_idKey"
-    static let userRSMNoSQLPublic = "userRSMNoSQLPublic"
     static let userDefaults = UserDefaults.standard
     
     static var token: String? {
@@ -59,7 +58,6 @@ class Auth {
         get {
             if let savedData = userDefaults.object(forKey: user_profile_data_Key) as? Data {
                 if let loadedUserProfileData = try? JSONDecoder().decode(User.self, from: savedData) {
-                    print(loadedUserProfileData)
                     return loadedUserProfileData
                 }
             }
@@ -68,7 +66,6 @@ class Auth {
         set {
             if let encoded = try? JSONEncoder().encode(newValue) {
                 userDefaults.set(encoded, forKey: user_profile_data_Key)
-                print(encoded)
             }
         }
     }
@@ -153,15 +150,15 @@ class Auth {
             }
         }
         
-        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "mess")
-        request_box.getArray(token: Auth.token) { result in
-            switch result {
-            case .success(let data):
-                Auth.userBoxData = data
-            case .failure:
-                break
-            }
-        }
+//        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "mess")
+//        request_box.getArray(token: Auth.token) { result in
+//            switch result {
+//            case .success(let data):
+//                Auth.userBoxData = data
+//            case .failure:
+//                break
+//            }
+//        }
         
         // method 2
 //        let path = "http://\(ip)/api/users/getauthuserdata"

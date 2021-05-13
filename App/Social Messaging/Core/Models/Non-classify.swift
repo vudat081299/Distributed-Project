@@ -14,6 +14,7 @@ struct Box: Codable {
     let type: BoxType
     var members: [UUID?]
     var members_id: [String?]
+    let membersName: [String?]
     
     let creator_id: String?
     let createdAt: String
@@ -30,6 +31,7 @@ struct ResolvedBox: Codable {
     let boxSpecification: BoxSpecification
     var members: [UUID]
     var members_id: [String]
+    let membersName: [String]
 }
 
 struct BoxSpecification: Codable {
@@ -37,6 +39,7 @@ struct BoxSpecification: Codable {
     let avartar: String?
     let creator: UUID
     let creator_id: String?
+    let creatorName: String?
     let createdAt: Date
     let lastestMess: String?
 }

@@ -397,13 +397,47 @@ extension ViewController {
                 guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: UserView.reuseIdentifier,
                         for: indexPath) as? UserView else { fatalError("Cannot create new cell") }
-                cell.userProfileData = self.resolvedUser[indexPath.row]
-                cell.name.text = self.resolvedUser[indexPath.row].name
-                cell.username.text = "@\(self.resolvedUser[indexPath.row].username)"
-                cell.bio.text = self.resolvedUser[indexPath.row].bio
-                cell.followActionClosure = {
-                    cell.layoutIfNeeded()
-                    cell.updateConstraintsIfNeeded()
+                let user = self.resolvedUser[indexPath.row]
+                cell.userProfileData = user
+                cell.name.text = user.name
+                cell.username.text = "@\(user.username)"
+                cell.bio.text = user.bio
+                let existedBoxes = Auth.userProfileData?.boxes
+                if !existedBoxes!.contains(user._id) {
+                    cell.messToUserActionClosure = {
+                        if cell.userProfileData != nil {
+                            let currentUser = Auth.userProfileData
+                            let id1 = currentUser?.idOnRDBMS.uuidString
+                            let id2 = cell.userProfileData?.idOnRDBMS.uuidString
+                            let name1 = currentUser?.name
+                            let name2 = cell.userProfileData?.name
+                            
+                            let members = [cell.userProfileData?.idOnRDBMS]
+                            let members_id = [currentUser?._id, cell.userProfileData?._id]
+                            let generatedString = id1! > id2! ? "\(id1!)\(id2!)" : "\(id2!)\(id2!)"
+                            let membersName = [name2]
+
+
+                            let box = Box(
+                                generatedString: generatedString,
+                                type: .privateChat,
+                                members: members,
+                                members_id: members_id,
+                                membersName: membersName,
+                                creator_id: currentUser?._id,
+                                createdAt: Time.iso8601String
+                            )
+                            let request = ResourceRequest<Box>(resourcePath: "mess/box")
+                            request.post(token: Auth.token, box) { result in
+                                switch result {
+                                case .success(let data):
+                                    break
+                                case .failure:
+                                    break
+                                }
+                            }
+                        }
+                    }
                 }
                 return cell
                 

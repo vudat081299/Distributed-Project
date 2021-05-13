@@ -65,6 +65,14 @@ struct UserRSMNoSQL: Codable, Content {
     }
 }
 
+extension EventLoopFuture where Value == UserRSMNoSQL {
+    func convertToPublicData() -> EventLoopFuture<UserRSMNoSQLPublic> {
+        return self.map { user in
+            return user.convertToPublicData()
+        }
+    }
+}
+
 extension Collection where Element == UserRSMNoSQL {
   func convertToPublicData() -> [UserRSMNoSQLPublic] {
     return self.map { $0.convertToPublicData() }

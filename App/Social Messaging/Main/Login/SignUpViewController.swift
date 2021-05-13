@@ -5,40 +5,6 @@
 //  Created by HungPH on 19/12/2020.
 //
 
-/*
-
-
-
-
-
-
-
-
-
-
--------------------------------------------
-Đĩ mẹ mày code kiểu đéo j mà kéo lắm UI thế
--------------------------------------------
-rep: bm làm trong 1 tiếng ra cái này thì chỉ thế thôi
-
-
-
-
-
-
-
-
-
-
-
-*/
-
-
-
-
-
-
-
 import UIKit
 
 class SignUpViewController: UIViewController {

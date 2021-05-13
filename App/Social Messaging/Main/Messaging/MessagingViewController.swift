@@ -9,8 +9,14 @@ import UIKit
 
 class MessagingViewController: UIViewController {
     
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
+    var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
+    var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
     private var collectionView: UICollectionView! = nil
+    var item: [Item] = []
+    var userBoxData: [ResolvedBox] = [] {
+        didSet {
+        }
+    }
     
     // MARK: - Navbar components.
     let searchController: UISearchController = {
@@ -26,11 +32,10 @@ class MessagingViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        configureHierarchy()
-        configureDataSource()
     
         navigationItem.searchController = searchController
-        
+        configureHierarchy()
+        configureDataSource()
         
         
 //        var url = URLComponents(string: "http://\(ip)/api/users/getMessagesOfRoom/")!
@@ -44,17 +49,20 @@ class MessagingViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+    }
+    
     func fetchBoxesData() {
-        let getAll = ResourceRequest<User>(resourcePath: "users/nosql")
-        getAll.get() { [weak self] result in
+        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "mess")
+        request_box.getArray(token: Auth.token) { result in
             switch result {
             case .success(let data):
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    // async code here
-                }
+                Auth.userBoxData = data
+                self.userBoxData = data
             case .failure:
-                ErrorPresenter.showError(message: "There was an error getting the textModels", on: self)
+                break
             }
         }
     }
@@ -117,25 +125,49 @@ extension MessagingViewController {
         }
         
         // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
         
-        let resolvedBox = Auth.userBoxData
-        var item: [Item] = []
-        resolvedBox.forEach { box in
+//        Auth.userBoxData.forEach { box in
+//            var title = "Group"
+//            if box.type == .privateChat {
+//                for member in box.members {
+//                    if member != box.boxSpecification.creator {
+//                        title = member.uuidString
+//                        break
+//                    }
+//                }
+//            }
+//            self.item.append(Item(category: .weather, imageName: "avatar_9", title: title, description: box.boxSpecification.lastestMess ?? "Say hello to your friend!", recipientName: user!.name))
+//            // get recipient.
+//            let request = ResourceRequest<User>(resourcePath: "users/getuserprofilenosql/\(title)")
+//            request.get(token: Auth.token) { [self] result in
+//                switch result {
+//                case .success(let data):
+//                    var user: User?
+//                    user = data
+//                    print(user)
+//
+//                    self.snapshot.appendItems(self.item)
+//                case .failure:
+//                    break
+//                }
+//            }
+//        }
+        
+        userBoxData.forEach {
             var title = "Group"
-            if box.type == .privateChat {
-                for member in box.members {
-                    if member != box.boxSpecification.creator {
-                        title = member.uuidString
+            if $0.type == .privateChat {
+                for name in $0.membersName {
+                    if name != $0.boxSpecification.creatorName {
+                        title = name
                         break
                     }
                 }
             }
-            item.append(Item(category: .weather, imageName: "avatar_9", title: title, description: box.boxSpecification.lastestMess ?? "Say hello to your friend!"))
+            item.append(Item(category: .music, imageName: $0.boxSpecification.avartar ?? "avatar_4", title: title, description: $0.boxSpecification.lastestMess))
         }
-        //        snapshot.appendItems(Item.all)
-        snapshot.appendItems(item)
+        
+        snapshot.appendItems(Item.all)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
