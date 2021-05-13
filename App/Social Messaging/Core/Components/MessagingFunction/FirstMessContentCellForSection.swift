@@ -15,6 +15,8 @@ class FirstMessContentCellForSection: UICollectionViewCell {
     @IBOutlet weak var constraint: NSLayoutConstraint!
     @IBOutlet weak var backGroundView: UIView!
     
+    @IBOutlet weak var senderName: UILabel!
+    @IBOutlet weak var creationDate: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

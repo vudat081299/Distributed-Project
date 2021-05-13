@@ -84,7 +84,7 @@ In a real app that you publish on the App Store, you would provide a user experi
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
-                                <mutableString key="userLabel">This view hierarchy is useful for learning how HomeKit structures device data, which is slightly different than the way the Apple Home app refers to related concepts. It’s also useful for device developers who want to understand how HomeKit sees custom hardware.  In a real app that you publish on the App Store, you would provide a user experience more like the one found in Configuring a Home Automation Device. For example, you would focus on the actions a user can take and hide the underlying technical details. For more tips about presenting HomeKit data to users, see the “Adjust the Interface for a Published App” section at the end of this article.</mutableString>
+                                <string key="userLabel">This view hierarchy is useful for learning how HomeKit structures device data, which is slightly different than the way the Apple Home app refers to related concepts. It’s also useful for device developers who want to understand how HomeKit sees custom hardware.  In a real app that you publish on the App Store, you would provide a user experience more like the one found in Configuring a Home Automation Device. For example, you would focus on the actions a user can take and hide the underlying technical details. For more tips about presenting HomeKit data to users, see the “Adjust the Interface for a Published App” section at the end of this article.</string>
                             </label>
                         </subviews>
                         <constraints>
@@ -120,6 +120,8 @@ In a real app that you publish on the App Store, you would provide a user experi
                 <outlet property="backGroundView" destination="Ujj-UE-xqP" id="SRs-hw-Ejw"/>
                 <outlet property="constraint" destination="OyS-mr-fAI" id="oD6-u3-5ux"/>
                 <outlet property="contentTextLabel" destination="fSz-KO-0ba" id="CJW-46-G0H"/>
+                <outlet property="creationDate" destination="iZA-jO-MgI" id="1fc-ge-7dB"/>
+                <outlet property="senderName" destination="gsJ-15-L8l" id="7ej-eA-miD"/>
                 <outlet property="timeLabel" destination="PV0-b7-Zaj" id="tPM-rZ-zjh"/>
             </connections>
             <point key="canvasLocation" x="393.47826086956525" y="105.13392857142857"/>

@@ -80,23 +80,21 @@ class ChattingViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        fetchBoxesData {
+            self.configureDataSource()
+        }
         setUpNavigationBar()
         configureHierarchy()
-        configureDataSource()
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        messagesOfBox = messages[boxId]!
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchBoxesData {
-            
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -121,7 +119,16 @@ class ChattingViewController: UIViewController {
             switch result {
             case .success(let data):
                 data.forEach { message in
-                    (messages[message.boxId])!.append(message)
+                    print(messages)
+                    if messages[message.boxId] != nil {
+                        (messages[message.boxId])!.append(message)
+                    } else {
+                        messages[message.boxId] = []
+                        (messages[message.boxId])!.append(message)
+                    }
+                }
+                if messages[self.boxId] != nil {
+                    self.messagesOfBox = messages[self.boxId]!
                 }
                 completion()
             case .failure:
@@ -305,6 +312,8 @@ extension ChattingViewController {
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: FirstMessContentCellForSection.reuseIdentifier,
                     for: indexPath) as? FirstMessContentCellForSection else { fatalError("Cannot create new cell") }
+                cell.senderName.text = self.messagesOfBox[indexPath.row].sender_id
+                cell.creationDate.text = String(describing: self.messagesOfBox[indexPath.row].creationDate)
                 return cell
             }
             guard let cell = collectionView.dequeueReusableCell(
@@ -329,15 +338,15 @@ extension ChattingViewController {
         }
 
         // initial data
-        let itemsPerSection = 5
-//        let sections = Array(0..<5)
+        let itemsPerSection = 1
+        let sections = Array(0..<messagesOfBox.count - 1)
         var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
         var itemOffset = 0
-//        sections.forEach {
-            snapshot.appendSections([0])
+        sections.forEach {
+            snapshot.appendSections([$0])
             snapshot.appendItems(Array(itemOffset..<itemOffset + itemsPerSection))
             itemOffset += itemsPerSection
-//        }
+        }
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
