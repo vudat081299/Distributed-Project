@@ -15,12 +15,15 @@ struct CoreEngine {
     
     
     // MARK: - Box
-    static func createBox(_ box: Box, generatedString: String?, inDatabase database: MongoDatabase) -> EventLoopFuture<HTTPStatus> {
-        "a" > "b"
-        if generatedString != nil {
-            checkPrivateBox(generatedString: generatedString!, inDatabase: database)
-        }
-        return database[Box.collection].insertEncoded(box).map { _ in }.transform(to: .ok)
+    static func createBox(_ box: Box, of userId: String, generatedString: String?, inDatabase database: MongoDatabase) -> EventLoopFuture<HTTPStatus> {
+//        database[Box.collection].createIndex(named: "email", keys: ["idOnRDBMS": ["$unique": true]])
+        return database[Box.collection].insertEncoded(box).map { _ in
+            return findUser(has: userId, of: "idOnRDBMS", inDatabase: database).map { user in
+                var foundedUser = user
+                foundedUser.boxes.append(box._id)
+                updateBoxesOfUser(box, from: user, inDatabase: database)
+            }
+        }.transform(to: .ok)
     }
     
     static func loadAllBoxes(
@@ -33,22 +36,21 @@ struct CoreEngine {
     
     /// Load all boxes of User.
     static func loadAllBoxesOfUser(
-        of userId: ObjectId,
+        of userId: String,
         inDatabase database: MongoDatabase
     ) -> EventLoopFuture<[Box]> {
-        return findUser(has: String(userId), of: "_id", inDatabase: database).flatMap { user in
+        return findUser(has: String(userId), of: "idOnRDBMS", inDatabase: database).flatMap { user in
             let boxes = user.boxes
-            let boxesOfUserQuey: Document = [
+            let boxesOfUserQuery: Document = [
               "_id": [
                 "$in": boxes
               ]
             ]
             return database[Box.collection].buildAggregate {
-                match(boxesOfUserQuey)
+                match(boxesOfUserQuery)
                 sort([
                     "boxSpecification.createdAt": .descending
                 ])
-                project("messages")
             }.decode(Box.self).allResults()
         }
     }
@@ -86,6 +88,21 @@ struct CoreEngine {
                 }
                 return box
             }
+    }
+    
+    static func updateBox(
+        mess: Message,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<Void> {
+        database[Box.collection]
+            .updateOne(
+                where: "_id" == mess.boxId,
+                to: [
+                    "$set": [
+                        "boxSpecification.lastest": mess.text
+                    ]
+                ]
+            ).map { _ in }
     }
     
 //    static func updateBoxInfo(
@@ -189,6 +206,7 @@ struct CoreEngine {
     //        ).map { _ in }
     //    }
     static func mess(_ content: Message, inDatabase database: MongoDatabase) {
+        updateBox(mess: content, inDatabase: database)
         database[Message.collection].insertEncoded(content).map { _ in }
     }
     
@@ -228,7 +246,7 @@ struct CoreEngine {
     
     static func findUser(
         has searchTerm: String,
-        of field: String = "idOnRDBMS",
+        of field: String,
         inDatabase database: MongoDatabase
     ) -> EventLoopFuture<UserRSMNoSQL> {
         return database[UserRSMNoSQL.collection]
@@ -308,6 +326,22 @@ struct CoreEngine {
             ]
         ).map { _ in }
     }
+    
+    static func updateBoxesOfUser(
+        _ box: Box,
+        from user: UserRSMNoSQL,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<Void> {
+        return database[UserRSMNoSQL.collection].updateOne(
+            where: "_id" == user._id,
+            to: [
+                "$push": [
+                    "boxes": box._id
+                ]
+            ]
+        ).map { _ in }
+    }
+    
     
     
     

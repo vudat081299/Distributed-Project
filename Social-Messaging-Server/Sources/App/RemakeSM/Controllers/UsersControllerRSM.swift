@@ -145,7 +145,7 @@ struct UsersControllerRSM: RouteCollection {
     
     func getAuthUserData(_ req: Request) throws -> EventLoopFuture<UserRSMNoSQL> {
         let user = try req.auth.require(UserRSM.self)
-        return CoreEngine.findUser(has: user.id!.uuidString, inDatabase: req.mongoDB)
+        return CoreEngine.findUser(has: user.id!.uuidString, of: "idOnRDBMS", inDatabase: req.mongoDB)
     }
     
     func getUserProfileIdNoSQL(_ req: Request) throws -> EventLoopFuture<String> {
@@ -153,7 +153,7 @@ struct UsersControllerRSM: RouteCollection {
         else {
             throw Abort(.badRequest)
         }
-        return CoreEngine.findUser(has: searchTerm, inDatabase: req.mongoDB).map { user in
+        return CoreEngine.findUser(has: searchTerm, of: "idOnRDBMS", inDatabase: req.mongoDB).map { user in
             return user._id.hexString
         }
     }

@@ -14,6 +14,7 @@ struct BoxSpecification: Codable, Content {
     let creator: UUID
     let creator_id: ObjectId?
     let createdAt: Date
+    let lastestMess: String?
 }
 
 struct Box: Codable, Content {

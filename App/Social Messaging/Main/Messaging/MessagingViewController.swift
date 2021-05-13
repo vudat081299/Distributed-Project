@@ -119,7 +119,23 @@ extension MessagingViewController {
         // initial data
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(Item.all)
+        
+        let resolvedBox = Auth.userBoxData
+        var item: [Item] = []
+        resolvedBox.forEach { box in
+            var title = "Group"
+            if box.type == .privateChat {
+                for member in box.members {
+                    if member != box.boxSpecification.creator {
+                        title = member.uuidString
+                        break
+                    }
+                }
+            }
+            item.append(Item(category: .weather, imageName: "avatar_9", title: title, description: box.boxSpecification.lastestMess ?? "Say hello to your friend!"))
+        }
+        //        snapshot.appendItems(Item.all)
+        snapshot.appendItems(item)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 }

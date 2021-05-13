@@ -73,6 +73,22 @@ class Auth {
         }
     }
     
+    static var userBoxData: [ResolvedBox] {
+        get {
+            if let savedData = userDefaults.object(forKey: user_box_data_Key) as? Data {
+                if let loadedUserBoxData = try? JSONDecoder().decode([ResolvedBox].self, from: savedData) {
+                    return loadedUserBoxData
+                }
+            }
+            return []
+        }
+        set {
+            if let encoded = try? JSONEncoder().encode(newValue) {
+                userDefaults.set(encoded, forKey: user_box_data_Key)
+            }
+        }
+    }
+    
     static func logout(on viewController: UIViewController?) {
         self.token = nil
         DispatchQueue.main.async {
@@ -127,11 +143,21 @@ class Auth {
     
     static func prepareUserProfileData() {
         // method 1
-        let request = ResourceRequest<User>(resourcePath: "users/getauthuserdata")
-        request.get(token: Auth.token) { result in
+        let request_user = ResourceRequest<User>(resourcePath: "users/getauthuserdata")
+        request_user.get(token: Auth.token) { result in
             switch result {
             case .success(let data):
                 Auth.userProfileData = data
+            case .failure:
+                break
+            }
+        }
+        
+        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "mess")
+        request_box.getArray(token: Auth.token) { result in
+            switch result {
+            case .success(let data):
+                Auth.userBoxData = data
             case .failure:
                 break
             }

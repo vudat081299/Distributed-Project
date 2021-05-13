@@ -11,3 +11,4 @@ import Foundation
 
 // MARK: - List keys use in NSUserDefault.
 let user_profile_data_Key = "USER-PROFILE-DATA"
+let user_box_data_Key = "USER-BOX-DATA"

@@ -12,6 +12,20 @@ class Time {
     var userCalendar: Calendar!
     var requestedComponents: Set<Calendar.Component>
     var dateTimeComponents: DateComponents
+    static var iso8601String: String {
+        get {
+            // Date with ISO 8601 format.
+            let dateFormatter = DateFormatter()
+            let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
+            dateFormatter.locale = enUSPosixLocale
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+            dateFormatter.calendar = Calendar(identifier: .gregorian)
+
+            let iso8601String = dateFormatter.string(from: Date())
+            return iso8601String
+        }
+    }
+    
     let formatter: DateFormatter
     static var someOtherDateTime: Date {
         get {
@@ -125,6 +139,7 @@ class Time {
 //        let formatter = DateFormatter()
 //        formatter.dateFormat = "yyyy/MM/dd HH:mm"
 //        let someDateTime = formatter.date(from: "2016/10/08 22:31")
+        
         
         
     }

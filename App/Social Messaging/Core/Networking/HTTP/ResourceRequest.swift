@@ -97,6 +97,7 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
     func getArray(token: String? = nil,
                   completion: @escaping (ResourcesRequestGetArray<ResourceType>) -> Void) {
         var urlRequest = URLRequest(url: resourceURL)
+        print(resourceURL)
         if token != nil {
             urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
 //            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")

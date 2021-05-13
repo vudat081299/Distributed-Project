@@ -55,7 +55,8 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
         passwordTextFieldContainer.border()
         passwordTextFieldContainer.dropShadow()
         
-        
+        usernameTextField.text = "vudat81299"
+        passwordTextField.text = "vudat81299"
     }
     
     // MARK: - Common methods

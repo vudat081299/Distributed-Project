@@ -22,3 +22,21 @@ struct Box: Codable {
 enum BoxType: Int, Codable {
     case privateChat, group
 }
+
+struct ResolvedBox: Codable {
+    let _id: String
+    let generatedString: String?
+    let type: BoxType
+    let boxSpecification: BoxSpecification
+    var members: [UUID]
+    var members_id: [String]
+}
+
+struct BoxSpecification: Codable {
+    let name: String?
+    let avartar: String?
+    let creator: UUID
+    let creator_id: String?
+    let createdAt: Date
+    let lastestMess: String?
+}

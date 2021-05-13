@@ -35,7 +35,8 @@ class UserView: UICollectionViewCell {
     }
     
     @IBAction func messToUserAction(_ sender: UIButton) {
-        print(Auth.userProfileData)
+        print(Auth.userBoxData)
+        let a = Auth.userBoxData
         if let action = messToUserActionClosure {
             action()
         }
@@ -45,15 +46,9 @@ class UserView: UICollectionViewCell {
             let id1 = currentUser?.idOnRDBMS.uuidString
             let id2 = userProfileData?.idOnRDBMS.uuidString
             let members_id = [currentUser?._id, userProfileData?._id]
-            
-            let dateFormatter = DateFormatter()
-            let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
-            dateFormatter.locale = enUSPosixLocale
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-            dateFormatter.calendar = Calendar(identifier: .gregorian)
 
-            let iso8601String = dateFormatter.string(from: Date())
             let generatedString = id1! > id2! ? "\(id1)\(id2)" : "\(id2)\(id2)"
+
             
             let box = Box(
                 generatedString: generatedString,
@@ -61,7 +56,7 @@ class UserView: UICollectionViewCell {
                 members: members,
                 members_id: members_id,
                 creator_id: currentUser?._id,
-                createdAt: iso8601String
+                createdAt: Time.iso8601String
             )
             let request = ResourceRequest<Box>(resourcePath: "mess/box")
             request.post(token: Auth.token, box) { result in

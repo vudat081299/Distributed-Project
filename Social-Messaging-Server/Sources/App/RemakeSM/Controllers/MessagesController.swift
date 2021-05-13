@@ -42,7 +42,8 @@ struct MessagesController: RouteCollection {
             name: "", avartar: nil,
             creator: user.id!,
             creator_id: data.creator_id,
-            createdAt: data.createdAt
+            createdAt: data.createdAt,
+            lastestMess: "Say hello to your friend!"
         )
         let box = Box(
             _id: ObjectId(),
@@ -52,7 +53,8 @@ struct MessagesController: RouteCollection {
             members: members,
             members_id: data.members_id
         )
-        return CoreEngine.createBox(box, generatedString: data.generatedString, inDatabase: req.mongoDB)
+        
+        return CoreEngine.createBox(box, of: user.id!.uuidString, generatedString: data.generatedString, inDatabase: req.mongoDB)
     }
     
     func loadAllBoxes(_ req: Request) throws -> EventLoopFuture<[Box]> {
@@ -61,9 +63,10 @@ struct MessagesController: RouteCollection {
     
     func loadAllBoxesOfUser(_ req: Request) throws -> EventLoopFuture<[Box]> {
         let user = try req.auth.require(UserRSM.self)
-        return CoreEngine.findUser(has: user.id!.uuidString, of: "idOnRDBMS", inDatabase: req.mongoDB).flatMap { user in
-            return CoreEngine.loadAllBoxesOfUser(of: user._id, inDatabase: req.mongoDB)
-        }
+//        return CoreEngine.findUser(has: user.id!.uuidString, of: "idOnRDBMS", inDatabase: req.mongoDB).flatMap { user in
+//            print(user._id)
+        return CoreEngine.loadAllBoxesOfUser(of: user.id!.uuidString, inDatabase: req.mongoDB)
+//        }
     }
     
     func loadAllMessagesInBox(_ req: Request) throws -> EventLoopFuture<[Message]> {
