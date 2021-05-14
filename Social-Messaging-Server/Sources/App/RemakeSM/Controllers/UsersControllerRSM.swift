@@ -12,42 +12,36 @@ import MongoKitten
 struct UsersControllerRSM: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let usersRoute = routes.grouped("api", "users")
+        // Main
+        usersRoute.post("signup", use: signUp)
+        
+        
+        
+        
         
         // Test
         usersRoute.get("token", use: getAllToken)
         usersRoute.get("nosql", use: getAllUserData)
         usersRoute.get(":userId", use: getHandler)
         usersRoute.delete(":userId", "deleteUser", use: deleteHandler)
-        
-        
-        // Main
         usersRoute.get(use: getAllHandler) // load all users
-        usersRoute.get("searchuserssql", ":term", use: searchUsersSQL)
-        usersRoute.get("getavatar", ":avatarid", use: getAvatar)
+        usersRoute.get("getauthuser", use: getAuthUserData)
         
-        usersRoute.post("signup", use: signUp)
         
         let basicAuthMiddleware = UserRSM.authenticator()
         let basicAuthGroup = usersRoute.grouped(basicAuthMiddleware)
         // Main
         basicAuthGroup.post("login", use: login)
-        basicAuthGroup.post("signin", use: signIn)
         
         let tokenAuthMiddleware = TokenRSM.authenticator()
         let guardAuthMiddleware = UserRSM.guardMiddleware()
         let tokenAuthGroup = usersRoute.grouped(tokenAuthMiddleware, guardAuthMiddleware)
-        // Test
-        
-        
         // Main
-        tokenAuthGroup.get("loadusers", use: getAllHandler)
+        tokenAuthGroup.get("loadallusers", use: getAllHandler)
+        tokenAuthGroup.get("nosql", use: getAllUserData)
         tokenAuthGroup.get("getauthuserdata", use: getAuthUserData)
-        tokenAuthGroup.get("getuserprofilenosql", ":searchterm", use: getUserProfileNoSQL)
-        tokenAuthGroup.get("getuserprofileidnosql", ":searchterm", use: getUserProfileIdNoSQL)
-        tokenAuthGroup.get("searchusersnosql", ":searchterm", ":searchfield", use: searchUsersNoSQL)
-        
-        tokenAuthGroup.post("confirmgmail", use: confirmGmail)
-        tokenAuthGroup.post("confirmotp", ":otp", use: confirmOTP)
+        tokenAuthGroup.get("getavatar", ":avatarid", use: getAvatar)
+        tokenAuthGroup.get("searchuserssql", ":term", use: searchUsersSQL)
         
         tokenAuthGroup.post(use: signUp)
         
@@ -56,6 +50,21 @@ struct UsersControllerRSM: RouteCollection {
         
         tokenAuthGroup.delete("logout", use: logout)
         tokenAuthGroup.delete("clearsessionuser", use: logoutAllDevices)
+        
+        
+        
+        
+        
+        
+        tokenAuthGroup.get("getuserprofilenosql", ":searchterm", use: getUserProfileNoSQL)
+        tokenAuthGroup.get("getuserprofileidnosql", ":searchterm", use: getUserProfileIdNoSQL)
+        tokenAuthGroup.get("searchusersnosql", ":searchterm", ":searchfield", use: searchUsersNoSQL)
+        
+        tokenAuthGroup.post("confirmgmail", use: confirmGmail)
+        tokenAuthGroup.post("confirmotp", ":otp", use: confirmOTP)
+        
+        
+        
         
     }
     

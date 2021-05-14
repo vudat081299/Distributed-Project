@@ -20,18 +20,22 @@ struct MessagesController: RouteCollection {
         //
         
         // Main
-        tokenAuthGroup.post("box", use: createBox)
-        
-        tokenAuthGroup.get(use: loadAllBoxesOfUser)
-        acronymsRoutes.get("all", use: loadAllBoxes)
-        
+        tokenAuthGroup.get("box", use: loadAllBoxesOfUser)
+        tokenAuthGroup.get("getmessageinrange", ":boxId", ":before", ":limit", use: loadAllMessagesInBoxInRange)
         acronymsRoutes.get(":boxId", use: loadAllMessagesInBox)
-        acronymsRoutes.get("getmessageinrange", ":boxId", ":before", ":limit", use: loadAllMessagesInBoxInRange)
+        
+        tokenAuthGroup.post(use: mess)
+        
+        
+        //
+        acronymsRoutes.get("messesinbox", use: loadAllMessagesInBox)
+        acronymsRoutes.get(use: loadAllBoxesOfUser)
+        acronymsRoutes.get("all", use: loadAllBoxes)
         
         
     }
     
-    func createBox(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+    func mess(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
         let user = try req.auth.require(UserRSM.self)
         let data = try req.content.decode(CreateBox.self)
         
