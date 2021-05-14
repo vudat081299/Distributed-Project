@@ -46,6 +46,7 @@ Hướng dân build server. (Tham khảo: https://swift.org/package-manager/)
 > - Không đợi đến gần khi bảo vệ mới push hết code lên git.
 > - Pull về trước khi code.
 > - Phần app code dễ hiểu và dễ xây dựng hơn phần server, tham khảo https://developer.apple.com/documentation/uikit và đọc tài liệu hướng dẫn. (Nên xây dựng app trước, phần server hiện đã có api đăng kí đăng nhập, load tin nhắn, nhắn tin, kết bạn,..).
+> update: phần server hiện tại đã hoàn thiện, mọi người chạy thử server và call thử api và ghép vào code.
 > - Trong mỗi project app và server đều có file README.md, hướng dẫn build, và có tài liệu tham khảo.
 
 Tài liệu tham khảo:
