@@ -49,7 +49,8 @@ struct MessagesController: RouteCollection {
             lastestMess: """
 🐝 I’m student at Ha Noi University of Science and Technology.
             🐽 I'm currently learning and working on 🧠 AI (Machine Learning, Deep Learning, CNN, RNN on <Python, Swift>), Augmented-Reality (Swift), iOS (Swift, Objc-C, C/C++), full-stack developer (Vuejs, React, 💧Vapor-Swift, Nodejs, Golang), Cybersecurity - Computer Security.
-"""
+""",
+            lastestUpdate: Date()
         )
         let box = Box(
             _id: ObjectId(),

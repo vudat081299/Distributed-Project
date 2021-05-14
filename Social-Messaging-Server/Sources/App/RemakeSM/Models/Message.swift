@@ -16,7 +16,7 @@ struct Message: Codable, Content {
     let boxId: ObjectId
     let fileId: ObjectId?
     let type: MediaType?
-    let sender_id: ObjectId
+    let senderId: ObjectId
     let senderIdOnRDBMS: UUID
 }
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-var ip = "10.2.75.16:8080"
+var ip = "192.168.1.65:8080"
 
 enum GetResourcesRequest<ResourceType> {
   case success([ResourceType])

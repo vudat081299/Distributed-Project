@@ -13,7 +13,7 @@ import Foundation
 // MARK: - Structure.
 struct WSResolvedMessage: Decodable {
     let type: WSResolvedMajorDataType
-    let majorData: String
+    let majorData: WSMessage
 }
 
 enum WSResolvedMajorDataType: Int, Codable {
@@ -21,14 +21,14 @@ enum WSResolvedMajorDataType: Int, Codable {
 }
 
 struct WSMessage: Codable {
-    let boxId: String
-    let creationDate: String
+    let boxId: String? // _id
+    let creationDate: Date
     let text: String?
     let fileId: String?
     let type: MediaTypeMess
-    let sender_id: String
-    let senderIdOnRDBMS: UUID
-    let members: [UUID]
+    let senderId: String? // _id
+    let senderIdOnRDBMS: UUID?
+    let notify: String?
 }
 
 struct ResolvedMessage: Codable {

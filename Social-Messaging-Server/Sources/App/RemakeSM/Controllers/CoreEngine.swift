@@ -99,7 +99,8 @@ struct CoreEngine {
                 where: "_id" == mess.boxId,
                 to: [
                     "$set": [
-                        "boxSpecification.lastest": mess.text
+                        "boxSpecification.lastest": mess.text,
+                        "boxSpecification.lastestUpdate": String(describing: Date())
                     ]
                 ]
             ).map { _ in }

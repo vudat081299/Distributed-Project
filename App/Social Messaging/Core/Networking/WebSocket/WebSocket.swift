@@ -1014,7 +1014,7 @@ private class InnerWebSocket: Hashable {
             }
             req.setValue(val, forHTTPHeaderField: "Sec-WebSocket-Extensions")
         }
-		
+
 		let security: TCPConnSecurity
 		let port : Int
 		if req.url!.scheme == "wss" {
@@ -1149,7 +1149,7 @@ private class InnerWebSocket: Hashable {
                         value = trim(String(line[r.upperBound...]))
                     }
                 }
-                
+
                 switch key.lowercased() {
                 case "sec-websocket-subprotocol":
                     privateSubProtocol = value
@@ -1552,7 +1552,7 @@ private func ==(lhs: InnerWebSocket, rhs: InnerWebSocket) -> Bool {
 private enum TCPConnSecurity {
     case none
     case negoticatedSSL
-	
+
 	var level: String {
 		switch self {
 		case .none: return StreamSocketSecurityLevel.none.rawValue

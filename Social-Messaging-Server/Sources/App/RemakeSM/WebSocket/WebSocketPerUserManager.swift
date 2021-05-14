@@ -18,7 +18,7 @@ final class WebSocketPerUserManager {
     
     func add(ws: WebSocket, to userId: String) {
         dictionary[userId] = ws
-        
+        print("Add new WebSocket connection!")
     }
     
     func removeSession(of userId: String) {

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		6B2FE946264C18D2007CAA3D /* URLResponse+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2FE945264C18D2007CAA3D /* URLResponse+Extensions.swift */; };
 		6B2FE948264C18FB007CAA3D /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2FE947264C18FB007CAA3D /* Data+Extensions.swift */; };
 		6B2FE94A264C256B007CAA3D /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2FE949264C256B007CAA3D /* Key.swift */; };
+		6B2FE94D264DA5D2007CAA3D /* WebSocketKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6B2FE94C264DA5D2007CAA3D /* WebSocketKit */; };
 		6B5AC2BF262C8510003B8F93 /* CustomListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B5AC2BD262C8510003B8F93 /* CustomListCell.xib */; };
 		6B89CAEE26306215007FCAE5 /* ChattingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B89CAEC26306215007FCAE5 /* ChattingViewController.swift */; };
 		6B89CAEF26306215007FCAE5 /* ChattingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B89CAED26306215007FCAE5 /* ChattingViewController.xib */; };
@@ -52,6 +53,7 @@
 		6BBFDE7626492221001AA9D9 /* SuccessRequestServerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE7526492221001AA9D9 /* SuccessRequestServerView.swift */; };
 		6BBFDE7A264A22A6001AA9D9 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE78264A22A6001AA9D9 /* UserView.swift */; };
 		6BBFDE7B264A22A6001AA9D9 /* UserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BBFDE79264A22A6001AA9D9 /* UserView.xib */; };
+		6BC5FE54264E51AC000702BE /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC5FE53264E51AC000702BE /* Date.swift */; };
 		6BCCA268262B3A420075A2A3 /* Note2.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA267262B3A420075A2A3 /* Note2.txt */; };
 		6BCCA276262B3A930075A2A3 /* Note1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6BCCA275262B3A930075A2A3 /* Note1.txt */; };
 		6BCF0912263324CB00311C41 /* UICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCF0911263324CB00311C41 /* UICollectionViewCell.swift */; };
@@ -161,6 +163,7 @@
 		6BBFDE7526492221001AA9D9 /* SuccessRequestServerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuccessRequestServerView.swift; sourceTree = "<group>"; };
 		6BBFDE78264A22A6001AA9D9 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		6BBFDE79264A22A6001AA9D9 /* UserView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserView.xib; sourceTree = "<group>"; };
+		6BC5FE53264E51AC000702BE /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		6BCCA267262B3A420075A2A3 /* Note2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note2.txt; sourceTree = "<group>"; };
 		6BCCA275262B3A930075A2A3 /* Note1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Note1.txt; sourceTree = "<group>"; };
 		6BCF0911263324CB00311C41 /* UICollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewCell.swift; sourceTree = "<group>"; };
@@ -207,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C49176802624551F00253070 /* libz.tbd in Frameworks */,
+				6B2FE94D264DA5D2007CAA3D /* WebSocketKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +318,7 @@
 				6B2FE943264C18A8007CAA3D /* URLRequest+Extensions.swift */,
 				6B2FE945264C18D2007CAA3D /* URLResponse+Extensions.swift */,
 				6B2FE947264C18FB007CAA3D /* Data+Extensions.swift */,
+				6BC5FE53264E51AC000702BE /* Date.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -627,6 +632,9 @@
 			dependencies = (
 			);
 			name = "Social Messaging";
+			packageProductDependencies = (
+				6B2FE94C264DA5D2007CAA3D /* WebSocketKit */,
+			);
 			productName = "Social Messaging";
 			productReference = 6B8FF04B2622024000F813C6 /* Social Messaging.app */;
 			productType = "com.apple.product-type.application";
@@ -698,6 +706,9 @@
 				Base,
 			);
 			mainGroup = 6B8FF0422622024000F813C6;
+			packageReferences = (
+				6B2FE94B264DA5D1007CAA3D /* XCRemoteSwiftPackageReference "websocket-kit" */,
+			);
 			productRefGroup = 6B8FF04C2622024000F813C6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -778,6 +789,7 @@
 				6BBFDE5826491C32001AA9D9 /* UserAccessControlViewController.swift in Sources */,
 				6B8FF0532622024000F813C6 /* ViewController.swift in Sources */,
 				C49176702624546D00253070 /* WebServices.swift in Sources */,
+				6BC5FE54264E51AC000702BE /* Date.swift in Sources */,
 				6BBFDE7626492221001AA9D9 /* SuccessRequestServerView.swift in Sources */,
 				6BBFDE6A2649205E001AA9D9 /* NVActivityIndicatorAnimationDelegate.swift in Sources */,
 				C49176772624546D00253070 /* Auth.swift in Sources */,
@@ -1152,6 +1164,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6B2FE94B264DA5D1007CAA3D /* XCRemoteSwiftPackageReference "websocket-kit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vapor/websocket-kit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6B2FE94C264DA5D2007CAA3D /* WebSocketKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6B2FE94B264DA5D1007CAA3D /* XCRemoteSwiftPackageReference "websocket-kit" */;
+			productName = WebSocketKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		6B8FF0572622024000F813C6 /* Social_Messaging.xcdatamodeld */ = {

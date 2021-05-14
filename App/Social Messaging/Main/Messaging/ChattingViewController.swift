@@ -34,7 +34,7 @@ class ChattingViewController: UIViewController {
     @IBOutlet weak var chatTextField: UITextField!
     // Constraints.
     @IBOutlet weak var textFieldBottomAlign: NSLayoutConstraint!
-    @IBOutlet weak var popKeyboardHeight: NSLayoutConstraint!
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
     
     
@@ -95,6 +95,7 @@ class ChattingViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -142,8 +143,6 @@ class ChattingViewController: UIViewController {
     // MARK: - IBAction
     @IBAction func sendMessage(_ sender: UIButton) {
     }
-    
-    
     
     // MARK: - Gesture.
     /// Pan Gesture on collection chat view. Using for swipe showing time stamp.
@@ -380,6 +379,11 @@ extension ChattingViewController: UIGestureRecognizerDelegate {
         }
         return true
     }
+    
+    @IBAction func hideKeyBoardTap(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
+    }
+    
 }
 
 
@@ -389,7 +393,7 @@ extension ChattingViewController: UITextFieldDelegate {
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardRect.height
-            self.popKeyboardHeight.constant = keyboardHeight + 50
+            self.bottomConstraint.constant = keyboardHeight - 34
             self.view.layoutIfNeeded()
         }
     }
@@ -397,7 +401,7 @@ extension ChattingViewController: UITextFieldDelegate {
     @objc func keyboardWillHide(notification: NSNotification) {
         if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardRect.height
-            self.popKeyboardHeight.constant -= keyboardRect.height
+            self.bottomConstraint.constant = 0
             self.view.layoutIfNeeded()
         }
     }

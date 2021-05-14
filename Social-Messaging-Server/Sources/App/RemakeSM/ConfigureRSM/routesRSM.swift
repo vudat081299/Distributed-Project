@@ -44,7 +44,7 @@ func routesRSM(_ app: Application) throws {
 func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userId: String) {
     socket.onText { _, text in
         let jsonData = text.data(using: .utf8)!
-        
+        print(jsonData)
         // sample to post in ws.
 //        {
 //            "type": 1,
@@ -148,16 +148,17 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userId: String
 
 
 // MARK: - Handlers.
-func messingHandler(data: String, of req: Request, using decoder: JSONDecoder) throws {
+func messingHandler(data: WSResolvedMessage, of req: Request, using decoder: JSONDecoder) throws {
     // Save mess.
-    let mess = try decoder.decode(WSResolvedMessage.self, from: data.data(using: .utf8)!)
+//    let mess = try decoder.decode(WSResolvedMessage.self, from: data.data(using: .utf8)!)
+    let mess = data
     let createMessageInBox = Message(
         creationDate: mess.creationDate,
         text: mess.text,
         boxId: mess.boxId,
         fileId: mess.fileId,
         type: mess.type,
-        sender_id: mess.sender_id,
+        senderId: mess.senderId,
         senderIdOnRDBMS: mess.senderIdOnRDBMS
     )
     
@@ -168,8 +169,14 @@ func messingHandler(data: String, of req: Request, using decoder: JSONDecoder) t
     )
     
     // notify to all recipients of box.
+//    do {
+//        let encoder = JSONEncoder()
+//    let context = WSEncodeContext(type: .newMess, majorData: try encoder.encode(createMessageInBox))
     let context = WSEncodeContext(type: .newMess, majorData: createMessageInBox)
-    webSocketPerUserManager.notifyMess(to: mess.members, content: context)
+        webSocketPerUserManager.notifyMess(to: mess.members, content: context)
+//    } catch {
+//        print(error.localizedDescription)
+//    }
 }
 
 
@@ -183,7 +190,7 @@ func messingHandler(data: String, of req: Request, using decoder: JSONDecoder) t
 // MARK: - Structure.
 struct WSResolvedData: Decodable {
     let type: WSResolvedMajorDataType
-    let majorData: String
+    let majorData: WSResolvedMessage
 }
 
 enum WSResolvedMajorDataType: Int, Codable {
@@ -196,7 +203,7 @@ struct WSResolvedMessage: Decodable {
     let text: String?
     let fileId: ObjectId?
     let type: MediaType
-    let sender_id: ObjectId
+    let senderId: ObjectId
     let senderIdOnRDBMS: UUID
     
     let members: [UUID]
