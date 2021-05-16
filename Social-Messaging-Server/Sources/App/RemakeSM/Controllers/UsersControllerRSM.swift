@@ -21,12 +21,13 @@ struct UsersControllerRSM: RouteCollection {
         
         // Test
         usersRoute.get("token", use: getAllToken)
-        usersRoute.get("nosql", use: getAllUserData)
+        usersRoute.get("nosqlnotoken", use: getAllUserData)
         usersRoute.get(":userId", use: getHandler)
         usersRoute.delete(":userId", "deleteUser", use: deleteHandler)
         usersRoute.get(use: getAllHandler) // load all users
         usersRoute.get("getauthuser", use: getAuthUserData)
-        
+        usersRoute.post("postfiletest", use: postFile)
+        usersRoute.get("getfiletest", ":fileId", use: getFile)
         
         let basicAuthMiddleware = UserRSM.authenticator()
         let basicAuthGroup = usersRoute.grouped(basicAuthMiddleware)
@@ -40,10 +41,13 @@ struct UsersControllerRSM: RouteCollection {
         tokenAuthGroup.get("loadallusers", use: getAllHandler)
         tokenAuthGroup.get("nosql", use: getAllUserData)
         tokenAuthGroup.get("getauthuserdata", use: getAuthUserData)
-        tokenAuthGroup.get("getavatar", ":avatarid", use: getAvatar)
+        tokenAuthGroup.get("getavatar", ":avatarId", use: getAvatar)
+        tokenAuthGroup.get("getfile", ":fileId", use: getFile)
         tokenAuthGroup.get("searchuserssql", ":term", use: searchUsersSQL)
         
         tokenAuthGroup.post(use: signUp)
+        tokenAuthGroup.post("followuser", use: followUser)
+        tokenAuthGroup.post("postfile", use: postFile)
         
         tokenAuthGroup.put("editprofile", use: editProfile)
         tokenAuthGroup.put("updateavatar", use: updateAvatar)
@@ -270,6 +274,12 @@ struct UsersControllerRSM: RouteCollection {
     }
     
     
+    func followUser(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        let data = try req.content.decode(FollowUserPostRQ.self)
+        return CoreEngine.followUser(userId: data.userId, from: data.followerId, inDatabase: req.mongoDB).transform(to: .ok)
+    }
+    
+    
     
     // MARK: - Get data.
     func getAllHandler(_ req: Request) -> EventLoopFuture<[UserRSM]> {
@@ -298,6 +308,38 @@ struct UsersControllerRSM: RouteCollection {
         
         return CoreEngine.readFile(byId: fileId, inDatabase: req.mongoDB).map { data in
             return Response(body: Response.Body(data: data))
+        }
+    }
+    
+    ///
+    func getFile(_ req: Request) throws -> EventLoopFuture<Response> {
+        guard let fileId = req.parameters.get("fileId", as: ObjectId.self) else {
+            throw Abort(.notFound)
+        }
+        
+        return CoreEngine.readFile(byId: fileId, inDatabase: req.mongoDB).map { data in
+            return Response(body: Response.Body(data: data))
+        }
+    }
+    
+    func postFile(_ req: Request) throws -> EventLoopFuture<String> {
+        let updateAvatar = try req.content.decode(FileUpload.self)
+        let fileId: EventLoopFuture<ObjectId?>
+
+        if let file = updateAvatar.file, !file.isEmpty {
+            // Upload the attached file to GridFS
+            fileId = CoreEngine.uploadFile(file, inDatabase: req.mongoDB).map { fileId in
+                // This is needed to map the EventLoopFuture from `ObjectId` to `ObjectId?`
+                return fileId
+            }
+        } else {
+            fileId = req.eventLoop.makeSucceededFuture(nil)
+        }
+        return fileId.flatMapThrowing { id in
+            guard let id = id else {
+                throw Abort(.badRequest)
+            }
+            return id.hexString
         }
     }
     

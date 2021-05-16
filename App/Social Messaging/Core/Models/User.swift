@@ -20,8 +20,8 @@ struct User: Codable { // NoSQL structure.
     
     let privacy: PrivacyType?
     let defaultAvartar: DefaultAvartar?
-    
     let personalData: PrivateUserData
+    
     let followings: [String]
     let boxes: [String]
     let followers: [String]

@@ -20,53 +20,26 @@ struct MessagesController: RouteCollection {
         //
         
         // Main
-        tokenAuthGroup.get("box", use: loadAllBoxesOfUser)
-        tokenAuthGroup.get("getmessageinrange", ":boxId", ":before", ":limit", use: loadAllMessagesInBoxInRange)
-        acronymsRoutes.get(":boxId", use: loadAllMessagesInBox)
+        tokenAuthGroup.get("box", ":userId", use: loadAllBoxesOfUser)
+        tokenAuthGroup.get("messageinrange", ":boxId", ":before", ":limit", use: loadAllMessagesInBoxInRange)
+        tokenAuthGroup.get("messesinbox", ":boxId", use: loadAllMessagesInBox)
         
         tokenAuthGroup.post(use: mess)
         
         
         //
         acronymsRoutes.get("messesinbox", use: loadAllMessagesInBox)
-        acronymsRoutes.get(use: loadAllBoxesOfUser)
+        acronymsRoutes.get(":userId", use: loadAllBoxesOfUser)
         acronymsRoutes.get("all", use: loadAllBoxes)
         
         
     }
     
-    func mess(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+    /// Check of box is existed, if not create box.
+    func mess(_ req: Request) throws -> EventLoopFuture<Box> {
         let user = try req.auth.require(UserRSM.self)
         let data = try req.content.decode(CreateBox.self)
-        
-        var members = data.members
-        members.append(user.id!)
-        var membersName = data.membersName
-        membersName.append(user.name)
-        
-        let boxSpecification = BoxSpecification(
-            name: "", avartar: nil,
-            creator: user.id!,
-            creator_id: data.creator_id,
-            creatorName: user.name,
-            createdAt: data.createdAt,
-            lastestMess: """
-🐝 I’m student at Ha Noi University of Science and Technology.
-            🐽 I'm currently learning and working on 🧠 AI (Machine Learning, Deep Learning, CNN, RNN on <Python, Swift>), Augmented-Reality (Swift), iOS (Swift, Objc-C, C/C++), full-stack developer (Vuejs, React, 💧Vapor-Swift, Nodejs, Golang), Cybersecurity - Computer Security.
-""",
-            lastestUpdate: Date()
-        )
-        let box = Box(
-            _id: ObjectId(),
-            generatedString: data.generatedString,
-            type: data.type,
-            boxSpecification: boxSpecification,
-            members: members,
-            members_id: data.members_id,
-            membersName: membersName
-        )
-        
-        return CoreEngine.createBox(box, of: user.id!.uuidString, generatedString: data.generatedString, inDatabase: req.mongoDB)
+        return CoreEngine.checkBoxIfExisted(data: data, of: user, inDatabase: req.mongoDB)
     }
     
     func loadAllBoxes(_ req: Request) throws -> EventLoopFuture<[Box]> {
@@ -74,10 +47,12 @@ struct MessagesController: RouteCollection {
     }
     
     func loadAllBoxesOfUser(_ req: Request) throws -> EventLoopFuture<[Box]> {
-        let user = try req.auth.require(UserRSM.self)
+        guard let _id = req.parameters.get("userId", as: ObjectId.self) else {
+            throw Abort(.badRequest)
+        }
 //        return CoreEngine.findUser(has: user.id!.uuidString, of: "idOnRDBMS", inDatabase: req.mongoDB).flatMap { user in
 //            print(user._id)
-        return CoreEngine.loadAllBoxesOfUser(of: user.id!.uuidString, inDatabase: req.mongoDB)
+        return CoreEngine.loadAllBoxesOfUser(of: _id, inDatabase: req.mongoDB)
 //        }
     }
     

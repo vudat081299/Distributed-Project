@@ -45,6 +45,26 @@ class Time {
         }
     }
     
+    static func getTypeWithFormat(of date: Date) -> String {
+        var customRequestedComponents: Set<Calendar.Component>
+        var customDateTimeComponents: DateComponents
+        var customUserCalendar: Calendar!
+        customUserCalendar = Calendar.current
+        customRequestedComponents = [
+            .year,
+            .month,
+            .day,
+            .hour,
+            .minute,
+            .second
+        ]
+        customDateTimeComponents = customUserCalendar.dateComponents(customRequestedComponents, from: date)
+        let customFormatter = DateFormatter()
+        customFormatter.timeStyle = .short
+        customFormatter.dateStyle = .none
+        return customFormatter.string(from: date)
+    }
+    
     init() {
 
         // get current date time

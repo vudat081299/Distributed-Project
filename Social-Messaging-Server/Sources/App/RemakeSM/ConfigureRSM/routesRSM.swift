@@ -38,6 +38,25 @@ func routesRSM(_ app: Application) throws {
         webSocketPerUserManager.add(ws: ws, to: userId)
         webSocketBehaviorHandler(req: req, socket: ws, of: userId)
         
+        
+        
+        
+        let a = """
+{
+   "type": 1,
+    "majorData": {"boxId": "60a0c4a6d41b94d16d43b6d7", "creationDate": 1621150327.421111, "text": "Hello this is first mess!", "fileId": "6094d82ddba87b2eb8b413f3", "type": 1, "senderId": "609ea00683818e382c32bbd8", "senderIdOnRDBMS": "FECE0C19-60BE-4DFC-87BA-31749B9459F7", "members": ["D8D04A41-A7DD-4A4B-BBF1-EBD314900F0E", "FECE0C19-60BE-4DFC-87BA-31749B9459F7"]}
+}
+"""
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            let resolvedData = try decoder.decode(WSResolvedDataTest.self, from: a.data(using: .utf8)!)
+            print(resolvedData)
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        
     }
 }
 
@@ -47,8 +66,8 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userId: String
         print(jsonData)
         // sample to post in ws.
 //        {
-//            "type": 1,
-//            "majorData": "{\"boxId\": \"6097a490021b77cd7434dd2e\", \"creationDate\": 1620184184.11111111111111, \"text\": \"********************************\", \"fileId\": \"6094d82ddba87b2eb8b413f3\", \"type\": 3, \"sender_id\": \"6094d82ddba87b2eb8b413f3\", \"senderIdOnRDBMS\": \"C697A624-052D-48F3-9FB9-C823BDD246D7\", \"members\": [\"DBD54018-97DA-4888-B87A-D2E8403A9845\", \"C697A624-052D-48F3-9FB9-C823BDD246D7\"]}"
+//           "type": 1,
+//            "majorData": {"boxId": "60a0c4a6d41b94d16d43b6d7", "creationDate": 1621150327.421111, "text": "Hello this is first mess!", "fileId": "6094d82ddba87b2eb8b413f3", "type": 1, "senderId": "609ea00683818e382c32bbd8", "senderIdOnRDBMS": "FECE0C19-60BE-4DFC-87BA-31749B9459F7", "members": ["D8D04A41-A7DD-4A4B-BBF1-EBD314900F0E", "FECE0C19-60BE-4DFC-87BA-31749B9459F7"]}
 //        }
         
         // new design.
@@ -153,6 +172,7 @@ func messingHandler(data: WSResolvedMessage, of req: Request, using decoder: JSO
 //    let mess = try decoder.decode(WSResolvedMessage.self, from: data.data(using: .utf8)!)
     let mess = data
     let createMessageInBox = Message(
+        _id: ObjectId(),
         creationDate: mess.creationDate,
         text: mess.text,
         boxId: mess.boxId,
@@ -212,4 +232,21 @@ struct WSResolvedMessage: Decodable {
 struct WSEncodeContext: Encodable {
     let type: WSResolvedMajorDataType
     let majorData: Message
+}
+
+struct WSResolvedDataTest: Decodable {
+    let type: WSResolvedMajorDataType
+    let majorData: WSResolvedMessage
+}
+
+struct WSResolvedMessageTest: Decodable {
+    let boxId: ObjectId
+    let creationDate: Date
+    let text: String?
+    let fileId: ObjectId?
+    let type: MediaType
+    let senderId: ObjectId
+    let senderIdOnRDBMS: UUID
+
+    let members: [UUID]
 }

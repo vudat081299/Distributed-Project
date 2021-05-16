@@ -53,12 +53,13 @@ class MessagingViewControllerTableView: UIViewController {
     */
     
     func fetchBoxesData(completion: @escaping () -> Void) {
-        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "mess")
+        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "mess/box/\(Auth.userProfileData!._id)")
         request_box.getArray(token: Auth.token) { result in
             switch result {
             case .success(let data):
-                Auth.userBoxData = data
-                self.userBoxData = data
+                let boxData = data.sorted(by: { $0.boxSpecification.lastestUpdate > $1.boxSpecification.lastestUpdate })
+                Auth.userBoxData = boxData
+                self.userBoxData = boxData
                 completion()
             case .failure:
                 break
@@ -100,7 +101,9 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
             }
         }
         cell.name.text = boxName
+        cell.idLabel.text = "@\(box._id)"
         cell.lastestMess.text = box.boxSpecification.lastestMess
+        cell.timeStampButton.setTitle(Time.getTypeWithFormat(of: box.boxSpecification.lastestUpdate), for: .normal)
         return cell
     }
     

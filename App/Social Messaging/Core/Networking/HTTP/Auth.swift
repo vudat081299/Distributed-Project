@@ -17,6 +17,7 @@ class Auth {
     static let userIdKey = "userIdKey"
     static let _idKey = "_idKey"
     static let userDefaults = UserDefaults.standard
+    static var avatar: UIImage!
     
     static var token: String? {
         get {
@@ -145,6 +146,31 @@ class Auth {
             switch result {
             case .success(let data):
                 Auth.userProfileData = data
+                do {
+//                        avatar = UIImage(data: try Data(contentsOf: URL(string: "http://\(ip)/api/users\(data.profilePicture)")!))
+                    avatar = UIImage(data: try Data(contentsOf: URL(string: "http://192.168.1.65:8080/api/users/getfiletest/60a09d19901feaeae8684069")!))
+                    
+                } catch {
+                    print(error.localizedDescription)
+                }
+                if data.profilePicture != nil {
+//                    let request_avatar = ResourceRequest<User>(resourcePath: "users/getavatar/\(data.profilePicture)")
+//                    request_avatar.get(token: Auth.token) { result in
+//                        switch result {
+//                        case .success(let data):
+//
+//                        case .failure:
+//                            break
+//                        }
+//                    }
+                    do {
+//                        avatar = UIImage(data: try Data(contentsOf: URL(string: "http://\(ip)/api/users\(data.profilePicture)")!))
+                        avatar = UIImage(data: try Data(contentsOf: URL(string: "http://192.168.1.65:8080/api/users/getfiletest/60a09d19901feaeae8684069")!))
+                        
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
             case .failure:
                 break
             }

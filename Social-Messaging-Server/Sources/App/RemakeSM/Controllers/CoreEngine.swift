@@ -15,13 +15,13 @@ struct CoreEngine {
     
     
     // MARK: - Box
-    static func createBox(_ box: Box, of userId: String, generatedString: String?, inDatabase database: MongoDatabase) -> EventLoopFuture<HTTPStatus> {
+    static func createBox(_ box: Box, of userId: String, inDatabase database: MongoDatabase) -> EventLoopFuture<HTTPStatus> {
 //        database[Box.collection].createIndex(named: "email", keys: ["idOnRDBMS": ["$unique": true]])
         return database[Box.collection].insertEncoded(box).map { _ in
             return findUser(has: userId, of: "idOnRDBMS", inDatabase: database).map { user in
                 var foundedUser = user
                 foundedUser.boxes.append(box._id)
-                updateBoxesOfUser(box, from: user, inDatabase: database)
+                print(updateBoxesOfUser(box, from: user, inDatabase: database))
             }
         }.transform(to: .ok)
     }
@@ -36,10 +36,10 @@ struct CoreEngine {
     
     /// Load all boxes of User.
     static func loadAllBoxesOfUser(
-        of userId: String,
+        of _id: ObjectId,
         inDatabase database: MongoDatabase
     ) -> EventLoopFuture<[Box]> {
-        return findUser(has: String(userId), of: "idOnRDBMS", inDatabase: database).flatMap { user in
+        return findUserByObjectId(has: _id, inDatabase: database).flatMap { user in
             let boxes = user.boxes
             let boxesOfUserQuery: Document = [
               "_id": [
@@ -71,6 +71,53 @@ struct CoreEngine {
             }
     }
     
+    static func checkBoxIfExisted( // if not create.
+        data: CreateBox,
+        of userSQL: UserRSM,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<Box> {
+        return database[Box.collection]
+            .findOne(
+                "generatedString" == data.generatedString,
+                as: Box.self
+            ).flatMapThrowing { box in
+                guard let box = box else {
+                    var members = data.members
+                    members.append(userSQL.id!)
+                    var membersName = data.membersName
+                    membersName.append(userSQL.name)
+                    
+                    let boxSpecification = BoxSpecification(
+                        name: "", avartar: nil,
+                        creator: userSQL.id!,
+                        creator_id: data.creator_id,
+                        creatorName: userSQL.name,
+                        createdAt: data.createdAt,
+                        lastestMess: """
+🐝  Say hello to your new friend!
+🐽 I'm currently learning and working on
+🧠 AI (Machine Learning, Deep Learning, CNN, RNN on <Python, Swift>), Augmented-Reality (Swift), iOS (Swift, Objc-C, C/C++), full-stack developer (Vuejs, React,
+💧Vapor-Swift, Nodejs, Golang), Cybersecurity - Computer Security.
+""",
+                        lastestUpdate: Date()
+                    )
+                    let box = Box(
+                        _id: ObjectId(),
+                        generatedString: data.generatedString,
+                        type: data.type,
+                        boxSpecification: boxSpecification,
+                        members: members,
+                        members_id: data.members_id,
+                        membersName: membersName
+                    )
+                    
+                    print(CoreEngine.createBox(box, of: userSQL.id!.uuidString, inDatabase: database))
+                    return box
+                }
+                return box
+            }
+    }
+    
     static func checkPrivateBox(
         generatedString: String,
         inDatabase database: MongoDatabase
@@ -81,9 +128,6 @@ struct CoreEngine {
                 as: Box.self
             ).flatMapThrowing { box in
                 guard let box = box else {
-                    throw Abort(.notFound)
-                }
-                if box != nil {
                     throw Abort(.notFound)
                 }
                 return box
@@ -207,8 +251,8 @@ struct CoreEngine {
     //        ).map { _ in }
     //    }
     static func mess(_ content: Message, inDatabase database: MongoDatabase) {
-        updateBox(mess: content, inDatabase: database)
-        database[Message.collection].insertEncoded(content).map { _ in }
+        print(updateBox(mess: content, inDatabase: database))
+        print(database[Message.collection].insertEncoded(content).map { _ in })
     }
     
     /// Send file in mess.
@@ -253,6 +297,22 @@ struct CoreEngine {
         return database[UserRSMNoSQL.collection]
             .findOne(
                 field == searchTerm,
+                as: UserRSMNoSQL.self
+            ).flatMapThrowing { user in
+                guard let user = user else {
+                    throw Abort(.notFound)
+                }
+                return user
+            }
+    }
+    
+    static func findUserByObjectId(
+        has _id: ObjectId,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<UserRSMNoSQL> {
+        return database[UserRSMNoSQL.collection]
+            .findOne(
+                "_id" == _id,
                 as: UserRSMNoSQL.self
             ).flatMapThrowing { user in
                 guard let user = user else {
@@ -344,6 +404,20 @@ struct CoreEngine {
     }
     
     
+    static func followUser(
+        userId: ObjectId,
+        from followerId: ObjectId,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<Void> {
+        return database[UserRSMNoSQL.collection].updateOne(
+            where: "_id" == followerId,
+            to: [
+                "$push": [
+                    "following": userId
+                ]
+            ]
+        ).map { _ in }
+    }
     
     
     // MARK: - File handler.

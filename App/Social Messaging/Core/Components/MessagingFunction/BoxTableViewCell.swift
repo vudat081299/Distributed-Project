@@ -12,7 +12,9 @@ class BoxTableViewCell: UITableViewCell {
     
     @IBOutlet weak var boxImage: UIImageView!
     @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var idLabel: UILabel!
     @IBOutlet weak var lastestMess: UILabel!
+    @IBOutlet weak var timeStampButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

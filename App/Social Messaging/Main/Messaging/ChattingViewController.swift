@@ -115,7 +115,7 @@ class ChattingViewController: UIViewController {
     */
     
     func fetchBoxesData(completion: @escaping () -> Void) {
-        let request_mess = ResourceRequest<ResolvedMessage>(resourcePath: "mess/\(boxId)")
+        let request_mess = ResourceRequest<ResolvedMessage>(resourcePath: "mess/messesinbox/\(boxId)")
         request_mess.getArray(token: Auth.token) { result in
             switch result {
             case .success(let data):

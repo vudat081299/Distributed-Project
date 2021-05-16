@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import MongoKitten
 
 struct Avatar: Content {
     var file: Data?
@@ -18,4 +19,13 @@ enum SearchUserCases: String {
     case phoneNumber
     case email
     case dob
+}
+
+struct FollowUserPostRQ: Content {
+    let userId: ObjectId
+    let followerId: ObjectId
+}
+
+struct FileUpload: Content {
+    var file: Data?
 }

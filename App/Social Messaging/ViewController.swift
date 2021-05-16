@@ -146,6 +146,8 @@ class ViewController: UIViewController {
     
     @objc func leftBarItemAction() {
         print("Left bar button was pressed!")
+        print(Auth.token)
+        print(Auth.userProfileData)
     }
     @objc func rightBarItemAction() {
         print("Right bar button was pressed!")
@@ -203,7 +205,7 @@ class ViewController: UIViewController {
     
     func fetchUsersData() {
         let request = ResourceRequest<User>(resourcePath: "users/nosql")
-        request.getArray() { [weak self] result in
+        request.getArray(token: Auth.token) { [weak self] result in
             switch result {
             case .success(let data):
                 DispatchQueue.main.async { [weak self] in
@@ -427,7 +429,7 @@ extension ViewController {
                                 creator_id: currentUser?._id,
                                 createdAt: Time.iso8601String
                             )
-                            let request = ResourceRequest<Box>(resourcePath: "mess/box")
+                            let request = ResourceRequest<Box>(resourcePath: "mess")
                             request.post(token: Auth.token, box) { result in
                                 switch result {
                                 case .success(let data):

@@ -11,6 +11,7 @@ import MongoKitten
 struct Message: Codable, Content {
     static let collection = "messages"
     
+    let _id: ObjectId
     let creationDate: Date
     let text: String?
     let boxId: ObjectId

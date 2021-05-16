@@ -14,15 +14,20 @@ final class WebSocketPerUserManager {
     var listWS: [WebSocket] = []
     // MARK: Observer Interactions
     
-    var dictionary: [String: WebSocket] = [:]
+    var dictionary: [String: [WebSocket]] = [:]
     
     func add(ws: WebSocket, to userId: String) {
-        dictionary[userId] = ws
+        if dictionary[userId] == nil {
+            dictionary[userId] = []
+        }
+        dictionary[userId]?.append(ws)
         print("Add new WebSocket connection!")
     }
     
     func removeSession(of userId: String) {
-        dictionary.removeValue(forKey: userId)
+        if dictionary[userId] != nil {
+            dictionary.removeValue(forKey: userId)
+        }
     }
     
     func log() {
@@ -31,8 +36,10 @@ final class WebSocketPerUserManager {
     
     func notifyMess(to userIds: [UUID], content: WSEncodeContext) {
         userIds.forEach { id in
-            if let ws = dictionary[id.uuidString] {
-                ws.send(content)
+            if let wss = dictionary[id.uuidString] {
+                wss.forEach { ws in
+                    ws.send(content)
+                }
             }
         }
 //        listWS.forEach { ws in
