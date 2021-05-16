@@ -89,6 +89,12 @@ class Auth {
     
     static func logout(on viewController: UIViewController?) {
         self.token = nil
+        self.userProfileData = nil
+        self._id = nil
+        self.userId = nil
+        self.userBoxData = []
+        self.currentUserID = nil
+        
         DispatchQueue.main.async {
 //      guard let applicationDelegate = UIApplication.shared.delegate as? SceneDelegate else {
 //        return

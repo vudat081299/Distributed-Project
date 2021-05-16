@@ -9,7 +9,7 @@ import UIKit
 
 var messages: [String: [ResolvedMessage]] = [:] // map with box id.
 
-class ChattingViewController: UIViewController {
+class ChattingViewController: UIViewController, MessagePullThread {
     
     // MARK: - CV config data.
     // Collection view config data.
@@ -43,7 +43,11 @@ class ChattingViewController: UIViewController {
     var headersIndex = [IndexPath]()
     var touchPosition: CGPoint = CGPoint(x: 0, y: 0)
     var boxId: String = ""
+    var boxData: ResolvedBox!
     var messagesOfBox: [ResolvedMessage] = []
+    let authUser = Auth.userProfileData
+    var delegate: MessagePushThread?
+    
     
     
     // MARK: - Closures.
@@ -80,9 +84,6 @@ class ChattingViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        fetchBoxesData {
-            self.configureDataSource()
-        }
         setUpNavigationBar()
         configureHierarchy()
         
@@ -90,12 +91,18 @@ class ChattingViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
+        fetchBoxesData {
+//            self.configureDataSource()
+            DispatchQueue.main.async {
+                self.configureDataSource()
+                self.chatView.scrollToItem(at: IndexPath(row: 0, section: self.messagesOfBox.count - 1), at: .bottom, animated: true)
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -114,22 +121,30 @@ class ChattingViewController: UIViewController {
     }
     */
     
+    func receiveMessage(data: WSMessage) {
+        let message = ResolvedMessage(_id: data._id, creationDate: data.creationDate, text: data.text, boxId: data.boxId!, fileId: data.fileId, type: data.type.rawValue, senderId: data.senderId!, senderIdOnRDBMS: data.senderIdOnRDBMS!)
+        messagesOfBox.append(message)
+//        chatView.insertItems(at: [IndexPath(row: 0, section: <#T##Int#>)])
+//        chatView.insertSections(IndexSet()
+        setUpDataSource()
+    }
+    
     func fetchBoxesData(completion: @escaping () -> Void) {
         let request_mess = ResourceRequest<ResolvedMessage>(resourcePath: "mess/messesinbox/\(boxId)")
         request_mess.getArray(token: Auth.token) { result in
             switch result {
             case .success(let data):
-                data.forEach { message in
-                    print(messages)
-                    if messages[message.boxId] != nil {
-                        (messages[message.boxId])!.append(message)
+                let sortMessages = data.sorted(by: { $0.creationDate < $1.creationDate })
+                if sortMessages.count > 0 {
+                    if messages[sortMessages[0].boxId] != nil {
+                        (messages[sortMessages[0].boxId])! = sortMessages
                     } else {
-                        messages[message.boxId] = []
-                        (messages[message.boxId])!.append(message)
+                        messages[sortMessages[0].boxId] = []
+                        (messages[sortMessages[0].boxId])! = sortMessages
                     }
-                }
-                if messages[self.boxId] != nil {
-                    self.messagesOfBox = messages[self.boxId]!
+                    if messages[self.boxId] != nil {
+                        self.messagesOfBox = messages[self.boxId]!
+                    }
                 }
                 completion()
             case .failure:
@@ -142,6 +157,28 @@ class ChattingViewController: UIViewController {
     
     // MARK: - IBAction
     @IBAction func sendMessage(_ sender: UIButton) {
+//        push
+        let majorData = MajorDataSendWS(boxId: boxData._id,
+                                        creationDate: Time.iso8601String,
+                                        text: chatTextField.text,
+                                        fileId: nil,
+                                        type: .text,
+                                        senderId: Auth.userProfileData!._id,
+                                        senderIdOnRDBMS: Auth.userProfileData!.idOnRDBMS,
+                                        members: boxData.members
+        )
+        let data = MessageSendWS(type: .newMess, majorData: majorData)
+//        delegate?.sendMessage(data: data)
+        
+        let request = ResourceRequest<MessageSendWS>(resourcePath: "mess/sendmess")
+        request.post(token: Auth.token, data) { result in
+            switch result {
+            case .success(let data):
+                break
+            case .failure:
+                break
+            }
+        }
     }
     
     // MARK: - Gesture.
@@ -310,15 +347,31 @@ extension ChattingViewController {
             if indexPath.row == 0 {
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: FirstMessContentCellForSection.reuseIdentifier,
-                    for: indexPath) as? FirstMessContentCellForSection else { fatalError("Cannot create new cell") }
-                cell.senderName.text = self.messagesOfBox[indexPath.row].sender_id
-                cell.creationDate.text = String(describing: self.messagesOfBox[indexPath.row].creationDate)
+                        for: indexPath) as? FirstMessContentCellForSection else { fatalError("Cannot create new cell") }
+                let message = self.messagesOfBox[indexPath.section]
+                var name: String?
+                for (index, value) in self.boxData.membersName.enumerated() {
+                    if message.senderIdOnRDBMS == self.authUser?.idOnRDBMS {
+                        name = self.authUser?.name
+                        cell.senderName.textColor = .orange
+                        break
+                    } else {
+                        name = value
+                        cell.senderName.textColor = .link
+                        break
+                    }
+                }
+
+                cell.senderName.text = name
+//                cell.creationDate.text = Time.getTypeWithFormat(of: message.creationDate, type: .date)
+                cell.creationDate.text = "\(message.creationDate)"
+                cell.contentTextLabel.text = message.text
                 return cell
             }
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: MessContentCell.reuseIdentifier,
                 for: indexPath) as? MessContentCell else { fatalError("Cannot create new cell") }
-            cell.contentTextLabel.text = self.messagesOfBox[indexPath.row].text
+//            cell.contentTextLabel.text = self.messagesOfBox[indexPath.row].text
             return cell
         }
         
@@ -335,12 +388,15 @@ extension ChattingViewController {
             supplementaryView.clipsToBounds = false
             return supplementaryView
         }
-
-        // initial data
+        setUpDataSource()
+    }
+    
+    func setUpDataSource() {
+//        // initial data
         let itemsPerSection = 1
         var sections = Array(0..<0)
         if (messagesOfBox.count > 0) {
-        sections = Array(0..<messagesOfBox.count - 1)
+        sections = Array(0..<messagesOfBox.count)
         } else {
             let sections = Array(0..<0)
         }
@@ -352,6 +408,18 @@ extension ChattingViewController {
             itemOffset += itemsPerSection
         }
         dataSource.apply(snapshot, animatingDifferences: false)
+        
+        // initial data
+//        let itemsPerSection = 5
+//        let sections = Array(0..<5)
+//        var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
+//        var itemOffset = 0
+//        sections.forEach {
+//            snapshot.appendSections([$0])
+//            snapshot.appendItems(Array(itemOffset..<itemOffset + itemsPerSection))
+//            itemOffset += itemsPerSection
+//        }
+//        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 

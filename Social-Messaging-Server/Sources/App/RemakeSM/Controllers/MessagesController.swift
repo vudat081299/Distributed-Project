@@ -25,6 +25,7 @@ struct MessagesController: RouteCollection {
         tokenAuthGroup.get("messesinbox", ":boxId", use: loadAllMessagesInBox)
         
         tokenAuthGroup.post(use: mess)
+        tokenAuthGroup.post("sendmess", use: sendMess)
         
         
         //
@@ -40,6 +41,13 @@ struct MessagesController: RouteCollection {
         let user = try req.auth.require(UserRSM.self)
         let data = try req.content.decode(CreateBox.self)
         return CoreEngine.checkBoxIfExisted(data: data, of: user, inDatabase: req.mongoDB)
+    }
+    
+    func sendMess(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        let data = try req.content.decode(WSResolvedData.self)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
+        return messingHandler(data: data.majorData, of: req, using: decoder).transform(to: .ok)
     }
     
     func loadAllBoxes(_ req: Request) throws -> EventLoopFuture<[Box]> {

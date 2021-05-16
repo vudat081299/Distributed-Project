@@ -10,8 +10,12 @@ import UIKit
 // App global variables.
 
 
-
-
+protocol MessagePullThread {
+    func receiveMessage(data: WSMessage)
+}
+protocol MessagePushThread {
+    func sendMessage(data: MessageSendWS)
+}
 
 
 struct ViewControllerData {
@@ -23,9 +27,9 @@ struct ViewControllerData {
     static var viewControllerDatas: [ViewControllerData] = {
         let array = [
             ViewControllerData(title: "Notifications", iconNormal: "graduationcap", selectedIcon: "graduationcap.fill", viewController: UINavigationController(rootViewController: UITableViewController())),
-            ViewControllerData(title: "Message", iconNormal: "message", selectedIcon: "message.fill", viewController: UINavigationController(rootViewController: MessagingViewController())),
-            ViewControllerData(title: "Profile", iconNormal: "person", selectedIcon: "person.fill", viewController: UINavigationController(rootViewController: ProfileViewController())),
-            ViewControllerData(title: "NewMessage", iconNormal: "person", selectedIcon: "person.fill", viewController: UINavigationController(rootViewController: MessagingViewControllerTableView()))
+            ViewControllerData(title: "NewMessage", iconNormal: "message", selectedIcon: "message.fill", viewController: UINavigationController(rootViewController: MessagingViewControllerTableView())),
+//            ViewControllerData(title: "Message", iconNormal: "message", selectedIcon: "message.fill", viewController: UINavigationController(rootViewController: MessagingViewController())),
+            ViewControllerData(title: "Profile", iconNormal: "person", selectedIcon: "person.fill", viewController: UINavigationController(rootViewController: ProfileViewController()))
         ]
         var dataList: [ViewControllerData] = []
         array.forEach {
@@ -41,14 +45,29 @@ struct ViewControllerData {
     }()
 }
 
-class TabBarController: UITabBarController {
+class TabBarController: UITabBarController, MessagePushThread {
+    
+    func sendMessage(data: MessageSendWS) {
+        let encoder = JSONEncoder()
+        guard let data = try? encoder.encode(data) else { return }
+        let ws = WebSocket("ws://\(ip)/connecttowsserver/\(Auth.userId ?? "")")
+        ws.send(data)
+    }
+    
+    var messagePullThreadDelegate: MessagePullThread?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         ViewControllerData.viewControllerDatas.forEach {
             viewControllers?.append($0.viewController)
+            if $0.viewController.viewControllers[0] is MessagingViewControllerTableView {
+                if let vc = $0.viewController.viewControllers[0] as? MessagingViewControllerTableView {
+                    messagePullThreadDelegate = vc
+                    vc.messagePushThreadDelegate = self
+                }
+            }
         }
     }
     
@@ -83,6 +102,7 @@ class TabBarController: UITabBarController {
                  */
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
+//                decoder.dateDecodingStrategy = .secondsSince1970
                 let resolvedData = try decoder.decode(WSResolvedMessage.self, from: jsonData)
                 print("Resolved WS Data successful!")
                 switch resolvedData.type {
@@ -90,7 +110,7 @@ class TabBarController: UITabBarController {
                     break
                     
                 case .newMess:
-                    print(resolvedData)
+                    self.messagePullThreadDelegate?.receiveMessage(data: resolvedData.majorData)
                     break
                     
                 case .newBox: // new box
@@ -103,9 +123,7 @@ class TabBarController: UITabBarController {
             } catch {
                 print(error.localizedDescription)
             }
-            
-            
         }
+        
     }
-
 }

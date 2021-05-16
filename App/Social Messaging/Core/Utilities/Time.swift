@@ -16,12 +16,14 @@ class Time {
         get {
             // Date with ISO 8601 format.
             let dateFormatter = DateFormatter()
-            let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
-            dateFormatter.locale = enUSPosixLocale
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+//            let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
+//            dateFormatter.locale = enUSPosixLocale
+//            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss SSSZ"
+//            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZSSS"
             dateFormatter.calendar = Calendar(identifier: .gregorian)
-
             let iso8601String = dateFormatter.string(from: Date())
+            print(iso8601String)
             return iso8601String
         }
     }
@@ -45,24 +47,32 @@ class Time {
         }
     }
     
-    static func getTypeWithFormat(of date: Date) -> String {
-        var customRequestedComponents: Set<Calendar.Component>
-        var customDateTimeComponents: DateComponents
-        var customUserCalendar: Calendar!
-        customUserCalendar = Calendar.current
-        customRequestedComponents = [
-            .year,
-            .month,
-            .day,
-            .hour,
-            .minute,
-            .second
-        ]
-        customDateTimeComponents = customUserCalendar.dateComponents(customRequestedComponents, from: date)
-        let customFormatter = DateFormatter()
-        customFormatter.timeStyle = .short
-        customFormatter.dateStyle = .none
-        return customFormatter.string(from: date)
+    enum DateType: Int {
+        case date
+        case time
+        case datetime
+    }
+    
+    static func getTypeWithFormat(of date: Date, type: DateType) -> String {
+        switch type {
+        case .date:
+            
+            let customFormatter = DateFormatter()
+            customFormatter.timeStyle = .none
+            customFormatter.dateStyle = .medium
+            return customFormatter.string(from: date)
+            break
+        case .time:
+            
+            let customFormatter = DateFormatter()
+            customFormatter.timeStyle = .short
+            customFormatter.dateStyle = .none
+            return customFormatter.string(from: date)
+            break
+        case .datetime:
+            return ""
+            break
+        }
     }
     
     init() {

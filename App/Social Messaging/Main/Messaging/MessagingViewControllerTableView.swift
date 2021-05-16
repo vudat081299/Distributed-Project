@@ -7,11 +7,15 @@
 
 import UIKit
 
-class MessagingViewControllerTableView: UIViewController {
+
+var userBoxData: [ResolvedBox] = []
+
+class MessagingViewControllerTableView: UIViewController, MessagePullThread, MessagePushThread {
+    
     
     private var tableView: UITableView! = nil
-    var userBoxData: [ResolvedBox] = []
-    
+    var messagePullThreadDelegate: MessagePullThread?
+    var messagePushThreadDelegate: MessagePushThread?
     
     
     // MARK: - Navbar components.
@@ -59,14 +63,21 @@ class MessagingViewControllerTableView: UIViewController {
             case .success(let data):
                 let boxData = data.sorted(by: { $0.boxSpecification.lastestUpdate > $1.boxSpecification.lastestUpdate })
                 Auth.userBoxData = boxData
-                self.userBoxData = boxData
+                userBoxData = boxData
                 completion()
             case .failure:
                 break
             }
         }
     }
-
+    
+    func receiveMessage(data: WSMessage) {
+        messagePullThreadDelegate?.receiveMessage(data: data)
+    }
+    
+    func sendMessage(data: MessageSendWS) {
+        messagePushThreadDelegate?.sendMessage(data: data)
+    }
 }
 
 
@@ -103,7 +114,16 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
         cell.name.text = boxName
         cell.idLabel.text = "@\(box._id)"
         cell.lastestMess.text = box.boxSpecification.lastestMess
-        cell.timeStampButton.setTitle(Time.getTypeWithFormat(of: box.boxSpecification.lastestUpdate), for: .normal)
+        let dateFormatter = ISO8601DateFormatter()
+        print(box.boxSpecification.lastestUpdate)
+    
+        var dateString = ""
+        if box.boxSpecification.lastestUpdate.count > 20, let range = box.boxSpecification.lastestUpdate.range(of: " ") {
+            let substring = box.boxSpecification.lastestUpdate.index(range.upperBound, offsetBy: 5)
+            let date = box.boxSpecification.lastestUpdate[range.lowerBound..<substring]
+            dateString = String(date)
+        }
+        cell.timeStampButton.setTitle(dateString, for: .normal)
         return cell
     }
     
@@ -111,8 +131,11 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
         tableView.deselectRow(at: indexPath, animated: true)
         
         let chattingViewController = ChattingViewController()
+        messagePullThreadDelegate = chattingViewController
         let box = userBoxData[indexPath.row]
         chattingViewController.boxId = box._id
+        chattingViewController.boxData = userBoxData[indexPath.row]
+        chattingViewController.delegate = self
         chattingViewController.navigationItem.largeTitleDisplayMode = .never
         chattingViewController.tabBarController?.tabBar.isHidden = true
         navigationController?.pushViewController(chattingViewController, animated: true)

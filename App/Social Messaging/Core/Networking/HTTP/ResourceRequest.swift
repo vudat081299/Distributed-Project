@@ -85,6 +85,7 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
             }
             do {
                 let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .secondsSince1970
                 let resources: ResourceType = try decoder.decode(ResourceType.self, from: jsonData)
                 completion(.success(resources))
             } catch {
@@ -112,6 +113,7 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
             }
             do {
                 let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .secondsSince1970
                 let resources: [ResourceType] = try decoder.decode([ResourceType].self, from: jsonData)
                 completion(.success(resources))
             } catch {
@@ -171,8 +173,6 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
                     completion(.failure)
                     return
                 }
-                print(data!)
-                print(response!)
                 do {
                     let decoder = JSONDecoder()
                     let resource = try decoder.decode(ResourceType.self, from: jsonData)

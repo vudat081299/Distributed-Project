@@ -11,7 +11,7 @@ import Foundation
 
 
 // MARK: - Structure.
-struct WSResolvedMessage: Decodable {
+struct WSResolvedMessage: Codable {
     let type: WSResolvedMajorDataType
     let majorData: WSMessage
 }
@@ -21,6 +21,7 @@ enum WSResolvedMajorDataType: Int, Codable {
 }
 
 struct WSMessage: Codable {
+    let _id: String?
     let boxId: String? // _id
     let creationDate: Date
     let text: String?
@@ -31,15 +32,38 @@ struct WSMessage: Codable {
     let notify: String?
 }
 
+struct MessageSendWS: Codable {
+    let type: WSResolvedMajorDataType
+    let majorData: MajorDataSendWS
+}
+
+struct MajorDataSendWS: Codable {
+    let boxId: String // _id
+    let creationDate: String
+    let text: String?
+    let fileId: String?
+    let type: MediaTypeMess
+    let senderId: String // _id
+    let senderIdOnRDBMS: UUID
+    let members: [UUID]
+}
+
 struct ResolvedMessage: Codable {
+    let _id: String?
     let creationDate: Date
     let text: String?
     let boxId: String
     let fileId: String?
     let type: Int
-    let sender_id: String
+    let senderId: String
     let senderIdOnRDBMS: UUID
 }
+
+
+
+
+
+
 
 enum MediaTypeMess: Int, Codable {
     case png, text, jpg, mp4

@@ -16,7 +16,7 @@ struct BoxSpecification: Codable, Content {
     let creatorName: String
     let createdAt: Date
     let lastestMess: String?
-    let lastestUpdate: Date
+    let lastestUpdate: String
 }
 
 struct Box: Codable, Content {

@@ -41,20 +41,20 @@ func routesRSM(_ app: Application) throws {
         
         
         
-        let a = """
-{
-   "type": 1,
-    "majorData": {"boxId": "60a0c4a6d41b94d16d43b6d7", "creationDate": 1621150327.421111, "text": "Hello this is first mess!", "fileId": "6094d82ddba87b2eb8b413f3", "type": 1, "senderId": "609ea00683818e382c32bbd8", "senderIdOnRDBMS": "FECE0C19-60BE-4DFC-87BA-31749B9459F7", "members": ["D8D04A41-A7DD-4A4B-BBF1-EBD314900F0E", "FECE0C19-60BE-4DFC-87BA-31749B9459F7"]}
-}
-"""
-        do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            let resolvedData = try decoder.decode(WSResolvedDataTest.self, from: a.data(using: .utf8)!)
-            print(resolvedData)
-        } catch {
-            print(error.localizedDescription)
-        }
+//        let a = """
+//{
+//   "type": 1,
+//    "majorData": {"boxId": "60a0c4a6d41b94d16d43b6d7", "creationDate": 1621150327.421111, "text": "Hello this is first mess!", "fileId": "6094d82ddba87b2eb8b413f3", "type": 1, "senderId": "609ea00683818e382c32bbd8", "senderIdOnRDBMS": "FECE0C19-60BE-4DFC-87BA-31749B9459F7", "members": ["D8D04A41-A7DD-4A4B-BBF1-EBD314900F0E", "FECE0C19-60BE-4DFC-87BA-31749B9459F7"]}
+//}
+//"""
+//        do {
+//            let decoder = JSONDecoder()
+//            decoder.dateDecodingStrategy = .secondsSince1970
+//            let resolvedData = try decoder.decode(WSResolvedDataTest.self, from: a.data(using: .utf8)!)
+//            print(resolvedData)
+//        } catch {
+//            print(error.localizedDescription)
+//        }
         
         
     }
@@ -167,7 +167,7 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userId: String
 
 
 // MARK: - Handlers.
-func messingHandler(data: WSResolvedMessage, of req: Request, using decoder: JSONDecoder) throws {
+func messingHandler(data: WSResolvedMessage, of req: Request, using decoder: JSONDecoder) -> EventLoopFuture<Void> {
     // Save mess.
 //    let mess = try decoder.decode(WSResolvedMessage.self, from: data.data(using: .utf8)!)
     let mess = data
@@ -183,10 +183,6 @@ func messingHandler(data: WSResolvedMessage, of req: Request, using decoder: JSO
     )
     
     // save into db
-    CoreEngine.mess(
-        createMessageInBox,
-        inDatabase: req.mongoDB
-    )
     
     // notify to all recipients of box.
 //    do {
@@ -197,6 +193,10 @@ func messingHandler(data: WSResolvedMessage, of req: Request, using decoder: JSO
 //    } catch {
 //        print(error.localizedDescription)
 //    }
+    return CoreEngine.mess(
+        createMessageInBox,
+        inDatabase: req.mongoDB
+    )
 }
 
 

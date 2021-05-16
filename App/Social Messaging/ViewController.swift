@@ -416,7 +416,7 @@ extension ViewController {
                             
                             let members = [cell.userProfileData?.idOnRDBMS]
                             let members_id = [currentUser?._id, cell.userProfileData?._id]
-                            let generatedString = id1! > id2! ? "\(id1!)\(id2!)" : "\(id2!)\(id2!)"
+                            let generatedString = id1! > id2! ? "\(id1!)\(id2!)" : "\(id2!)\(id1!)"
                             let membersName = [name2]
 
 

@@ -18,11 +18,13 @@ struct CoreEngine {
     static func createBox(_ box: Box, of userId: String, inDatabase database: MongoDatabase) -> EventLoopFuture<HTTPStatus> {
 //        database[Box.collection].createIndex(named: "email", keys: ["idOnRDBMS": ["$unique": true]])
         return database[Box.collection].insertEncoded(box).map { _ in
-            return findUser(has: userId, of: "idOnRDBMS", inDatabase: database).map { user in
-                var foundedUser = user
-                foundedUser.boxes.append(box._id)
-                print(updateBoxesOfUser(box, from: user, inDatabase: database))
+            box.members_id.forEach {
+                print(updateBoxesOfUser(box, from: $0, inDatabase: database))
             }
+//            return findUser(has: userId, of: "idOnRDBMS", inDatabase: database).map { user in
+//                var foundedUser = user
+//                foundedUser.boxes.append(box._id)
+//            }
         }.transform(to: .ok)
     }
     
@@ -99,7 +101,7 @@ struct CoreEngine {
 🧠 AI (Machine Learning, Deep Learning, CNN, RNN on <Python, Swift>), Augmented-Reality (Swift), iOS (Swift, Objc-C, C/C++), full-stack developer (Vuejs, React,
 💧Vapor-Swift, Nodejs, Golang), Cybersecurity - Computer Security.
 """,
-                        lastestUpdate: Date()
+                        lastestUpdate: "\(Date())"
                     )
                     let box = Box(
                         _id: ObjectId(),
@@ -144,7 +146,7 @@ struct CoreEngine {
                 to: [
                     "$set": [
                         "boxSpecification.lastest": mess.text,
-                        "boxSpecification.lastestUpdate": String(describing: Date())
+                        "boxSpecification.lastestUpdate": "\(Date())"
                     ]
                 ]
             ).map { _ in }
@@ -250,9 +252,10 @@ struct CoreEngine {
     //            ]
     //        ).map { _ in }
     //    }
-    static func mess(_ content: Message, inDatabase database: MongoDatabase) {
-        print(updateBox(mess: content, inDatabase: database))
-        print(database[Message.collection].insertEncoded(content).map { _ in })
+    static func mess(_ content: Message, inDatabase database: MongoDatabase) -> EventLoopFuture<Void> {
+        return database[Message.collection].insertEncoded(content).flatMap { _ in
+            return updateBox(mess: content, inDatabase: database)
+        }
     }
     
     /// Send file in mess.
@@ -390,11 +393,11 @@ struct CoreEngine {
     
     static func updateBoxesOfUser(
         _ box: Box,
-        from user: UserRSMNoSQL,
+        from userObjectId: ObjectId,
         inDatabase database: MongoDatabase
     ) -> EventLoopFuture<Void> {
         return database[UserRSMNoSQL.collection].updateOne(
-            where: "_id" == user._id,
+            where: "_id" == userObjectId,
             to: [
                 "$push": [
                     "boxes": box._id
