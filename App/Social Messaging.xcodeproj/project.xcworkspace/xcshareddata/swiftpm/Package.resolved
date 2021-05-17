@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Starscream",
+        "repositoryURL": "https://github.com/daltoniam/Starscream.git",
+        "state": {
+          "branch": null,
+          "revision": "e6b65c6d9077ea48b4a7bdda8994a1d3c6969c8d",
+          "version": "3.1.1"
+        }
+      },
+      {
         "package": "swift-nio",
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {
@@ -17,6 +26,24 @@
           "branch": null,
           "revision": "6363cdf6d2fb863e82434f3c4618f4e896e37569",
           "version": "2.13.1"
+        }
+      },
+      {
+        "package": "swift-nio-zlib-support",
+        "repositoryURL": "https://github.com/apple/swift-nio-zlib-support.git",
+        "state": {
+          "branch": null,
+          "revision": "37760e9a52030bb9011972c5213c3350fa9d41fd",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "WebRTC",
+        "repositoryURL": "https://github.com/stasel/WebRTC.git",
+        "state": {
+          "branch": null,
+          "revision": "f73c6add3f7694e2e5f27bc6efb889759bb4e9a9",
+          "version": "90.0.0"
         }
       },
       {

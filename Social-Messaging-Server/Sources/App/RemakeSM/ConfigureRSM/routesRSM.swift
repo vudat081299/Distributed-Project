@@ -7,6 +7,7 @@
 
 import Vapor
 import MongoKitten
+import FluentSQL
 
 func routesRSM(_ app: Application) throws {
     
@@ -17,6 +18,17 @@ func routesRSM(_ app: Application) throws {
     try app.register(collection: messagesController)
     
     
+    
+    app.get("hello") { req -> String in
+        let sql = req.db as! SQLDatabase
+            // The underlying database driver is SQL.
+        let a = sql.raw("SELECT * FROM usersrsm").all().map { i in
+            let o = i
+//            return o
+        }
+        print(a)
+        return ""
+    }
     
     // MARK: - Web socket.
     app.webSocket("echo") { req, ws in
