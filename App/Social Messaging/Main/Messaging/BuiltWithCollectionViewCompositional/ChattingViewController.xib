@@ -35,12 +35,12 @@
                     </collectionViewFlowLayout>
                 </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wfP-ao-UKy">
-                    <rect key="frame" x="0.0" y="812" width="414" height="84"/>
+                    <rect key="frame" x="0.0" y="812" width="414" height="50"/>
                     <subviews>
                         <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0M1-D9-qUS">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="84"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="miG-jx-vci">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="84"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </view>
                             <blurEffect style="systemMaterial"/>
@@ -122,7 +122,7 @@
                 <constraint firstItem="wfP-ao-UKy" firstAttribute="top" secondItem="orl-LS-sm8" secondAttribute="bottom" id="e0J-5w-qwU"/>
                 <constraint firstAttribute="trailing" secondItem="orl-LS-sm8" secondAttribute="trailing" id="etR-Yn-9Xi"/>
                 <constraint firstItem="wfP-ao-UKy" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="nX8-9l-1FR"/>
-                <constraint firstAttribute="bottom" secondItem="wfP-ao-UKy" secondAttribute="bottom" id="rpU-2P-2nL"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="wfP-ao-UKy" secondAttribute="bottom" id="rpU-2P-2nL"/>
             </constraints>
             <connections>
                 <outletCollection property="gestureRecognizers" destination="6M3-Bq-dDw" appends="YES" id="X2F-ic-LzM"/>

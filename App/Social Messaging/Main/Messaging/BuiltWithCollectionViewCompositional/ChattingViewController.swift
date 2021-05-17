@@ -418,7 +418,7 @@ extension ChattingViewController {
         let itemsPerSection = 1
         var sections = Array(0..<0)
         if (messagesOfBox.count > 0) {
-        sections = Array(0..<messagesOfBox.count)
+            sections = Array(0..<messagesOfBox.count)
         } else {
             let sections = Array(0..<0)
         }
@@ -429,8 +429,8 @@ extension ChattingViewController {
             snapshot.appendItems(Array(itemOffset..<itemOffset + itemsPerSection))
             itemOffset += itemsPerSection
         }
-        dataSource.apply(snapshot, animatingDifferences: false)
-        
+        dataSource.apply(snapshot, animatingDifferences: true)
+        scrollToBottom(of: chatView)
         // initial data
 //        let itemsPerSection = 5
 //        let sections = Array(0..<5)
@@ -442,6 +442,11 @@ extension ChattingViewController {
 //            itemOffset += itemsPerSection
 //        }
 //        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+    
+    func scrollToBottom(of collectionView: UICollectionView) {
+        chatView.scrollToItem(at: IndexPath(item: 0, section: messagesOfBox.count - 1), at: .bottom, animated: true)
+        self.view.layoutIfNeeded()
     }
 }
 
@@ -483,8 +488,9 @@ extension ChattingViewController: UITextFieldDelegate {
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardRect.height
-            self.bottomConstraint.constant = keyboardHeight - 34
+            self.bottomConstraint.constant = keyboardHeight
             self.view.layoutIfNeeded()
+            scrollToBottom(of: chatView)
         }
     }
     
@@ -493,6 +499,7 @@ extension ChattingViewController: UITextFieldDelegate {
             keyboardHeight = keyboardRect.height
             self.bottomConstraint.constant = 0
             self.view.layoutIfNeeded()
+            scrollToBottom(of: chatView)
         }
     }
 }

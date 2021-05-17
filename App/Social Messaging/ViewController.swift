@@ -19,8 +19,6 @@ class ViewController: UIViewController {
     
     
     
-    
-    
     // MARK: - Collection view setting up.
     static let headerElementKind = "header-element-kind"
     
@@ -127,7 +125,15 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    
+    
+    // MARK: - Variables.
     var dataSource: UICollectionViewDiffableDataSource<Int, Int>! = nil
+    
+    
+    
+    // MARK: - IBOutlet and UI constant.
 //    var collectionView: UICollectionView! = nil
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -154,7 +160,33 @@ class ViewController: UIViewController {
         print("Right bar button was pressed!")
     }
     
+    func setUpNavigationBar() {
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.sizeToFit()
+        
+        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.searchController = searchController
+//        navigationItem.hidesSearchBarWhenScrolling = false
+        
+//        self.searchController.hidesNavigationBarDuringPresentation = true
+//        self.searchController.searchBar.searchBarStyle = .prominent
+//        // Include the search bar within the navigation bar.
+//        self.navigationItem.titleView = self.searchController.searchBar
+        
+        let leftBarItem: UIBarButtonItem = {
+            let bt = UIBarButtonItem(title: "Action", style: .done, target: self, action: #selector(leftBarItemAction))
+            return bt
+        }()
+        let rightBarItem: UIBarButtonItem = {
+            let bt = UIBarButtonItem(image: UIImage(systemName: "bookmark.circle"), style: .plain, target: self, action: #selector(rightBarItemAction))
+            return bt
+        }()
+        navigationItem.leftBarButtonItem = leftBarItem
+        navigationItem.rightBarButtonItem = rightBarItem
+    }
     
+    // MARK: - Test video call setup.
     private func buildMainViewController() -> UIViewController {
         let ws = WebSocketSM("ws://\(ip)/connecttowsserver/\(Auth.userId ?? "")")
         ws.close()
@@ -185,33 +217,7 @@ class ViewController: UIViewController {
         return SignalingClient(webSocket: webSocketProvider)
     }
     
-    func setUpNavigationBar() {
-        
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.sizeToFit()
-        
-        navigationItem.largeTitleDisplayMode = .always
-        navigationItem.searchController = searchController
-//        navigationItem.hidesSearchBarWhenScrolling = false
-        
-//        self.searchController.hidesNavigationBarDuringPresentation = true
-//        self.searchController.searchBar.searchBarStyle = .prominent
-//        // Include the search bar within the navigation bar.
-//        self.navigationItem.titleView = self.searchController.searchBar
-        
-        let leftBarItem: UIBarButtonItem = {
-            let bt = UIBarButtonItem(title: "Action", style: .done, target: self, action: #selector(leftBarItemAction))
-            return bt
-        }()
-        let rightBarItem: UIBarButtonItem = {
-            let bt = UIBarButtonItem(image: UIImage(systemName: "bookmark.circle"), style: .plain, target: self, action: #selector(rightBarItemAction))
-            return bt
-        }()
-        navigationItem.leftBarButtonItem = leftBarItem
-        navigationItem.rightBarButtonItem = rightBarItem
-    }
 
-    
     
     // MARK: - Life cycle.
     override func viewDidLoad() {
@@ -370,7 +376,6 @@ extension ViewController {
 //        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.frame = view.bounds
         collectionView.collectionViewLayout = createLayout()
-        
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .systemGroupedBackground
         view.addSubview(collectionView)
@@ -439,38 +444,7 @@ extension ViewController {
                 let existedBoxes = Auth.userProfileData?.boxes
                 if !existedBoxes!.contains(user._id) {
                     cell.messToUserActionClosure = {
-                        if cell.userProfileData != nil {
-                            let currentUser = Auth.userProfileData
-                            let id1 = currentUser?.idOnRDBMS.uuidString
-                            let id2 = cell.userProfileData?.idOnRDBMS.uuidString
-                            let name1 = currentUser?.name
-                            let name2 = cell.userProfileData?.name
-                            
-                            let members = [cell.userProfileData?.idOnRDBMS]
-                            let members_id = [currentUser?._id, cell.userProfileData?._id]
-                            let generatedString = id1! > id2! ? "\(id1!)\(id2!)" : "\(id2!)\(id1!)"
-                            let membersName = [name2]
-
-
-                            let box = Box(
-                                generatedString: generatedString,
-                                type: .privateChat,
-                                members: members,
-                                members_id: members_id,
-                                membersName: membersName,
-                                creator_id: currentUser?._id,
-                                createdAt: Time.iso8601String
-                            )
-                            let request = ResourceRequest<Box>(resourcePath: "mess")
-                            request.post(token: Auth.token, box) { result in
-                                switch result {
-                                case .success(let data):
-                                    break
-                                case .failure:
-                                    break
-                                }
-                            }
-                        }
+                        createBox(withDataOf: cell)
                     }
                 }
                 return cell
@@ -481,7 +455,42 @@ extension ViewController {
             }
         }
         
-        // Header for Section.
+        func createBox(withDataOf cell: UserView) {
+            if cell.userProfileData != nil {
+                let currentUser = Auth.userProfileData
+                let id1 = currentUser?.idOnRDBMS.uuidString
+                let id2 = cell.userProfileData?.idOnRDBMS.uuidString
+                let name1 = currentUser?.name
+                let name2 = cell.userProfileData?.name
+                
+                let members = [cell.userProfileData?.idOnRDBMS]
+                let members_id = [currentUser?._id, cell.userProfileData?._id]
+                let generatedString = id1! > id2! ? "\(id1!)\(id2!)" : "\(id2!)\(id1!)"
+                let membersName = [name2]
+                
+                
+                let box = Box(
+                    generatedString: generatedString,
+                    type: .privateChat,
+                    members: members,
+                    members_id: members_id,
+                    membersName: membersName,
+                    creator_id: currentUser?._id,
+                    createdAt: Time.iso8601String
+                )
+                let request = ResourceRequest<Box>(resourcePath: "mess")
+                request.post(token: Auth.token, box) { result in
+                    switch result {
+                    case .success(let data):
+                        break
+                    case .failure:
+                        break
+                    }
+                }
+            }
+        }
+        
+        /// Header for Section.
         let supplementaryRegistration = UICollectionView.SupplementaryRegistration
         <TitleSupplementaryView>(elementKind: ViewController.headerElementKind) { [self]
             (supplementaryView, string, indexPath) in
@@ -508,7 +517,7 @@ extension ViewController {
             return cell
         }
 
-        // initial data
+        /// initial data.
         var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
         var identifierOffset = 0
 //        SectionKind.allCases.forEach {
@@ -537,9 +546,7 @@ extension ViewController {
 extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        
 //        guard let menuItem = self.dataSource.itemIdentifier(for: indexPath) else { return }
-        
         let cellItem = listItems[indexPath.section].cell[indexPath.row]
         if let action = cellItem.select { action() }
         if let viewController = cellItem.viewControllerType {
