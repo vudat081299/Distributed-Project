@@ -45,7 +45,7 @@ struct MajorDataSendWS: Codable {
     let type: MediaTypeMess
     let senderId: String // _id
     let senderIdOnRDBMS: UUID
-    let members: [UUID]
+    let members: [String]
 }
 
 struct ResolvedMessage: Codable {

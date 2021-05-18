@@ -43,12 +43,12 @@ func routesRSM(_ app: Application) throws {
 //    }
 
     // create first web socket conection.
-    app.webSocket("connecttowsserver", ":userId") { req, ws in
-        guard let userId = req.parameters.get("userId") else {
+    app.webSocket("connectws", ":userObjectId") { req, ws in
+        guard let userObjectId = req.parameters.get("userObjectId") else {
             return
         }
-        webSocketPerUserManager.add(ws: ws, to: userId)
-        webSocketBehaviorHandler(req: req, socket: ws, of: userId)
+        webSocketPerUserManager.add(ws: ws, to: userObjectId)
+        webSocketBehaviorHandler(req: req, socket: ws, of: userObjectId)
         
         
         
@@ -72,7 +72,7 @@ func routesRSM(_ app: Application) throws {
     }
 }
 
-func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userId: String) {
+func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userObjectId: String) {
     socket.onText { _, text in
         let jsonData = text.data(using: .utf8)!
         print(jsonData)
@@ -165,7 +165,7 @@ func webSocketBehaviorHandler(req: Request, socket: WebSocket, of userId: String
         // Succeeded or failed to close.
         switch result {
         case .success:
-            webSocketPerUserManager.removeSession(of: userId)
+            webSocketPerUserManager.removeSession(of: userObjectId)
             print("close ws successful!")
             break
             
@@ -236,29 +236,12 @@ struct WSResolvedMessage: Decodable {
     let fileId: ObjectId?
     let type: MediaType
     let senderId: ObjectId
-    let senderIdOnRDBMS: UUID
+    let senderIdOnRDBMS: UUID?
     
-    let members: [UUID]
+    let members: [String]
 }
 
 struct WSEncodeContext: Encodable {
     let type: WSResolvedMajorDataType
     let majorData: Message
-}
-
-struct WSResolvedDataTest: Decodable {
-    let type: WSResolvedMajorDataType
-    let majorData: WSResolvedMessage
-}
-
-struct WSResolvedMessageTest: Decodable {
-    let boxId: ObjectId
-    let creationDate: Date
-    let text: String?
-    let fileId: ObjectId?
-    let type: MediaType
-    let senderId: ObjectId
-    let senderIdOnRDBMS: UUID
-
-    let members: [UUID]
 }

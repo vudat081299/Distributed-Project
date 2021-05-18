@@ -18,7 +18,7 @@ struct Message: Codable, Content {
     let fileId: ObjectId?
     let type: MediaType?
     let senderId: ObjectId
-    let senderIdOnRDBMS: UUID
+    let senderIdOnRDBMS: UUID?
 }
 
 struct ResolvedMessageRSM: Codable {

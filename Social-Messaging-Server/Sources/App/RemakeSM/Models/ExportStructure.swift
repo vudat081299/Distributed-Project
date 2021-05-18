@@ -22,8 +22,8 @@ enum SearchUserCases: String {
 }
 
 struct FollowUserPostRQ: Content {
-    let userId: ObjectId
-    let followerId: ObjectId
+    let userObjectId: ObjectId
+    let followerObjectId: ObjectId
 }
 
 struct FileUpload: Content {

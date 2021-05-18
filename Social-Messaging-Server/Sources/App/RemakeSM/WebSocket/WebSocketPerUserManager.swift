@@ -16,14 +16,14 @@ final class WebSocketPerUserManager {
     
     var dictionary: [String: WebSocket] = [:]
     
-    func add(ws: WebSocket, to userId: String) {
+    func add(ws: WebSocket, to userObjectId: String) {
 //        if dictionary[userId] == nil {
 //            dictionary[userId] = []
 //        }
 //        dictionary[userId]?.append(ws)
         
-        if dictionary[userId] == nil {
-            dictionary[userId] = ws
+        if dictionary[userObjectId] == nil {
+            dictionary[userObjectId] = ws
         }
         print("Add new WebSocket connection!")
     }
@@ -38,10 +38,10 @@ final class WebSocketPerUserManager {
         
     }
     
-    func notifyMess(to userIds: [UUID], content: WSEncodeContext) {
-        userIds.forEach { id in
-            if let ws = dictionary[id.uuidString] {
-                print(id.uuidString)
+    func notifyMess(to userObjectIds: [String], content: WSEncodeContext) {
+        userObjectIds.forEach { id in
+            if let ws = dictionary[id] {
+                print(id)
                 ws.send(content)
             }
         }

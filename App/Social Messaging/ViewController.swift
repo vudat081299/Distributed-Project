@@ -211,7 +211,7 @@ class ViewController: UIViewController {
     }
     
     func fetchUsersData() {
-        let request = ResourceRequest<User>(resourcePath: "users/nosql")
+        let request = ResourceRequest<User>(resourcePath: "users/data/nosql")
         request.getArray(token: Auth.token) { [weak self] result in
             switch result {
             case .success(let data):
@@ -411,7 +411,7 @@ extension ViewController {
                 cell.username.text = "@\(user.username)"
                 cell.bio.text = user.bio
                 let existedBoxes = Auth.userProfileData?.boxes
-                if !existedBoxes!.contains(user._id) {
+                if let boxes = existedBoxes, !boxes.contains(user._id) {
                     cell.messToUserActionClosure = {
                         createBox(withDataOf: cell)
                     }
@@ -447,7 +447,7 @@ extension ViewController {
                     creator_id: currentUser?._id,
                     createdAt: Time.iso8601String
                 )
-                let request = ResourceRequest<Box>(resourcePath: "mess")
+                let request = ResourceRequest<Box>(resourcePath: "messaging")
                 request.post(token: Auth.token, box) { result in
                     switch result {
                     case .success(let data):

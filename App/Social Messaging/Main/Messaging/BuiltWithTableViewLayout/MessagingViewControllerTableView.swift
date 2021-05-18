@@ -12,7 +12,6 @@ var userBoxData: [ResolvedBox] = []
 
 class MessagingViewControllerTableView: UIViewController, MessagePullThread, MessagePushThread {
     
-    
     private var tableView: UITableView! = nil
     var messagePullThreadDelegate: MessagePullThread?
     var messagePushThreadDelegate: MessagePushThread?
@@ -57,7 +56,7 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     */
     
     func fetchBoxesData(completion: @escaping () -> Void) {
-        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "mess/box/\(Auth.userProfileData!._id)")
+        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "messaging/boxes/data/\(Auth.userProfileData!._id)")
         request_box.getArray(token: Auth.token) { result in
             switch result {
             case .success(let data):
@@ -101,29 +100,26 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BoxTableViewCell.reuseIdentifier, for: indexPath) as! BoxTableViewCell
 //        cell.boxImage
-        var boxName = "Group"
         let box = userBoxData[indexPath.row]
+        let authUser = Auth.userProfileData
         if box.type == .privateChat {
             for name in box.membersName {
-                if name != box.boxSpecification.creatorName {
-                    boxName = name
+                if name != authUser?.name {
+                    cell.name.text = name
                     break
                 }
             }
         }
-        cell.name.text = boxName
         cell.idLabel.text = "@\(box._id)"
         cell.lastestMess.text = box.boxSpecification.lastestMess
-        let dateFormatter = ISO8601DateFormatter()
-        print(box.boxSpecification.lastestUpdate)
-    
-        var dateString = ""
-        if box.boxSpecification.lastestUpdate.count > 20, let range = box.boxSpecification.lastestUpdate.range(of: " ") {
-            let substring = box.boxSpecification.lastestUpdate.index(range.upperBound, offsetBy: 5)
-            let date = box.boxSpecification.lastestUpdate[range.lowerBound..<substring]
-            dateString = String(date)
-        }
-        cell.timeStampButton.setTitle(dateString, for: .normal)
+//        let dateFormatter = ISO8601DateFormatter()
+//        var dateString = ""
+//        if box.boxSpecification.lastestUpdate.count > 20, let range = box.boxSpecification.lastestUpdate.range(of: " ") {
+//            let substring = box.boxSpecification.lastestUpdate.index(range.upperBound, offsetBy: 5)
+//            let date = box.boxSpecification.lastestUpdate[range.lowerBound..<substring]
+//            dateString = String(date)
+//        }
+        cell.timeStampButton.setTitle(box.boxSpecification.lastestUpdate.transformToShortTime(), for: .normal)
         return cell
     }
     
@@ -133,7 +129,7 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
         let chattingViewController = ChattingViewController()
         messagePullThreadDelegate = chattingViewController
         let box = userBoxData[indexPath.row]
-        chattingViewController.boxId = box._id
+        chattingViewController.boxObjectId = box._id
         chattingViewController.boxData = userBoxData[indexPath.row]
         chattingViewController.delegate = self
         chattingViewController.navigationItem.largeTitleDisplayMode = .never

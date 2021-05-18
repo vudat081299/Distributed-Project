@@ -42,11 +42,12 @@ class ChattingViewController: UIViewController, MessagePullThread {
     var keyboardHeight: CGFloat = 0.0
     var headersIndex = [IndexPath]()
     var touchPosition: CGPoint = CGPoint(x: 0, y: 0)
-    var boxId: String = ""
+    var boxObjectId: String = ""
     var boxData: ResolvedBox!
     var messagesOfBox: [ResolvedMessage] = []
     let authUser = Auth.userProfileData
     var delegate: MessagePushThread?
+    var users: [String: User] = [:]
     
     
     
@@ -165,7 +166,7 @@ class ChattingViewController: UIViewController, MessagePullThread {
     }
     
     func fetchBoxesData(completion: @escaping () -> Void) {
-        let request_mess = ResourceRequest<ResolvedMessage>(resourcePath: "mess/messesinbox/\(boxId)")
+        let request_mess = ResourceRequest<ResolvedMessage>(resourcePath: "messaging/data/\(boxObjectId)")
         request_mess.getArray(token: Auth.token) { result in
             switch result {
             case .success(let data):
@@ -177,8 +178,8 @@ class ChattingViewController: UIViewController, MessagePullThread {
                         messages[sortMessages[0].boxId] = []
                         (messages[sortMessages[0].boxId])! = sortMessages
                     }
-                    if messages[self.boxId] != nil {
-                        self.messagesOfBox = messages[self.boxId]!
+                    if messages[self.boxObjectId] != nil {
+                        self.messagesOfBox = messages[self.boxObjectId]!
                     }
                 }
                 completion()
@@ -187,6 +188,30 @@ class ChattingViewController: UIViewController, MessagePullThread {
             }
         }
     }
+
+//    func fetchFriendData(completion: @escaping () -> Void) {
+//        let request_mess = ResourceRequest<User>(resourcePath: "mess/messesinbox/\(boxId)")
+//        request_mess.getArray(token: Auth.token) { result in
+//            switch result {
+//            case .success(let data):
+//                let sortMessages = data.sorted(by: { $0.creationDate < $1.creationDate })
+//                if sortMessages.count > 0 {
+//                    if messages[sortMessages[0].boxId] != nil {
+//                        (messages[sortMessages[0].boxId])! = sortMessages
+//                    } else {
+//                        messages[sortMessages[0].boxId] = []
+//                        (messages[sortMessages[0].boxId])! = sortMessages
+//                    }
+//                    if messages[self.boxId] != nil {
+//                        self.messagesOfBox = messages[self.boxId]!
+//                    }
+//                }
+//                completion()
+//            case .failure:
+//                break
+//            }
+//        }
+//    }
     
     
     
@@ -200,12 +225,12 @@ class ChattingViewController: UIViewController, MessagePullThread {
                                         type: .text,
                                         senderId: Auth.userProfileData!._id,
                                         senderIdOnRDBMS: Auth.userProfileData!.idOnRDBMS,
-                                        members: boxData.members
+                                        members: boxData.members_id
         )
         let data = MessageSendWS(type: .newMess, majorData: majorData)
 //        delegate?.sendMessage(data: data)
         
-        let request = ResourceRequest<MessageSendWS>(resourcePath: "mess/sendmess")
+        let request = ResourceRequest<MessageSendWS>(resourcePath: "messaging/send/mess")
         request.post(token: Auth.token, data) { result in
             switch result {
             case .success(let data):
@@ -375,22 +400,21 @@ extension ChattingViewController {
                     withReuseIdentifier: FirstMessContentCellForSection.reuseIdentifier,
                         for: indexPath) as? FirstMessContentCellForSection else { fatalError("Cannot create new cell") }
                 let message = self.messagesOfBox[indexPath.section]
-                var name: String?
-                for (index, value) in self.boxData.membersName.enumerated() {
-                    if message.senderIdOnRDBMS == self.authUser?.idOnRDBMS {
-                        name = self.authUser?.name
-                        cell.senderName.textColor = .orange
-                        break
-                    } else {
-                        name = value
-                        cell.senderName.textColor = .link
-                        break
+                
+                if message.senderId == self.authUser?._id {
+                    cell.senderName.text = self.authUser?.name
+                    cell.senderName.textColor = .orange
+                } else {
+                    for (index, value) in self.boxData.membersName.enumerated() {
+                        if value != self.authUser?.name {
+                            cell.senderName.text = value
+                        }
                     }
+                    cell.senderName.textColor = .link
                 }
 
-                cell.senderName.text = name
 //                cell.creationDate.text = Time.getTypeWithFormat(of: message.creationDate, type: .date)
-                cell.creationDate.text = "\(message.creationDate)"
+                cell.creationDate.text = Time.iso8601String(of: message.creationDate)
                 cell.contentTextLabel.text = message.text
                 return cell
             }

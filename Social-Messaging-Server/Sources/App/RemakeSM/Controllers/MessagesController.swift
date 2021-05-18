@@ -11,7 +11,7 @@ import MongoKitten
 
 struct MessagesController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
-        let acronymsRoutes = routes.grouped("api", "mess")
+        let acronymsRoutes = routes.grouped("api", "messaging")
         
         let tokenAuthMiddleware = TokenRSM.authenticator()
         let guardAuthMiddleware = UserRSM.guardMiddleware()
@@ -20,12 +20,12 @@ struct MessagesController: RouteCollection {
         //
         
         // Main
-        tokenAuthGroup.get("box", ":userId", use: loadAllBoxesOfUser)
+        tokenAuthGroup.get("boxes", "data", ":userObjectId", use: loadAllBoxesOfUser)
         tokenAuthGroup.get("messageinrange", ":boxId", ":before", ":limit", use: loadAllMessagesInBoxInRange)
-        tokenAuthGroup.get("messesinbox", ":boxId", use: loadAllMessagesInBox)
+        tokenAuthGroup.get("data", ":boxObjectId", use: loadAllMessagesInBox)
         
         tokenAuthGroup.post(use: mess)
-        tokenAuthGroup.post("sendmess", use: sendMess)
+        tokenAuthGroup.post("send", "mess", use: sendMess)
         
         
         //
@@ -51,24 +51,24 @@ struct MessagesController: RouteCollection {
     }
     
     func loadAllBoxes(_ req: Request) throws -> EventLoopFuture<[Box]> {
-        return CoreEngine.loadAllBoxes(inDatabase: req.mongoDB)
+        return CoreEngine.findAllBoxes(inDatabase: req.mongoDB)
     }
     
     func loadAllBoxesOfUser(_ req: Request) throws -> EventLoopFuture<[Box]> {
-        guard let _id = req.parameters.get("userId", as: ObjectId.self) else {
+        guard let userObjectId = req.parameters.get("userObjectId", as: ObjectId.self) else {
             throw Abort(.badRequest)
         }
 //        return CoreEngine.findUser(has: user.id!.uuidString, of: "idOnRDBMS", inDatabase: req.mongoDB).flatMap { user in
 //            print(user._id)
-        return CoreEngine.loadAllBoxesOfUser(of: _id, inDatabase: req.mongoDB)
+        return CoreEngine.findAllBoxes(of: userObjectId, inDatabase: req.mongoDB)
 //        }
     }
     
     func loadAllMessagesInBox(_ req: Request) throws -> EventLoopFuture<[Message]> {
-        guard let boxId = req.parameters.get("boxId", as: ObjectId.self) else {
+        guard let boxObjectId = req.parameters.get("boxObjectId", as: ObjectId.self) else {
             throw Abort(.badRequest)
         }
-        return CoreEngine.loadAllMessagesInBox(of: boxId, inDatabase: req.mongoDB)
+        return CoreEngine.loadAllMessages(of: boxObjectId, inDatabase: req.mongoDB)
     }
     
     func loadAllMessagesInBoxInRange(_ req: Request) throws -> EventLoopFuture<[Message]> {
@@ -85,7 +85,7 @@ struct MessagesController: RouteCollection {
         let myNSDate = Date(timeIntervalSince1970: timeInterval)
         
         print(myNSDate)
-        return CoreEngine.loadMessagesInBoxInRange(
+        return CoreEngine.loadMessages(
             of: boxId,
             before: myNSDate,
             limit: limit,

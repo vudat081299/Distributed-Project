@@ -13,6 +13,7 @@
 		6B0482432627395F0031D15B /* CustomCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0482412627395F0031D15B /* CustomCollectionViewListCell.swift */; };
 		6B0482512627C9960031D15B /* CustomCollectionViewListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B04824F2627C9960031D15B /* CustomCollectionViewListCell.xib */; };
 		6B04825E2627CF4B0031D15B /* TextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B04825C2627CF4B0031D15B /* TextCell.xib */; };
+		6B17BAA926542F3A000FA92C /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B17BAA826542F3A000FA92C /* String.swift */; };
 		6B2488EA26529F7100D6F06F /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = 6B2488E926529F7100D6F06F /* Starscream */; };
 		6B2488ED26529FE500D6F06F /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 6B2488EC26529FE500D6F06F /* WebRTC */; };
 		6B2489032652A09000D6F06F /* RTCMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2488F02652A08F00D6F06F /* RTCMessage.swift */; };
@@ -138,6 +139,7 @@
 		6B0482412627395F0031D15B /* CustomCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewListCell.swift; sourceTree = "<group>"; };
 		6B04824F2627C9960031D15B /* CustomCollectionViewListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCollectionViewListCell.xib; sourceTree = "<group>"; };
 		6B04825C2627CF4B0031D15B /* TextCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextCell.xib; sourceTree = "<group>"; };
+		6B17BAA826542F3A000FA92C /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		6B2488F02652A08F00D6F06F /* RTCMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTCMessage.swift; sourceTree = "<group>"; };
 		6B2488F22652A08F00D6F06F /* WebSocketProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketProvider.swift; sourceTree = "<group>"; };
 		6B2488F32652A08F00D6F06F /* NativeWebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeWebSocket.swift; sourceTree = "<group>"; };
@@ -458,6 +460,7 @@
 				6B2FE945264C18D2007CAA3D /* URLResponse+Extensions.swift */,
 				6B2FE947264C18FB007CAA3D /* Data+Extensions.swift */,
 				6BC5FE53264E51AC000702BE /* Date.swift */,
+				6B17BAA826542F3A000FA92C /* String.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -922,6 +925,7 @@
 				C49176712624546D00253070 /* UIView.swift in Sources */,
 				6BBFDE6D2649205E001AA9D9 /* NVActivityIndicatorAnimationBallPulseSync.swift in Sources */,
 				C49176722624546D00253070 /* UIColor.swift in Sources */,
+				6B17BAA926542F3A000FA92C /* String.swift in Sources */,
 				6BBFDE6B2649205E001AA9D9 /* NVActivityIndicatorShape.swift in Sources */,
 				C4849839264D2B3D00D35328 /* BoxTableViewCell.swift in Sources */,
 				6B2FE948264C18FB007CAA3D /* Data+Extensions.swift in Sources */,

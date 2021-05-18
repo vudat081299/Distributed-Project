@@ -28,7 +28,7 @@ class Auth {
         }
     }
     
-    static var _id: String? {
+    static var userObjectId: String? {
         get {
             return userDefaults.string(forKey: Auth._idKey)
         }
@@ -90,7 +90,7 @@ class Auth {
     static func logout(on viewController: UIViewController?) {
         self.token = nil
         self.userProfileData = nil
-        self._id = nil
+        self.userObjectId = nil
         self.userId = nil
         self.userBoxData = []
         self.currentUserID = nil
@@ -147,7 +147,7 @@ class Auth {
     
     static func prepareUserProfileData() {
         // method 1
-        let request_user = ResourceRequest<User>(resourcePath: "users/getauthuserdata")
+        let request_user = ResourceRequest<User>(resourcePath: "users/authuser/nosqldata")
         request_user.get(token: Auth.token) { result in
             switch result {
             case .success(let data):

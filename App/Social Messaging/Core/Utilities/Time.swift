@@ -75,6 +75,13 @@ class Time {
         }
     }
     
+    static func iso8601String(of date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZSSS"
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        return dateFormatter.string(from: date)
+    }
+    
     init() {
 
         // get current date time
