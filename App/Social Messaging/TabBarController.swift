@@ -24,6 +24,9 @@ struct ViewControllerData {
     let selectedIcon: String
     let viewController: UINavigationController
     
+    
+    
+    // MARK: - Data.
     static var viewControllerDatas: [ViewControllerData] = {
         let array = [
             ViewControllerData(title: "Notifications", iconNormal: "graduationcap", selectedIcon: "graduationcap.fill", viewController: UINavigationController(rootViewController: UITableViewController())),
@@ -46,7 +49,9 @@ struct ViewControllerData {
 }
 
 class TabBarController: UITabBarController, MessagePushThread {
+    var messagePullThreadDelegate: MessagePullThread?
     
+    // MARK: - Delegate methods.
     func sendMessage(data: MessageSendWS) {
         let encoder = JSONEncoder()
         guard let data = try? encoder.encode(data) else { return }
@@ -54,8 +59,9 @@ class TabBarController: UITabBarController, MessagePushThread {
         ws.send(data)
     }
     
-    var messagePullThreadDelegate: MessagePullThread?
     
+    
+    // MARK: - Life cycle.
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -85,6 +91,7 @@ class TabBarController: UITabBarController, MessagePushThread {
         // Pass the selected object to the new view controller.
     }
     */
+    
     func startListenWebSocket() {
         let ws = WebSocketSM("ws://\(ip)/connecttowsserver/\(Auth.userId ?? "")")
         print(ws.url)
