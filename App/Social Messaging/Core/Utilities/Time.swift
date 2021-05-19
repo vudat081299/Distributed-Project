@@ -23,7 +23,6 @@ class Time {
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZSSS"
             dateFormatter.calendar = Calendar(identifier: .gregorian)
             let iso8601String = dateFormatter.string(from: Date())
-            print(iso8601String)
             return iso8601String
         }
     }

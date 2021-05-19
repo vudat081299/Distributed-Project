@@ -8,6 +8,8 @@
 import Foundation
 
 extension String {
+    
+    /// Convert from date String to shortTime String.
     func transformToShortTime() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ssZ"

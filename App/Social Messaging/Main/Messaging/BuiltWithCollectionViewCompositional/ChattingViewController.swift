@@ -414,7 +414,7 @@ extension ChattingViewController {
                 }
 
 //                cell.creationDate.text = Time.getTypeWithFormat(of: message.creationDate, type: .date)
-                cell.creationDate.text = Time.iso8601String(of: message.creationDate)
+                cell.creationDate.text = message.creationDate.iso8601String
                 cell.contentTextLabel.text = message.text
                 return cell
             }

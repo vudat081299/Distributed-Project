@@ -160,7 +160,9 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
               completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
         do {
             var urlRequest = URLRequest(url: resourceURL)
-            urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+            if token != nil {
+                urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+            }
             urlRequest.httpMethod = "POST"
             urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = try JSONEncoder().encode(resource)

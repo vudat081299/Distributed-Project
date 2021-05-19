@@ -14,6 +14,12 @@
 		6B0482512627C9960031D15B /* CustomCollectionViewListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B04824F2627C9960031D15B /* CustomCollectionViewListCell.xib */; };
 		6B04825E2627CF4B0031D15B /* TextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B04825C2627CF4B0031D15B /* TextCell.xib */; };
 		6B17BAA926542F3A000FA92C /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B17BAA826542F3A000FA92C /* String.swift */; };
+		6B17BAAD2654DD31000FA92C /* SignupInputTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B17BAAB2654DD31000FA92C /* SignupInputTableViewCell.swift */; };
+		6B17BAAE2654DD31000FA92C /* SignupInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B17BAAC2654DD31000FA92C /* SignupInputTableViewCell.xib */; };
+		6B17BAB12654E5AA000FA92C /* SignupPickerInputTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B17BAAF2654E5AA000FA92C /* SignupPickerInputTableViewCell.swift */; };
+		6B17BAB22654E5AA000FA92C /* SignupPickerInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B17BAB02654E5AA000FA92C /* SignupPickerInputTableViewCell.xib */; };
+		6B17BAB52654E9BD000FA92C /* SignupDatePickerInputTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B17BAB32654E9BD000FA92C /* SignupDatePickerInputTableViewCell.swift */; };
+		6B17BAB62654E9BD000FA92C /* SignupDatePickerInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B17BAB42654E9BD000FA92C /* SignupDatePickerInputTableViewCell.xib */; };
 		6B2488EA26529F7100D6F06F /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = 6B2488E926529F7100D6F06F /* Starscream */; };
 		6B2488ED26529FE500D6F06F /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 6B2488EC26529FE500D6F06F /* WebRTC */; };
 		6B2489032652A09000D6F06F /* RTCMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2488F02652A08F00D6F06F /* RTCMessage.swift */; };
@@ -140,6 +146,12 @@
 		6B04824F2627C9960031D15B /* CustomCollectionViewListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCollectionViewListCell.xib; sourceTree = "<group>"; };
 		6B04825C2627CF4B0031D15B /* TextCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextCell.xib; sourceTree = "<group>"; };
 		6B17BAA826542F3A000FA92C /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		6B17BAAB2654DD31000FA92C /* SignupInputTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupInputTableViewCell.swift; sourceTree = "<group>"; };
+		6B17BAAC2654DD31000FA92C /* SignupInputTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SignupInputTableViewCell.xib; sourceTree = "<group>"; };
+		6B17BAAF2654E5AA000FA92C /* SignupPickerInputTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupPickerInputTableViewCell.swift; sourceTree = "<group>"; };
+		6B17BAB02654E5AA000FA92C /* SignupPickerInputTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SignupPickerInputTableViewCell.xib; sourceTree = "<group>"; };
+		6B17BAB32654E9BD000FA92C /* SignupDatePickerInputTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupDatePickerInputTableViewCell.swift; sourceTree = "<group>"; };
+		6B17BAB42654E9BD000FA92C /* SignupDatePickerInputTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SignupDatePickerInputTableViewCell.xib; sourceTree = "<group>"; };
 		6B2488F02652A08F00D6F06F /* RTCMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTCMessage.swift; sourceTree = "<group>"; };
 		6B2488F22652A08F00D6F06F /* WebSocketProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketProvider.swift; sourceTree = "<group>"; };
 		6B2488F32652A08F00D6F06F /* NativeWebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeWebSocket.swift; sourceTree = "<group>"; };
@@ -273,6 +285,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6B17BAAA2654DD07000FA92C /* Signup */ = {
+			isa = PBXGroup;
+			children = (
+				6B17BAAB2654DD31000FA92C /* SignupInputTableViewCell.swift */,
+				6B17BAAC2654DD31000FA92C /* SignupInputTableViewCell.xib */,
+				6B17BAAF2654E5AA000FA92C /* SignupPickerInputTableViewCell.swift */,
+				6B17BAB02654E5AA000FA92C /* SignupPickerInputTableViewCell.xib */,
+				6B17BAB32654E9BD000FA92C /* SignupDatePickerInputTableViewCell.swift */,
+				6B17BAB42654E9BD000FA92C /* SignupDatePickerInputTableViewCell.xib */,
+			);
+			path = Signup;
+			sourceTree = "<group>";
+		};
 		6B2488EE2652A06700D6F06F /* VideoCall */ = {
 			isa = PBXGroup;
 			children = (
@@ -703,6 +728,7 @@
 		C491766B2624546D00253070 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				6B17BAAA2654DD07000FA92C /* Signup */,
 				6BBFDE77264A219D001AA9D9 /* HomeFunction */,
 				6BBFDE6F26492155001AA9D9 /* Definitions */,
 				6BBFDE482649072C001AA9D9 /* MessagingFunction */,
@@ -870,6 +896,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B17BAB62654E9BD000FA92C /* SignupDatePickerInputTableViewCell.xib in Resources */,
 				C491766E2624546D00253070 /* Cities.json in Resources */,
 				6B24890F2652A09000D6F06F /* MainViewController.xib in Resources */,
 				C484983A264D2B3D00D35328 /* BoxTableViewCell.xib in Resources */,
@@ -888,9 +915,11 @@
 				6B0482512627C9960031D15B /* CustomCollectionViewListCell.xib in Resources */,
 				C49176922624572D00253070 /* README.md in Resources */,
 				6B8FF05B2622024500F813C6 /* Assets.xcassets in Resources */,
+				6B17BAAE2654DD31000FA92C /* SignupInputTableViewCell.xib in Resources */,
 				6B8FF0562622024000F813C6 /* Main.storyboard in Resources */,
 				C4849833264D29A000D35328 /* MessagingViewControllerTableView.xib in Resources */,
 				6BCCA268262B3A420075A2A3 /* Note2.txt in Resources */,
+				6B17BAB22654E5AA000FA92C /* SignupPickerInputTableViewCell.xib in Resources */,
 				6BCCA276262B3A930075A2A3 /* Note1.txt in Resources */,
 				6B89CB0E26306B3C007FCAE5 /* HeaderSessionChat.xib in Resources */,
 				6B5AC2BF262C8510003B8F93 /* CustomListCell.xib in Resources */,
@@ -925,8 +954,10 @@
 				C49176712624546D00253070 /* UIView.swift in Sources */,
 				6BBFDE6D2649205E001AA9D9 /* NVActivityIndicatorAnimationBallPulseSync.swift in Sources */,
 				C49176722624546D00253070 /* UIColor.swift in Sources */,
+				6B17BAB52654E9BD000FA92C /* SignupDatePickerInputTableViewCell.swift in Sources */,
 				6B17BAA926542F3A000FA92C /* String.swift in Sources */,
 				6BBFDE6B2649205E001AA9D9 /* NVActivityIndicatorShape.swift in Sources */,
+				6B17BAAD2654DD31000FA92C /* SignupInputTableViewCell.swift in Sources */,
 				C4849839264D2B3D00D35328 /* BoxTableViewCell.swift in Sources */,
 				6B2FE948264C18FB007CAA3D /* Data+Extensions.swift in Sources */,
 				6B2489092652A09000D6F06F /* RTCStates.swift in Sources */,
@@ -968,6 +999,7 @@
 				6B24890C2652A09000D6F06F /* Config.swift in Sources */,
 				6BBFDE50264908FD001AA9D9 /* Token.swift in Sources */,
 				C4849832264D29A000D35328 /* MessagingViewControllerTableView.swift in Sources */,
+				6B17BAB12654E5AA000FA92C /* SignupPickerInputTableViewCell.swift in Sources */,
 				6B24890E2652A09000D6F06F /* VideoViewController.swift in Sources */,
 				C4917645262451D100253070 /* TextCell.swift in Sources */,
 				6B04823C26272F0B0031D15B /* CustomSupplementaryView.swift in Sources */,

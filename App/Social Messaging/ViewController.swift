@@ -437,7 +437,6 @@ extension ViewController {
                 let generatedString = id1! > id2! ? "\(id1!)\(id2!)" : "\(id2!)\(id1!)"
                 let membersName = [name2]
                 
-                
                 let box = Box(
                     generatedString: generatedString,
                     type: .privateChat,
@@ -445,7 +444,7 @@ extension ViewController {
                     members_id: members_id,
                     membersName: membersName,
                     creator_id: currentUser?._id,
-                    createdAt: Time.iso8601String
+                    createdAt: Date().iso8601String
                 )
                 let request = ResourceRequest<Box>(resourcePath: "messaging")
                 request.post(token: Auth.token, box) { result in

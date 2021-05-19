@@ -35,6 +35,22 @@ struct PrivateUserData: Codable {
     let phoneNumber: String
 }
 
+struct SignUpUserPost: Codable {
+    var name: String
+    var lastName: String?
+    var username: String
+    var password: String
+    var gender: Gender?
+    var phoneNumber: String?
+    var email: String?
+    var dob: String?
+    var city: String?
+    var country: String?
+    var defaultAvartar: DefaultAvartar?
+    var bio: String?
+    var idDevice: String?
+}
+
 
 
 // MARK: - Enumeration.
