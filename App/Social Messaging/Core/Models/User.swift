@@ -8,11 +8,11 @@
 import Foundation
 
 struct User: Codable { // NoSQL structure.
-    let _id: String
-    let idOnRDBMS: UUID
+    let _id: String?
+    let idOnRDBMS: UUID?
     
-    let name: String
-    let username: String
+    let name: String?
+    let username: String?
     
     let lastName: String?
     let bio: String?
@@ -28,11 +28,11 @@ struct User: Codable { // NoSQL structure.
 }
 
 struct PrivateUserData: Codable {
-    let email: String
-    let dob: String
+    let email: String?
+    let dob: String?
     let block: [String]
-    let gender: Gender
-    let phoneNumber: String
+    let gender: Gender?
+    let phoneNumber: String?
 }
 
 struct SignUpUserPost: Codable {

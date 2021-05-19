@@ -56,7 +56,7 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     */
     
     func fetchBoxesData(completion: @escaping () -> Void) {
-        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "messaging/boxes/data/\(Auth.userProfileData!._id)")
+        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "messaging/boxes/data/\(Auth.userProfileData!._id!)")
         request_box.getArray(token: Auth.token) { result in
             switch result {
             case .success(let data):

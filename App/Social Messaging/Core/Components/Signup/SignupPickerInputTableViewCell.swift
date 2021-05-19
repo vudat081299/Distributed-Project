@@ -44,6 +44,6 @@ class SignupPickerInputTableViewCell: UITableViewCell, UIPickerViewDataSource, U
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        delegate!.pass(itemsOfPickerView[row], at: indexPath!)
+        delegate!.pass("\(row)", at: indexPath!)
     }
 }

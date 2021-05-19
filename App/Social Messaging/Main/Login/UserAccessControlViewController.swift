@@ -11,8 +11,6 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var csTopContainerView: NSLayoutConstraint!
     @IBOutlet weak var csTopSigninView: NSLayoutConstraint!
-    @IBOutlet weak var welcomeScrollView: UIScrollView!
-    @IBOutlet weak var contentStackView: UIStackView!
     @IBOutlet weak var signinView: UIView!
     @IBOutlet weak var layerUsernameTextField: UIView!
     @IBOutlet weak var usernameTextFieldContainer: UIView!
@@ -20,7 +18,6 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var layerPasswordTextField: UIView!
     @IBOutlet weak var passwordTextFieldContainer: UIView!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var pageControl: UIPageControl!
     
     @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var animationLoadingView: NVActivityIndicatorView!
@@ -31,22 +28,17 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isHidden = true
-        title = "Sign in"
+        navigationController?.navigationBar.isHidden = false
+        title = "Social Messaging"
 
         // Do any additional setup after loading the view.
         usernameTextField.delegate = self
         passwordTextField.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        pageControl.addTarget(self, action: #selector(touchDragOutsidePageControl), for: UIControl.Event.touchDragOutside)
-        pageControl.addTarget(self, action: #selector(touchUpInsidePageControl), for: UIControl.Event.touchUpInside)
-        pageControl.addTarget(self, action: #selector(touchUpOutsidePageControl), for: UIControl.Event.touchUpOutside)
         
         // set up UI
         animationLoadingView.type = .cubeTransition
-        pageControl.numberOfPages = Int(contentStackView.frame.size.width / self.view.frame.size.width)
-        pageControl.currentPage = 0
         
         layerUsernameTextField.border()
         layerUsernameTextField.dropShadow()
@@ -116,11 +108,6 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
     }
     
     // MARK: IBAction
-    @IBAction func pageControlChange(_ sender: UIPageControl) {
-        welcomeScrollView.setContentOffset(CGPoint(x: welcomeScrollView.frame.size.width * CGFloat(sender.currentPage), y: welcomeScrollView.frame.origin.y), animated: true)
-        isChangePageByPageControl = true
-    }
-    
     @IBAction func loginButtonTap(_ sender: UIButton) {
         guard let username = usernameTextField.text, !username.isEmpty else {
             ErrorPresenter.showError(message: "Please enter your username", on: self)
@@ -198,23 +185,12 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
     }
     
     // MARK: Observer methods
-    @objc func touchDragOutsidePageControl() {
-        isChangePageByPageControl = false
-    }
     
-    @objc func touchUpInsidePageControl() {
-        isChangePageByPageControl = false
-    }
     
-    @objc func touchUpOutsidePageControl() {
-        isChangePageByPageControl = false
-    }
     
     // MARK: - Delegate methods
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !isChangePageByPageControl {
-            pageControl.currentPage = Int(scrollView.contentOffset.x / self.view.frame.size.width)
-        }
+        
     }
     
     /*
@@ -238,9 +214,7 @@ extension UserAccessControlViewController: UITextFieldDelegate {
                            delay: 0.1,
                            options: [.curveEaseIn],
                            animations: { [weak self] in
-                            let a = (self!.view.frame.height - self!.keyboardHeight) / 2
-                            let b = self!.welcomeScrollView.frame.size.height + self!.signinView.frame.origin.x +  self!.signinView.frame.size.height / 2
-                            self!.csTopContainerView.constant = a - b
+                            self!.csTopContainerView.constant = -50
                             self?.view.layoutIfNeeded()
                            }, completion: nil)
         }

@@ -411,7 +411,7 @@ extension ViewController {
                 cell.username.text = "@\(user.username)"
                 cell.bio.text = user.bio
                 let existedBoxes = Auth.userProfileData?.boxes
-                if let boxes = existedBoxes, !boxes.contains(user._id) {
+                if let boxes = existedBoxes, !boxes.contains(user._id!) {
                     cell.messToUserActionClosure = {
                         createBox(withDataOf: cell)
                     }
@@ -427,8 +427,8 @@ extension ViewController {
         func createBox(withDataOf cell: UserView) {
             if cell.userProfileData != nil {
                 let currentUser = Auth.userProfileData
-                let id1 = currentUser?.idOnRDBMS.uuidString
-                let id2 = cell.userProfileData?.idOnRDBMS.uuidString
+                let id1 = currentUser?.idOnRDBMS?.uuidString
+                let id2 = cell.userProfileData?.idOnRDBMS?.uuidString
                 let name1 = currentUser?.name
                 let name2 = cell.userProfileData?.name
                 

@@ -7,6 +7,29 @@
 
 import UIKit
 
+enum GenderPicker: String, CaseIterable, Codable {
+    case Male, Female, Other
+    
+    static var listRawValueString: [String] {
+        var list = [String]()
+        for item in self.allCases {
+            list.append("\(item.rawValue)")
+        }
+        return list
+    }
+}
+enum JobOrMajorPicker: String, CaseIterable, Codable {
+    case None, Engineer, Pianist, Student, Teacher, Saler
+    
+    static var listRawValueString: [String] {
+        var list = [String]()
+        for item in self.allCases {
+            list.append("\(item.rawValue)")
+        }
+        return list
+    }
+}
+
 protocol PassInputDataFromCell {
     func pass(_ string: String, at field: IndexPath)
 }
@@ -14,6 +37,7 @@ protocol PassInputDataFromCell {
 class SignUpViewController: UIViewController, UIScrollViewDelegate, PassInputDataFromCell {
     func pass(_ string: String, at field: IndexPath) {
         signUpUserListVar[keyOnPostAPI[field.section][field.row]] = string
+        inputData[field.section][field.row] = string
     }
     
     
@@ -30,28 +54,6 @@ class SignUpViewController: UIViewController, UIScrollViewDelegate, PassInputDat
     
     enum InputType: Int {
         case text, number, pickerGender, datePicker, pickerJobOrMajor
-    }
-    enum GenderPicker: Int, CaseIterable {
-        case Male, Female, Other
-        
-        static var listRawValueString: [String] {
-            var list = [String]()
-            for item in SignUpViewController.GenderPicker.allCases {
-                list.append("\(item.rawValue)")
-            }
-            return list
-        }
-    }
-    enum JobOrMajorPicker: Int, CaseIterable {
-        case None, Engineer, Pianist, Student, Teacher, Saler
-        
-        static var listRawValueString: [String] {
-            var list = [String]()
-            for item in SignUpViewController.JobOrMajorPicker.allCases {
-                list.append("\(item.rawValue)")
-            }
-            return list
-        }
     }
     
     // MARK: - Data tableView.
@@ -140,7 +142,7 @@ class SignUpViewController: UIViewController, UIScrollViewDelegate, PassInputDat
         // Do any additional setup after loading the view.
         configureHierarchy()
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 //        notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         setUpNavigationBar()
     }
@@ -159,17 +161,24 @@ class SignUpViewController: UIViewController, UIScrollViewDelegate, PassInputDat
         print("Right bar button was pressed!")
         print(signUpUserListVar)
         let request = ResourceRequest<SignUpUserPost>(resourcePath: "users/signup")
+        if (signUpUserListVar["name"] == nil ||
+                signUpUserListVar["username"] == nil ||
+                signUpUserListVar["password"] == nil
+        ) {
+            return
+        } else {
+        }
         let data = SignUpUserPost(name: signUpUserListVar["name"]!,
                                         lastName: signUpUserListVar["lastName"],
                                         username: signUpUserListVar["username"]!,
                                         password: signUpUserListVar["password"]!,
-                                        gender: Gender(rawValue: Int(signUpUserListVar["gender"] ?? "2")!),
+                                        gender: Gender(rawValue: Int(signUpUserListVar["gender"] ?? "\(Gender.other.rawValue)")!),
                                         phoneNumber: signUpUserListVar["phoneNumber"],
                                         email: signUpUserListVar["email"],
                                         dob: signUpUserListVar["dob"],
                                         city: signUpUserListVar["city"],
                                         country: signUpUserListVar["country"],
-                                        defaultAvartar: DefaultAvartar(rawValue: Int(signUpUserListVar["defaultAvartar"] ?? "0")!),
+                                        defaultAvartar: DefaultAvartar(rawValue: Int(signUpUserListVar["defaultAvartar"] ?? "\(DefaultAvartar.other.rawValue)")!),
                                         bio: signUpUserListVar["bio"],
                                         idDevice: signUpUserListVar["idDevice"]
         )
@@ -220,6 +229,14 @@ extension SignUpViewController: UITableViewDataSource, UITableViewDelegate {
         return header[section]
     }
     
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 1 {
+            return 350
+        } else {
+            return 30
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch typeInputOfRow[indexPath.section][indexPath.row] {
         case .text:
@@ -237,25 +254,27 @@ extension SignUpViewController: UITableViewDataSource, UITableViewDelegate {
             }
             cell.delegate = self
             cell.indexPath = indexPath
+            cell.content.text = inputData[indexPath.section][indexPath.row]
             cell.content.placeholder = placeHoldersRow[indexPath.section][indexPath.row]
             return cell
         case .number:
             let cell = tableView.dequeueReusableCell(withIdentifier: SignupInputTableViewCell.reuseIdentifier, for: indexPath) as! SignupInputTableViewCell
             cell.contentLabel.text = rowData[indexPath.section][indexPath.row]
             cell.content.placeholder = placeHoldersRow[indexPath.section][indexPath.row]
+            cell.content.text = inputData[indexPath.section][indexPath.row]
             cell.delegate = self
             cell.indexPath = indexPath
             return cell
         case .pickerGender:
             let cell = tableView.dequeueReusableCell(withIdentifier: SignupPickerInputTableViewCell.reuseIdentifier, for: indexPath) as! SignupPickerInputTableViewCell
-            cell.itemsOfPickerView = SignUpViewController.GenderPicker.listRawValueString
+            cell.itemsOfPickerView = GenderPicker.listRawValueString
             cell.contentLabel.text = rowData[indexPath.section][indexPath.row]
             cell.delegate = self
             cell.indexPath = indexPath
             return cell
         case .pickerJobOrMajor:
             let cell = tableView.dequeueReusableCell(withIdentifier: SignupPickerInputTableViewCell.reuseIdentifier, for: indexPath) as! SignupPickerInputTableViewCell
-            cell.itemsOfPickerView = SignUpViewController.JobOrMajorPicker.listRawValueString
+            cell.itemsOfPickerView = JobOrMajorPicker.listRawValueString
             cell.contentLabel.text = rowData[indexPath.section][indexPath.row]
             cell.delegate = self
             cell.indexPath = indexPath

@@ -9,7 +9,7 @@ import UIKit
 
 var messages: [String: [ResolvedMessage]] = [:] // map with box id.
 
-class ChattingViewController: UIViewController, MessagePullThread {
+class ChattingViewController: UIViewController, MessagePullThread, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
     // MARK: - CV config data.
     // Collection view config data.
@@ -23,18 +23,23 @@ class ChattingViewController: UIViewController, MessagePullThread {
     
     // MARK: - UI.
 //    var chatView: UICollectionView! = nil
+    let imagePicker = UIImagePickerController()
     
     
     
     // MARK: - IBOutlet.
     // Views.
     @IBOutlet weak var containChattingView: UIView!
-
+    @IBOutlet weak var sendingImageViewContainer: UIView!
+    
     @IBOutlet weak var chatView: UICollectionView!
     @IBOutlet weak var chatTextField: UITextField!
+    @IBOutlet weak var sendingImage: UIImageView!
+    @IBOutlet weak var removeSendingImageButton: UIButton!
     // Constraints.
     @IBOutlet weak var textFieldBottomAlign: NSLayoutConstraint!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leadingOfTextFieldCS: NSLayoutConstraint!
     
     
     
@@ -62,21 +67,19 @@ class ChattingViewController: UIViewController, MessagePullThread {
     
     
     // MARK: - Set up methods.
-    @objc func rightBarItemAction() {
-        print("Right bar button was pressed!")
-        self.present(buildMainViewController(), animated: true)
-    }
-    
     func setUpNavigationBar() {
-        
         navigationItem.title = "Pinned"
-        
         // BarButtonItem.
         let rightBarItem: UIBarButtonItem = {
             let bt = UIBarButtonItem(image: UIImage(systemName: "video.circle.fill"), style: .plain, target: self, action: #selector(rightBarItemAction))
             return bt
         }()
         navigationItem.rightBarButtonItem = rightBarItem
+    }
+    
+    @objc func rightBarItemAction() {
+        print("Right bar button was pressed!")
+        self.present(buildMainViewController(), animated: true)
     }
     
     
@@ -127,6 +130,8 @@ class ChattingViewController: UIViewController, MessagePullThread {
         notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
+        imagePicker.delegate = self
+        self.view.sendSubviewToBack(sendingImage)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -157,6 +162,8 @@ class ChattingViewController: UIViewController, MessagePullThread {
     }
     */
     
+    
+    // MARK: - Methods
     func receiveMessage(data: WSMessage) {
         let message = ResolvedMessage(_id: data._id, creationDate: data.creationDate, text: data.text, boxId: data.boxId!, fileId: data.fileId, type: data.type.rawValue, senderId: data.senderId!, senderIdOnRDBMS: data.senderIdOnRDBMS!)
         messagesOfBox.append(message)
@@ -213,6 +220,17 @@ class ChattingViewController: UIViewController, MessagePullThread {
 //        }
 //    }
     
+    // MARK: - Delegate methods.
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            sendingImage.contentMode = .scaleAspectFit
+            sendingImage.image = pickedImage
+            self.view.bringSubviewToFront(sendingImageViewContainer)
+        }
+
+        dismiss(animated: true, completion: nil)
+    }
+    
     
     
     // MARK: - IBAction
@@ -223,8 +241,8 @@ class ChattingViewController: UIViewController, MessagePullThread {
                                         text: chatTextField.text,
                                         fileId: nil,
                                         type: .text,
-                                        senderId: Auth.userProfileData!._id,
-                                        senderIdOnRDBMS: Auth.userProfileData!.idOnRDBMS,
+                                        senderId: Auth.userProfileData!._id!,
+                                        senderIdOnRDBMS: Auth.userProfileData!.idOnRDBMS!,
                                         members: boxData.members_id
         )
         let data = MessageSendWS(type: .newMess, majorData: majorData)
@@ -240,7 +258,18 @@ class ChattingViewController: UIViewController, MessagePullThread {
             }
         }
     }
+    @IBAction func pickImage(_ sender: UIButton) {
+        imagePicker.allowsEditing = true
+        imagePicker.sourceType = .photoLibrary
+        self.present(imagePicker, animated: true, completion: nil)
+    }
     
+    @IBAction func removeSendingImageAction(_ sender: UIButton) {
+        sendingImage.image = nil
+        self.view.sendSubviewToBack(sendingImageViewContainer)
+    }
+    
+
     // MARK: - Gesture.
     /// Pan Gesture on collection chat view. Using for swipe showing time stamp.
     @objc func panGestureOnTable(_ sender: UIPanGestureRecognizer) {
@@ -515,6 +544,7 @@ extension ChattingViewController: UIGestureRecognizerDelegate {
 extension ChattingViewController: UITextFieldDelegate {
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            leadingOfTextFieldCS.constant = 8
             keyboardHeight = keyboardRect.height
             self.bottomConstraint.constant = keyboardHeight
             self.view.layoutIfNeeded()
@@ -524,6 +554,7 @@ extension ChattingViewController: UITextFieldDelegate {
     
     @objc func keyboardWillHide(notification: NSNotification) {
         if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            leadingOfTextFieldCS.constant = 120
             keyboardHeight = keyboardRect.height
             self.bottomConstraint.constant = 0
             self.view.layoutIfNeeded()

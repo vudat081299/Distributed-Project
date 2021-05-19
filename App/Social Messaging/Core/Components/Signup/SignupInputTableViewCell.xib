@@ -17,8 +17,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="490" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your info" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6q6-6k-zQL">
-                        <rect key="frame" x="191.5" y="0.0" width="293.5" height="44"/>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your info" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6q6-6k-zQL">
+                        <rect key="frame" x="191.5" y="0.0" width="283.5" height="44"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                         <connections>
@@ -43,7 +43,7 @@
                     <constraint firstItem="hyp-xd-5mW" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.35" id="AKv-NJ-EfZ"/>
                     <constraint firstItem="6q6-6k-zQL" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="amF-s4-iXn"/>
                     <constraint firstItem="6q6-6k-zQL" firstAttribute="leading" secondItem="hyp-xd-5mW" secondAttribute="trailing" constant="5" id="cfh-yH-rfD"/>
-                    <constraint firstAttribute="trailing" secondItem="6q6-6k-zQL" secondAttribute="trailing" constant="5" id="eck-Xe-sly"/>
+                    <constraint firstAttribute="trailing" secondItem="6q6-6k-zQL" secondAttribute="trailing" constant="15" id="eck-Xe-sly"/>
                     <constraint firstAttribute="bottom" secondItem="hyp-xd-5mW" secondAttribute="bottom" id="q7P-AM-AeQ"/>
                     <constraint firstItem="hyp-xd-5mW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="wj0-VG-nrC"/>
                 </constraints>

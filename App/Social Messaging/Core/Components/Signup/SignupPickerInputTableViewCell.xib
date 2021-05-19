@@ -24,7 +24,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vIb-hF-Gaf">
-                        <rect key="frame" x="186" y="-5" width="155" height="54"/>
+                        <rect key="frame" x="186" y="0.0" width="155" height="44"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </pickerView>
@@ -33,9 +33,9 @@
                 <constraints>
                     <constraint firstItem="vIb-hF-Gaf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iP4-5e-DWD" secondAttribute="trailing" constant="50" id="5K7-KX-zsT"/>
                     <constraint firstItem="iP4-5e-DWD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="Npo-dF-xOL"/>
-                    <constraint firstAttribute="bottom" secondItem="vIb-hF-Gaf" secondAttribute="bottom" constant="-5" id="TCu-dg-hWA"/>
+                    <constraint firstAttribute="bottom" secondItem="vIb-hF-Gaf" secondAttribute="bottom" id="TCu-dg-hWA"/>
                     <constraint firstItem="iP4-5e-DWD" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.35" id="WBW-Kk-WRJ"/>
-                    <constraint firstItem="vIb-hF-Gaf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="-5" id="dVI-yH-mwG"/>
+                    <constraint firstItem="vIb-hF-Gaf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="dVI-yH-mwG"/>
                     <constraint firstItem="iP4-5e-DWD" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="ksl-iG-DW0"/>
                     <constraint firstAttribute="trailing" secondItem="vIb-hF-Gaf" secondAttribute="trailing" constant="5" id="mmA-8f-P02"/>
                     <constraint firstAttribute="bottom" secondItem="iP4-5e-DWD" secondAttribute="bottom" id="r7P-gQ-xOX"/>
