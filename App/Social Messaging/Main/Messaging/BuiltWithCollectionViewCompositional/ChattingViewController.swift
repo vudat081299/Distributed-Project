@@ -53,6 +53,7 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     let authUser = Auth.userProfileData
     var delegate: MessagePushThread?
     var users: [String: User] = [:]
+    var cacheImages: [String: UIImage] = [:]
     
     
     
@@ -87,8 +88,6 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     // MARK: - Video call setup.
     private let config = Config.default
     private func buildMainViewController() -> UIViewController {
-        let ws = WebSocketSM("ws://\(ip)/connecttowsserver/\(Auth.userId ?? "")")
-        ws.close()
         let webRTCClient = WebRTCClient(iceServers: self.config.webRTCIceServers)
         let signalClient = self.buildSignalingClient()
         let mainViewController = MainViewController(signalClient: signalClient, webRTCClient: webRTCClient)
@@ -172,6 +171,13 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
         setUpDataSource()
     }
     
+    func hideSendingImageViewContainer() {
+        sendingImage.image = nil
+        self.view.sendSubviewToBack(sendingImageViewContainer)
+    }
+    
+    
+    // MARK: - Request API.
     func fetchBoxesData(completion: @escaping () -> Void) {
         let request_mess = ResourceRequest<ResolvedMessage>(resourcePath: "messaging/data/\(boxObjectId)")
         request_mess.getArray(token: Auth.token) { result in
@@ -195,7 +201,16 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
             }
         }
     }
-
+    
+    func getImageMess(fileObjectId: String) -> UIImage? {
+        do {
+            return UIImage(data: try Data(contentsOf: URL(string: "http://192.168.1.65:8080/api/messaging/getfile/\(fileObjectId)")!))
+        } catch {
+            print(error.localizedDescription)
+        }
+        return nil
+    }
+    
 //    func fetchFriendData(completion: @escaping () -> Void) {
 //        let request_mess = ResourceRequest<User>(resourcePath: "mess/messesinbox/\(boxId)")
 //        request_mess.getArray(token: Auth.token) { result in
@@ -236,6 +251,7 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     // MARK: - IBAction
     @IBAction func sendMessage(_ sender: UIButton) {
 //        push
+//        delegate?.sendMessage(data: data)
         let majorData = MajorDataSendWS(boxId: boxData._id,
                                         creationDate: Time.iso8601String,
                                         text: chatTextField.text,
@@ -245,19 +261,45 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
                                         senderIdOnRDBMS: Auth.userProfileData!.idOnRDBMS!,
                                         members: boxData.members_id
         )
-        let data = MessageSendWS(type: .newMess, majorData: majorData)
-//        delegate?.sendMessage(data: data)
-        
+        var messageSendWSData = MessageSendWS(type: .newMess, majorData: majorData)
         let request = ResourceRequest<MessageSendWS>(resourcePath: "messaging/send/mess")
-        request.post(token: Auth.token, data) { result in
-            switch result {
-            case .success(let data):
-                break
-            case .failure:
-                break
+        
+        if sendingImage.image != nil {
+            let fileUploadData = FileUpload(file: sendingImage.image?.pngData())
+            let postImageRequest = ResourceRequest<FileUpload>(resourcePath: "messaging/postfile")
+            postImageRequest.postFile(token: Auth.token, fileUploadData) { result in
+                switch result {
+                case .success(let data):
+                    messageSendWSData.majorData.fileId = data.fileObjectId
+                    messageSendWSData.majorData.type = .png
+                    request.post(token: Auth.token, messageSendWSData) { result in
+                        switch result {
+                        case .success(let data):
+                            self.hideSendingImageViewContainer()
+                            self.chatTextField.text = ""
+                            break
+                        case .failure:
+                            break
+                        }
+                    }
+                    break
+                case .failure:
+                    break
+                }
+            }
+        } else if (messageSendWSData.majorData.text != nil) {
+            request.post(token: Auth.token, messageSendWSData) { result in
+                switch result {
+                case .success(let data):
+                    self.chatTextField.text = ""
+                    break
+                case .failure:
+                    break
+                }
             }
         }
     }
+    
     @IBAction func pickImage(_ sender: UIButton) {
         imagePicker.allowsEditing = true
         imagePicker.sourceType = .photoLibrary
@@ -265,8 +307,7 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     }
     
     @IBAction func removeSendingImageAction(_ sender: UIButton) {
-        sendingImage.image = nil
-        self.view.sendSubviewToBack(sendingImageViewContainer)
+        hideSendingImageViewContainer()
     }
     
 
@@ -441,7 +482,25 @@ extension ChattingViewController {
                     }
                     cell.senderName.textColor = .link
                 }
-
+                
+                if let fileObjectId = message.fileId {
+                    if let image = self.cacheImages[fileObjectId] {
+                        cell.heightContentImageCS.constant = 90
+                        cell.contentImageView.image = image
+                    } else {
+                        if let image = self.getImageMess(fileObjectId: fileObjectId) {
+                            cell.heightContentImageCS.constant = 90
+                            cell.contentImageView.image = image
+                            self.cacheImages[fileObjectId] = image
+                        } else {
+                            cell.heightContentImageCS.constant = 0
+                        }
+                    }
+                } else {
+                    cell.contentImageView.image = nil
+                    cell.heightContentImageCS.constant = 0
+                }
+                
 //                cell.creationDate.text = Time.getTypeWithFormat(of: message.creationDate, type: .date)
                 cell.creationDate.text = message.creationDate.iso8601String
                 cell.contentTextLabel.text = message.text

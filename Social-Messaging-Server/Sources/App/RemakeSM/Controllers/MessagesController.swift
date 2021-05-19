@@ -12,6 +12,8 @@ import MongoKitten
 struct MessagesController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let acronymsRoutes = routes.grouped("api", "messaging")
+        // Main
+        acronymsRoutes.get("getfile", ":fileObjectId", use: getFile)
         
         let tokenAuthMiddleware = TokenRSM.authenticator()
         let guardAuthMiddleware = UserRSM.guardMiddleware()
@@ -26,6 +28,7 @@ struct MessagesController: RouteCollection {
         
         tokenAuthGroup.post(use: mess)
         tokenAuthGroup.post("send", "mess", use: sendMess)
+        tokenAuthGroup.post("postfile", use: postFile)
         
         
         //
@@ -36,11 +39,45 @@ struct MessagesController: RouteCollection {
         
     }
     
+    
+    ///
+    func getFile(_ req: Request) throws -> EventLoopFuture<Response> {
+        guard let fileObjectId = req.parameters.get("fileObjectId", as: ObjectId.self) else {
+            throw Abort(.notFound)
+        }
+        
+        return CoreEngine.readFile(byId: fileObjectId, inDatabase: req.mongoDB).map { data in
+            return Response(body: Response.Body(data: data))
+        }
+    }
+    
+    
     /// Check of box is existed, if not create box.
     func mess(_ req: Request) throws -> EventLoopFuture<Box> {
         let user = try req.auth.require(UserRSM.self)
         let data = try req.content.decode(CreateBox.self)
         return CoreEngine.checkBoxIfExisted(data: data, of: user, inDatabase: req.mongoDB)
+    }
+    
+    func postFile(_ req: Request) throws -> EventLoopFuture<FileUpload> {
+        let data = try req.content.decode(FileUpload.self)
+        let fileObjectId: EventLoopFuture<ObjectId?>
+
+        if let file = data.file, !file.isEmpty {
+            // Upload the attached file to GridFS
+            fileObjectId = CoreEngine.uploadFile(file, inDatabase: req.mongoDB).map { fileObjectId in
+                // This is needed to map the EventLoopFuture from `ObjectId` to `ObjectId?`
+                return fileObjectId
+            }
+        } else {
+            fileObjectId = req.eventLoop.makeSucceededFuture(nil)
+        }
+        return fileObjectId.flatMapThrowing { id in
+            guard let id = id else {
+                throw Abort(.badRequest)
+            }
+            return FileUpload(fileObjectId: id.hexString)
+        }
     }
     
     func sendMess(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {

@@ -27,5 +27,6 @@ struct FollowUserPostRQ: Content {
 }
 
 struct FileUpload: Content {
+    var fileObjectId: String?
     var file: Data?
 }

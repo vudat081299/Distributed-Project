@@ -188,6 +188,39 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
             completion(.failure)
         }
     }
+    func postFile(token: String? = nil,
+                  _ resource: ResourceType,
+                  completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+        do {
+            var urlRequest = URLRequest(url: resourceURL)
+            if token != nil {
+                urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+            }
+            urlRequest.httpMethod = "POST"
+            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpBody = try JSONEncoder().encode(resource)
+            
+            let dataTask = URLSession.shared.dataTask(with: urlRequest) { data, response, _ in
+                guard let httpResponse = response as? HTTPURLResponse,
+                      httpResponse.statusCode == 200,
+                      let jsonData = data
+                else {
+                    completion(.failure)
+                    return
+                }
+                do {
+                    let decoder = JSONDecoder()
+                    let resource = try decoder.decode(ResourceType.self, from: jsonData)
+                    completion(.success(resource))
+                } catch {
+                    completion(.failure)
+                }
+            }
+            dataTask.resume()
+        } catch {
+            completion(.failure)
+        }
+    }
     
     
     

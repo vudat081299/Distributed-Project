@@ -26,7 +26,7 @@ public func configureRSM(_ app: Application) throws {
     // MARK: - Config http server."
     app.http.server.configuration.hostname = "192.168.1.65"
     app.http.server.configuration.port = 8080
-    app.routes.defaultMaxBodySize = "5mb"
+    app.routes.defaultMaxBodySize = "20mb"
     
     // MARK: - Config DB.
     let databaseName: String

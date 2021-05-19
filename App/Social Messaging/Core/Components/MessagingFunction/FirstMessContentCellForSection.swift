@@ -11,6 +11,8 @@ class FirstMessContentCellForSection: UICollectionViewCell {
     static let reuseIdentifier = "FirstMessContentCellForSection"
     
     @IBOutlet weak var contentTextLabel: UILabel!
+    @IBOutlet weak var contentImageView: UIImageView!
+    @IBOutlet weak var heightContentImageCS: NSLayoutConstraint!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var constraint: NSLayoutConstraint!
     @IBOutlet weak var backGroundView: UIView!

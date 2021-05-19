@@ -33,19 +33,19 @@ struct WSMessage: Codable {
 }
 
 struct MessageSendWS: Codable {
-    let type: WSResolvedMajorDataType
-    let majorData: MajorDataSendWS
+    var type: WSResolvedMajorDataType
+    var majorData: MajorDataSendWS
 }
 
 struct MajorDataSendWS: Codable {
-    let boxId: String // _id
-    let creationDate: String
-    let text: String?
-    let fileId: String?
-    let type: MediaTypeMess
-    let senderId: String // _id
-    let senderIdOnRDBMS: UUID
-    let members: [String]
+    var boxId: String // _id
+    var creationDate: String
+    var text: String?
+    var fileId: String?
+    var type: MediaTypeMess
+    var senderId: String // _id
+    var senderIdOnRDBMS: UUID
+    var members: [String]
 }
 
 struct ResolvedMessage: Codable {
@@ -62,6 +62,10 @@ struct ResolvedMessage: Codable {
 
 
 
+struct FileUpload: Codable {
+    var fileObjectId: String?
+    var file: Data?
+}
 
 
 
