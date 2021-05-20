@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <section class="wrap">
+      <div class="header">
+        <div class="header__mute"><i class="fas fa-volume-down"></i></div>
+        <div id="score" class="header__score">0</div>
+      </div>
+      <div class="quiz">
+        <div id="expression" class="quiz__expression"></div>
+        <div id="quiz-answer" class="quiz__answer"></div>
+      </div>
+      <div class="answer">
+        <button>
+          <i id="btn-correct" class="answer__correct fas fa-check"></i>
+        </button>
+        <button>
+          <i id="btn-wrong" class="answer__wrong fas fa-times"></i>
+        </button>
+      </div>
+    </section>
+
+    <script src="./__init.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
