@@ -44,7 +44,6 @@
 		6B2FE946264C18D2007CAA3D /* URLResponse+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2FE945264C18D2007CAA3D /* URLResponse+Extensions.swift */; };
 		6B2FE948264C18FB007CAA3D /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2FE947264C18FB007CAA3D /* Data+Extensions.swift */; };
 		6B2FE94A264C256B007CAA3D /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2FE949264C256B007CAA3D /* Key.swift */; };
-		6B2FE94D264DA5D2007CAA3D /* WebSocketKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6B2FE94C264DA5D2007CAA3D /* WebSocketKit */; };
 		6B5AC2BF262C8510003B8F93 /* CustomListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B5AC2BD262C8510003B8F93 /* CustomListCell.xib */; };
 		6B89CAEE26306215007FCAE5 /* ChattingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B89CAEC26306215007FCAE5 /* ChattingViewController.swift */; };
 		6B89CAEF26306215007FCAE5 /* ChattingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B89CAED26306215007FCAE5 /* ChattingViewController.xib */; };
@@ -263,7 +262,6 @@
 			files = (
 				C49176802624551F00253070 /* libz.tbd in Frameworks */,
 				6B2488ED26529FE500D6F06F /* WebRTC in Frameworks */,
-				6B2FE94D264DA5D2007CAA3D /* WebSocketKit in Frameworks */,
 				6B2488EA26529F7100D6F06F /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -800,7 +798,6 @@
 			);
 			name = "Social Messaging";
 			packageProductDependencies = (
-				6B2FE94C264DA5D2007CAA3D /* WebSocketKit */,
 				6B2488E926529F7100D6F06F /* Starscream */,
 				6B2488EC26529FE500D6F06F /* WebRTC */,
 			);
@@ -876,7 +873,6 @@
 			);
 			mainGroup = 6B8FF0422622024000F813C6;
 			packageReferences = (
-				6B2FE94B264DA5D1007CAA3D /* XCRemoteSwiftPackageReference "websocket-kit" */,
 				6B2488E826529F7000D6F06F /* XCRemoteSwiftPackageReference "Starscream" */,
 				6B2488EB26529FE400D6F06F /* XCRemoteSwiftPackageReference "WebRTC" */,
 			);
@@ -1378,14 +1374,6 @@
 				minimumVersion = 90.0.0;
 			};
 		};
-		6B2FE94B264DA5D1007CAA3D /* XCRemoteSwiftPackageReference "websocket-kit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/vapor/websocket-kit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1398,11 +1386,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6B2488EB26529FE400D6F06F /* XCRemoteSwiftPackageReference "WebRTC" */;
 			productName = WebRTC;
-		};
-		6B2FE94C264DA5D2007CAA3D /* WebSocketKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6B2FE94B264DA5D1007CAA3D /* XCRemoteSwiftPackageReference "websocket-kit" */;
-			productName = WebSocketKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 

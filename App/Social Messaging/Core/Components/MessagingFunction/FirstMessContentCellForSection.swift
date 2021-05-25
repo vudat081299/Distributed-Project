@@ -23,6 +23,8 @@ class FirstMessContentCellForSection: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        contentImageView.image = nil
+        contentTextLabel.text = ""
     }
     
     override func prepareForReuse() {

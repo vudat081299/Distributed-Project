@@ -6,15 +6,27 @@
 //
 
 import UIKit
+import CryptoKit
 
-
-var userBoxData: [ResolvedBox] = []
+func MD5<T: Encodable>(_ data: T) -> String {
+    do {
+        let encodedData = try JSONEncoder().encode(data)
+        let digest = Insecure.MD5.hash(data: encodedData)
+        return digest.map {
+            String(format: "%02hhx", $0)
+        }.joined()
+    } catch {
+        print("Cannot md5 object!")
+        return "error: true"
+    }
+}
 
 class MessagingViewControllerTableView: UIViewController, MessagePullThread, MessagePushThread {
     
     private var tableView: UITableView! = nil
     var messagePullThreadDelegate: MessagePullThread?
     var messagePushThreadDelegate: MessagePushThread?
+    var userBoxData: [ResolvedBox] = Auth.userBoxData
     
     
     // MARK: - Navbar components.
@@ -37,6 +49,13 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("Check userBoxData!")
+        print(userBoxData)
+        print(Auth.userBoxData)
+//        if MD5(userBoxData) != MD5(Auth.userBoxData) || userBoxData.count != Auth.userBoxData.count {
+//            userBoxData = Auth.userBoxData
+//            self.tableView.reloadData()
+//        }
         fetchBoxesData {
             DispatchQueue.main.async{
                 self.tableView.reloadData()
@@ -62,7 +81,7 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
             case .success(let data):
                 let boxData = data.sorted(by: { $0.boxSpecification.lastestUpdate > $1.boxSpecification.lastestUpdate })
                 Auth.userBoxData = boxData
-                userBoxData = boxData
+                self.userBoxData = boxData
                 completion()
             case .failure:
                 break
@@ -101,11 +120,13 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
         let cell = tableView.dequeueReusableCell(withIdentifier: BoxTableViewCell.reuseIdentifier, for: indexPath) as! BoxTableViewCell
 //        cell.boxImage
         let box = userBoxData[indexPath.row]
-        let authUser = Auth.userProfileData
-        if box.type == .privateChat {
-            for name in box.membersName {
-                if name != authUser?.name {
+        if let authUser = Auth.userProfileData, box.type == .privateChat {
+            for (index, name) in box.membersName.enumerated() {
+                if name != authUser.name {
                     cell.name.text = name
+                    break
+                } else if (index == box.membersName.count - 1) {
+                    cell.name.text = authUser.name
                     break
                 }
             }
@@ -130,7 +151,7 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
         messagePullThreadDelegate = chattingViewController
         let box = userBoxData[indexPath.row]
         chattingViewController.boxObjectId = box._id
-        chattingViewController.boxData = userBoxData[indexPath.row]
+        chattingViewController.boxData = box
         chattingViewController.delegate = self
         chattingViewController.navigationItem.largeTitleDisplayMode = .never
         chattingViewController.tabBarController?.tabBar.isHidden = true

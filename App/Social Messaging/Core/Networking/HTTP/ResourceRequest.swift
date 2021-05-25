@@ -7,8 +7,59 @@
 
 import Foundation
 
-var ip = "192.168.1.65:8080"
+// MARK: - Specifications.
+var domain: String? {
+    get {
+        return UserDefaults.standard.string(forKey: domain_key)
+    }
+    set {
+        UserDefaults.standard.set(newValue, forKey: domain_key)
+        let endIndexOfIp = newValue?.firstIndex(of: Character(":"))
+        if let index = endIndexOfIp, newValue != nil && newValue!.count >= 9 {
+            let ipSubString = newValue![newValue!.startIndex..<index]
+            let startIndexOfPort = newValue?.index(index, offsetBy: 1)
+            let portSubString = newValue![startIndexOfPort!..<newValue!.endIndex]
+            onlyIp = String(ipSubString)
+            port = String(portSubString)
+            chatPort = "8081"
+            print("Network specification ip:\(onlyIp!) \nport:\(port!) \ndomain:\(domain!)")
+        }
+    }
+}
 
+var onlyIp: String? {
+    get {
+        return UserDefaults.standard.string(forKey: ip_key) ?? "192.168.1.65"
+    }
+    set {
+        UserDefaults.standard.set(newValue, forKey: ip_key)
+    }
+}
+
+var port: String? {
+    get {
+        return UserDefaults.standard.string(forKey: port_key) ?? "8080"
+    }
+    set {
+        UserDefaults.standard.set(newValue, forKey: port_key)
+    }
+}
+
+var chatPort: String? {
+    get {
+        return UserDefaults.standard.string(forKey: chatting_port_key) ?? "8081"
+    }
+    set {
+        UserDefaults.standard.set(newValue, forKey: chatting_port_key)
+    }
+}
+
+let basedURL = "http://\(domain!)/api/"
+
+
+
+
+// MARK: - enum.
 enum GetResourcesRequest<ResourceType> {
   case success([ResourceType])
   case failure
@@ -55,11 +106,10 @@ enum ResourcesRequestGetArray<ResourceType> {
 
 struct ResourceRequest<ResourceType> where ResourceType: Codable {
     
-    let baseURL = "http://\(ip)/api/"
     let resourceURL: URL
     
     init(resourcePath: String) {
-        guard let resourceURL = URL(string: baseURL) else {
+        guard let resourceURL = URL(string: basedURL) else {
             fatalError()
         }
         self.resourceURL = resourceURL.appendingPathComponent(resourcePath)

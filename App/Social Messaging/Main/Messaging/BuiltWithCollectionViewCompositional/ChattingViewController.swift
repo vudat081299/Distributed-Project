@@ -252,6 +252,7 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     @IBAction func sendMessage(_ sender: UIButton) {
 //        push
 //        delegate?.sendMessage(data: data)
+        tapped(style: .medium)
         let majorData = MajorDataSendWS(boxId: boxData._id,
                                         creationDate: Time.iso8601String,
                                         text: chatTextField.text,
@@ -301,12 +302,14 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     }
     
     @IBAction func pickImage(_ sender: UIButton) {
+        tapped(style: .medium)
         imagePicker.allowsEditing = true
         imagePicker.sourceType = .photoLibrary
         self.present(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func removeSendingImageAction(_ sender: UIButton) {
+        tapped(style: .medium)
         hideSendingImageViewContainer()
     }
     
@@ -484,16 +487,22 @@ extension ChattingViewController {
                 }
                 
                 if let fileObjectId = message.fileId {
+                    cell.contentImageView.image = nil
+                    cell.heightContentImageCS.constant = 270
                     if let image = self.cacheImages[fileObjectId] {
-                        cell.heightContentImageCS.constant = 90
                         cell.contentImageView.image = image
                     } else {
-                        if let image = self.getImageMess(fileObjectId: fileObjectId) {
-                            cell.heightContentImageCS.constant = 90
-                            cell.contentImageView.image = image
-                            self.cacheImages[fileObjectId] = image
-                        } else {
-                            cell.heightContentImageCS.constant = 0
+                        DispatchQueue(label: "com.sm.dispatch.qos").async(qos: .utility) {
+                            if let image = self.getImageMess(fileObjectId: fileObjectId) {
+                                DispatchQueue.main.async {
+                                    cell.contentImageView.image = image
+                                    self.cacheImages[fileObjectId] = image
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    cell.heightContentImageCS.constant = 0
+                                }
+                            }
                         }
                     }
                 } else {

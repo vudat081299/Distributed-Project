@@ -18,6 +18,7 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var layerPasswordTextField: UIView!
     @IBOutlet weak var passwordTextFieldContainer: UIView!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var domainInput: UITextField!
     
     @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var animationLoadingView: NVActivityIndicatorView!
@@ -109,6 +110,7 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
     
     // MARK: IBAction
     @IBAction func loginButtonTap(_ sender: UIButton) {
+        domain = domainInput.text
         guard let username = usernameTextField.text, !username.isEmpty else {
             ErrorPresenter.showError(message: "Please enter your username", on: self)
             return

@@ -50,7 +50,7 @@ struct MessageRoomForm: Codable {
 }
 
 
-let host = ip
+let host = domain
 
 final class WebServices {
   static let baseURL = "http://\(host)/"
