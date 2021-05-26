@@ -17,7 +17,14 @@ class Auth {
     static let userIdKey = "userIdKey"
     static let _idKey = "_idKey"
     static let userDefaults = UserDefaults.standard
-    static var avatar: UIImage!
+    static var avatar: UIImage! {
+        get {
+            if let authUserData = userProfileData, let avatarObjectId = authUserData.profilePicture {
+                return UIImage.loadImageFromFileWithPNGEx(avatarObjectId)
+            }
+            return nil
+        }
+    }
     
     static var token: String? {
         get {
@@ -156,14 +163,9 @@ class Auth {
                 do {
                     // Convert to Data
                     if let avatarObjectId = userData.profilePicture,
-                       let avatarURL = URL(string: "\(basedURL)users/getfiletest/\(avatarObjectId)"),
-                       let image = UIImage(data: try Data(contentsOf: avatarURL)),
-                       let imageData = image.pngData() {
-                        // Create URL
-                        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                        let savingUrl = documents.appendingPathComponent("\(avatarObjectId).png")
-                        // Write to Disk
-                        try imageData.write(to: savingUrl)
+                       let avatarURL = URL(string: "\(basedURL)users/getavatar/\(avatarObjectId)"),
+                       let image = UIImage(data: try Data(contentsOf: avatarURL)) {
+                        image.saveToFileAsPNGEx(avatarObjectId)
                     }
                 } catch {
                     print(error.localizedDescription)

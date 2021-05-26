@@ -408,7 +408,7 @@ extension ViewController {
                 let user = self.resolvedUser[indexPath.row]
                 cell.userProfileData = user
                 cell.name.text = user.name
-                cell.username.text = "@\(user.username)"
+                cell.username.text = "@\(user.username!)"
                 cell.bio.text = user.bio
                 let existedBoxes = Auth.userProfileData?.boxes
                 if let boxes = existedBoxes, !boxes.contains(user._id!) {

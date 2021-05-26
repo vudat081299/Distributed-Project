@@ -60,6 +60,7 @@
 		6B8FF0692622024500F813C6 /* Social_MessagingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8FF0682622024500F813C6 /* Social_MessagingTests.swift */; };
 		6B8FF0742622024500F813C6 /* Social_MessagingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8FF0732622024500F813C6 /* Social_MessagingUITests.swift */; };
 		6B8FF0892622067A00F813C6 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8FF0882622067A00F813C6 /* TabBarController.swift */; };
+		6BBE02BB265EA3AC00F01BE5 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBE02BA265EA3AB00F01BE5 /* FileManager.swift */; };
 		6BBFDE4D264908FD001AA9D9 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE49264908FD001AA9D9 /* Message.swift */; };
 		6BBFDE4E264908FD001AA9D9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE4A264908FD001AA9D9 /* User.swift */; };
 		6BBFDE4F264908FD001AA9D9 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE4B264908FD001AA9D9 /* Upload.swift */; };
@@ -195,6 +196,7 @@
 		6B8FF0732622024500F813C6 /* Social_MessagingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Social_MessagingUITests.swift; sourceTree = "<group>"; };
 		6B8FF0752622024500F813C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B8FF0882622067A00F813C6 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		6BBE02BA265EA3AB00F01BE5 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		6BBFDE49264908FD001AA9D9 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		6BBFDE4A264908FD001AA9D9 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		6BBFDE4B264908FD001AA9D9 /* Upload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Upload.swift; sourceTree = "<group>"; };
@@ -484,6 +486,7 @@
 				6B2FE947264C18FB007CAA3D /* Data+Extensions.swift */,
 				6BC5FE53264E51AC000702BE /* Date.swift */,
 				6B17BAA826542F3A000FA92C /* String.swift */,
+				6BBE02BA265EA3AB00F01BE5 /* FileManager.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1019,6 +1022,7 @@
 				6BBFDE692649205E001AA9D9 /* NVActivityIndicatorViewable.swift in Sources */,
 				C4917644262451D100253070 /* MessagingViewController.swift in Sources */,
 				C49377C1264B92A500216514 /* Non-classify.swift in Sources */,
+				6BBE02BB265EA3AC00F01BE5 /* FileManager.swift in Sources */,
 				6B2489042652A09000D6F06F /* WebSocketProvider.swift in Sources */,
 				6B89CAEE26306215007FCAE5 /* ChattingViewController.swift in Sources */,
 				6BBFDE682649205E001AA9D9 /* NVActivityIndicatorPresenter.swift in Sources */,

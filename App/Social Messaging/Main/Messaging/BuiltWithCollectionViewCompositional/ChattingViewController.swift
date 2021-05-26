@@ -204,7 +204,7 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     
     func getImageMess(fileObjectId: String) -> UIImage? {
         do {
-            return UIImage(data: try Data(contentsOf: URL(string: "http://192.168.1.65:8080/api/messaging/getfile/\(fileObjectId)")!))
+            return UIImage(data: try Data(contentsOf: URL(string: "\(basedURL)messaging/getfile/\(fileObjectId)")!))
         } catch {
             print(error.localizedDescription)
         }
@@ -491,6 +491,9 @@ extension ChattingViewController {
                     cell.heightContentImageCS.constant = 270
                     if let image = self.cacheImages[fileObjectId] {
                         cell.contentImageView.image = image
+                        for (key, value) in self.cacheImages {
+                           print("\(key)")
+                        }
                     } else {
                         DispatchQueue(label: "com.sm.dispatch.qos").async(qos: .utility) {
                             if let image = self.getImageMess(fileObjectId: fileObjectId) {
@@ -529,7 +532,16 @@ extension ChattingViewController {
 //                using: headerRegistration, for: index)
             
             guard let supplementaryView = view.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier, for: index) as? HeaderSessionChat else { fatalError("Cannot create new cell") }
-            supplementaryView.avatar.image = UIImage(named: "avatar_11")
+            
+            let message = self.messagesOfBox[index.section]
+            
+            if message.senderId == self.authUser?._id {
+                supplementaryView.avatar.image = Auth.avatar
+            } else {
+                supplementaryView.avatar.image = UIImage(named: "avatar_11")
+            }
+            
+//            supplementaryView.avatar.image = UIImage(named: "avatar_11")
             supplementaryView.avatar.clipsToBounds = true
             supplementaryView.avatar.layer.cornerRadius = 8
             supplementaryView.clipsToBounds = false
