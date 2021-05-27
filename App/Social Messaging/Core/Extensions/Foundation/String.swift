@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension String {
     
@@ -21,5 +22,14 @@ extension String {
         dateFormatter.timeStyle = .short
         dateFormatter.dateStyle = .none
         return dateFormatter.string(from: date)
+    }
+    
+    func getImageWithThisURL() -> UIImage? {
+        do {
+            return UIImage(data: try Data(contentsOf: URL(string: self)!))
+        } catch {
+            print(error.localizedDescription)
+        }
+        return nil
     }
 }

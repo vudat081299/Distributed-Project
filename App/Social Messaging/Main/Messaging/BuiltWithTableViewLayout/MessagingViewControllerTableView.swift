@@ -27,6 +27,7 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     var messagePullThreadDelegate: MessagePullThread?
     var messagePushThreadDelegate: MessagePushThread?
     var userBoxData: [ResolvedBox] = Auth.userBoxData
+    var cacheImages: [String: UIImage] = [:]
     
     
     // MARK: - Navbar components.
@@ -130,7 +131,33 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
                     break
                 }
             }
+            for (index, userObjectId) in box.members_id.enumerated() {
+                if userObjectId == authUser._id {
+                    cell.boxImage.image = Auth.avatar
+                } else {
+                    if let image = self.cacheImages[userObjectId] {
+                        cell.boxImage.image = image
+                    } else {
+                        let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(userObjectId)"
+                        DispatchQueue(label: "com.chat.getavatar.qos").async(qos: .userInitiated) {
+                            if let image = imageURL.getImageWithThisURL() {
+                                DispatchQueue.main.async {
+                                    cell.boxImage.image = image
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    cell.boxImage.image = UIImage(named: "avatar_7")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+        
+        
+        
+        
         cell.idLabel.text = "@\(box._id)"
         cell.lastestMess.text = box.boxSpecification.lastestMess
 //        let dateFormatter = ISO8601DateFormatter()

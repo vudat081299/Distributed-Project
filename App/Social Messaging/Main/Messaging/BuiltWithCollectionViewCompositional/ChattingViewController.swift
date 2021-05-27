@@ -45,7 +45,6 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     
     // MARK: - Variables.
     var keyboardHeight: CGFloat = 0.0
-    var headersIndex = [IndexPath]()
     var touchPosition: CGPoint = CGPoint(x: 0, y: 0)
     var boxObjectId: String = ""
     var boxData: ResolvedBox!
@@ -193,6 +192,8 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
                     }
                     if messages[self.boxObjectId] != nil {
                         self.messagesOfBox = messages[self.boxObjectId]!
+                        let a = self.messagesOfBox
+                        print("")
                     }
                 }
                 completion()
@@ -397,7 +398,7 @@ extension ChattingViewController {
             alignment: .top)
         let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(44)),
+                                              heightDimension: .estimated(0)),
             elementKind: ChattingViewController.sectionFooterElementKind,
             alignment: .bottom)
         sectionHeader.pinToVisibleBounds = true
@@ -434,6 +435,7 @@ extension ChattingViewController {
         chatView.register(UINib(nibName: MessContentCell.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: MessContentCell.reuseIdentifier)
         chatView.register(UINib(nibName: FirstMessContentCellForSection.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: FirstMessContentCellForSection.reuseIdentifier)
         chatView.register(UINib(nibName: HeaderSessionChat.reuseIdentifier, bundle: nil), forSupplementaryViewOfKind: ChattingViewController.sectionHeaderElementKind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier)
+//        chatView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: ChattingViewController.sectionFooterElementKind, withReuseIdentifier: ChattingViewController.sectionFooterElementKind)
         chatView.addGestureRecognizer(panGesture)
         view.bringSubviewToFront(containChattingView)
     }
@@ -496,7 +498,8 @@ extension ChattingViewController {
                         }
                     } else {
                         DispatchQueue(label: "com.sm.dispatch.qos").async(qos: .utility) {
-                            if let image = self.getImageMess(fileObjectId: fileObjectId) {
+                            let imageURL = "\(basedURL)messaging/getfile/\(fileObjectId)"
+                            if let image = imageURL.getImageWithThisURL() {
                                 DispatchQueue.main.async {
                                     cell.contentImageView.image = image
                                     self.cacheImages[fileObjectId] = image
@@ -531,21 +534,44 @@ extension ChattingViewController {
 //            return self.chatView.dequeueConfiguredReusableSupplementary(
 //                using: headerRegistration, for: index)
             
-            guard let supplementaryView = view.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier, for: index) as? HeaderSessionChat else { fatalError("Cannot create new cell") }
-            
-            let message = self.messagesOfBox[index.section]
-            
-            if message.senderId == self.authUser?._id {
-                supplementaryView.avatar.image = Auth.avatar
-            } else {
-                supplementaryView.avatar.image = UIImage(named: "avatar_11")
-            }
-            
+            if kind == ChattingViewController.sectionHeaderElementKind {
+                guard let supplementaryView = view.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier, for: index) as? HeaderSessionChat else { fatalError("Cannot create new cell") }
+                
+                let message = self.messagesOfBox[index.section]
+                
+                if message.senderId == self.authUser?._id {
+                    supplementaryView.avatar.image = Auth.avatar
+                } else {
+                    if let image = self.cacheImages[message.senderId] {
+                        supplementaryView.avatar.image = image
+                    } else {
+                        let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(message.senderId)"
+                        DispatchQueue(label: "com.chat.getavatar.qos").async(qos: .userInitiated) {
+                            if let image = imageURL.getImageWithThisURL() {
+                                DispatchQueue.main.async {
+                                    supplementaryView.avatar.image = image
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    supplementaryView.avatar.image = UIImage(named: "avatar_7")
+                                }
+                            }
+                        }
+                    }
+                }
+                
 //            supplementaryView.avatar.image = UIImage(named: "avatar_11")
-            supplementaryView.avatar.clipsToBounds = true
-            supplementaryView.avatar.layer.cornerRadius = 8
-            supplementaryView.clipsToBounds = false
-            return supplementaryView
+                supplementaryView.avatar.clipsToBounds = true
+                supplementaryView.avatar.layer.cornerRadius = 8
+                supplementaryView.clipsToBounds = false
+                return supplementaryView
+            } else if (kind == ChattingViewController.sectionFooterElementKind &&
+                        index.section == self.messagesOfBox.count - 1) {
+                let supplementaryView = view.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ChattingViewController.sectionFooterElementKind, for: index)
+                supplementaryView.frame.size.height = 100
+                return supplementaryView
+            }
+            return nil
         }
         setUpDataSource()
     }
