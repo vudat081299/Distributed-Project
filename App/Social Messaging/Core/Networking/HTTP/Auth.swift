@@ -154,11 +154,10 @@ class Auth {
     
     static func prepareUserProfileData() {
         //
-        let get_authuser_data_request = ResourceRequest<User>(resourcePath: "users/authuser/nosqldata")
-        get_authuser_data_request.get(token: Auth.token) { result in
+        let get_authuser_data_request = ResourceRequest<User, User>(resourcePath: "users/authuser/nosqldata")
+        get_authuser_data_request.get(token: true) { result in
             switch result {
             case .success(let userData):
-                print(userData)
                 Auth.userProfileData = userData
                 do {
                     // Convert to Data
@@ -227,11 +226,10 @@ class Auth {
         //
         if let userObjectId = Auth.userProfileData?._id {
             let get_boxes_data_of_authuser_request =
-                ResourceRequest<ResolvedBox>(resourcePath: "messaging/boxes/data/\(userObjectId)")
-            get_boxes_data_of_authuser_request.getArray(token: Auth.token) { result in
+                ResourceRequest<ResolvedBox, ResolvedBox>(resourcePath: "messaging/boxes/data/\(userObjectId)")
+            get_boxes_data_of_authuser_request.getArray(token: true) { result in
                 switch result {
                 case .success(let data):
-                    print(data)
                     let boxData = data.sorted(by: { $0.boxSpecification.lastestUpdate > $1.boxSpecification.lastestUpdate })
                     Auth.userBoxData = boxData
                 case .failure:

@@ -94,7 +94,7 @@ class TabBarController: UITabBarController, MessagePushThread {
     
     func startListenWebSocket() {
         let ws = WebSocketSM("ws://\(domain!)/connectws/\(Auth.userProfileData?._id! ?? "")")
-        print(ws.url)
+        print("Connect ws: \(ws.url)")
         ws.event.close = { [weak self] code, reason, clean in
             print("WebSocket did close!")
         }

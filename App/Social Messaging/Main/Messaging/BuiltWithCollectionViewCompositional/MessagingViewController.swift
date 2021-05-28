@@ -55,8 +55,8 @@ class MessagingViewController: UIViewController {
     }
     
     func fetchBoxesData() {
-        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "mess")
-        request_box.getArray(token: Auth.token) { result in
+        let request_box = ResourceRequest<ResolvedBox, ResolvedBox>(resourcePath: "mess")
+        request_box.getArray(token: true) { result in
             switch result {
             case .success(let data):
                 Auth.userBoxData = data

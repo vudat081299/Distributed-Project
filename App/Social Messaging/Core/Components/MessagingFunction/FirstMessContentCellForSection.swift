@@ -35,6 +35,8 @@ class FirstMessContentCellForSection: UICollectionViewCell, UIScrollViewDelegate
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
+        
         constraint.constant = 0
         contentImageContainerScrollView.zoomScale = 1.0
         contentImageView.image = nil

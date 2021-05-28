@@ -8,7 +8,6 @@
 import UIKit
 
 func tapped(style: UIImpactFeedbackGenerator.FeedbackStyle?, type: UINotificationFeedbackGenerator.FeedbackType? = .success) {
-    print("Running \(type)")
     
     if let feedbackStyle = style {
         let generator = UIImpactFeedbackGenerator(style: feedbackStyle)

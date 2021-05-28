@@ -29,6 +29,11 @@ extension UIView {
         layer.shouldRasterize = true
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
+    
+    func borderOutline(_ width: CGFloat = 1, color: UIColor = .black) {
+        layer.borderWidth = width
+        layer.borderColor = color.cgColor
+    }
 }
 
 public let kShapeDashed : String = "kShapeDashed"

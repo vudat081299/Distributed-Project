@@ -368,6 +368,24 @@ struct CoreEngine {
             ).map { _ in }
     }
     
+    /// Update just one filed per time.
+    static func updateAuthUserProfileNoSQL(
+        of userObjectId: ObjectId,
+        with data: String,
+        of field: String,
+        inDatabase database: MongoDatabase
+    ) -> EventLoopFuture<Void> {
+        database[UserRSMNoSQL.collection]
+            .updateOne(
+            where: "_id" == userObjectId,
+            to: [
+                "$set": [
+                    field: data
+                ]
+            ]
+        ).map { _ in }
+    }
+    
     static func loadAllUsers(
         inDatabase database: MongoDatabase
     ) -> EventLoopFuture<[UserRSMNoSQL]> {

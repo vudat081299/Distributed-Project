@@ -159,8 +159,7 @@ class SignUpViewController: UIViewController, UIScrollViewDelegate, PassInputDat
     
     @objc func rightBarItemAction() {
         print("Right bar button was pressed!")
-        print(signUpUserListVar)
-        let request = ResourceRequest<SignUpUserPost>(resourcePath: "users/signup")
+        let request = ResourceRequest<SignUpUserPost, SignUpUserPost>(resourcePath: "users/signup")
         if (signUpUserListVar["name"] == nil ||
                 signUpUserListVar["username"] == nil ||
                 signUpUserListVar["password"] == nil

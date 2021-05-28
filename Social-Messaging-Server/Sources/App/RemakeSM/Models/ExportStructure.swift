@@ -30,3 +30,8 @@ struct FileUpload: Content {
     var fileObjectId: String?
     var file: Data?
 }
+
+struct UpdateAuthUserProfile: Content {
+    let data: String?
+    let field: String?
+}

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditProfileViewController" customModule="Social_Messaging" customModuleProvider="target">
+            <connections>
+                <outlet property="bottomAlignCS" destination="C75-yd-ApR" id="pjZ-vI-UiD"/>
+                <outlet property="countCharacterLeftLabel" destination="3W4-5M-0Sn" id="gXZ-Kj-azb"/>
+                <outlet property="textView" destination="T4L-iO-uvB" id="r7F-dC-bxf"/>
+                <outlet property="titleLabel" destination="oRc-W8-JJn" id="6M8-SY-wix"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="T4L-iO-uvB">
+                    <rect key="frame" x="0.0" y="73" width="414" height="823"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                    <color key="textColor" systemColor="labelColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oRc-W8-JJn">
+                    <rect key="frame" x="21" y="52" width="35.5" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="TNP-K3-JA2"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                    <color key="textColor" systemColor="systemGrayColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3W4-5M-0Sn">
+                    <rect key="frame" x="398" y="859" width="0.0" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="CTf-Dc-fVM"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                    <color key="textColor" systemColor="systemGrayColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="T4L-iO-uvB" firstAttribute="top" secondItem="oRc-W8-JJn" secondAttribute="bottom" id="34U-2U-F0V"/>
+                <constraint firstItem="T4L-iO-uvB" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="5O6-ec-puo"/>
+                <constraint firstAttribute="bottom" secondItem="T4L-iO-uvB" secondAttribute="bottom" id="C75-yd-ApR"/>
+                <constraint firstItem="T4L-iO-uvB" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="DdJ-Lx-dY4"/>
+                <constraint firstItem="3W4-5M-0Sn" firstAttribute="bottom" secondItem="T4L-iO-uvB" secondAttribute="bottom" constant="-16" id="HUa-g5-1Pp"/>
+                <constraint firstItem="oRc-W8-JJn" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="21" id="HzH-pq-qDG"/>
+                <constraint firstItem="oRc-W8-JJn" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="8" id="VXS-nI-PW5"/>
+                <constraint firstItem="3W4-5M-0Sn" firstAttribute="trailing" secondItem="T4L-iO-uvB" secondAttribute="trailing" constant="-16" id="c2B-cf-yMU"/>
+            </constraints>
+            <point key="canvasLocation" x="102.89855072463769" y="70.982142857142847"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

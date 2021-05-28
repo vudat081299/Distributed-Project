@@ -25,6 +25,7 @@ extension String {
     }
     
     func getImageWithThisURL() -> UIImage? {
+        print("Get image with url string: \(self)")
         do {
             return UIImage(data: try Data(contentsOf: URL(string: self)!))
         } catch {

@@ -61,6 +61,16 @@
 		6B8FF0742622024500F813C6 /* Social_MessagingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8FF0732622024500F813C6 /* Social_MessagingUITests.swift */; };
 		6B8FF0892622067A00F813C6 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8FF0882622067A00F813C6 /* TabBarController.swift */; };
 		6BBE02BB265EA3AC00F01BE5 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBE02BA265EA3AB00F01BE5 /* FileManager.swift */; };
+		6BBE02FC2660CF3E00F01BE5 /* CacheData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBE02FB2660CF3E00F01BE5 /* CacheData.swift */; };
+		6BBE03002660D44100F01BE5 /* AvatarViewerAndPickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBE02FE2660D44100F01BE5 /* AvatarViewerAndPickerTableViewCell.swift */; };
+		6BBE03012660D44100F01BE5 /* AvatarViewerAndPickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BBE02FF2660D44100F01BE5 /* AvatarViewerAndPickerTableViewCell.xib */; };
+		6BBE03042660D5B400F01BE5 /* ProfileInfoDataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBE03022660D5B400F01BE5 /* ProfileInfoDataTableViewCell.swift */; };
+		6BBE03052660D5B400F01BE5 /* ProfileInfoDataTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BBE03032660D5B400F01BE5 /* ProfileInfoDataTableViewCell.xib */; };
+		6BBE03082660ED6500F01BE5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBE03062660ED6500F01BE5 /* EditProfileViewController.swift */; };
+		6BBE03092660ED6500F01BE5 /* EditProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BBE03072660ED6500F01BE5 /* EditProfileViewController.xib */; };
+		6BBE030B2660FF2F00F01BE5 /* SoundFeedBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBE030A2660FF2F00F01BE5 /* SoundFeedBack.swift */; };
+		6BBE03522661096F00F01BE5 /* payment_failure.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6BBE030D2660FFD800F01BE5 /* payment_failure.m4a */; };
+		6BBE03532661096F00F01BE5 /* payment_success.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6BBE030E2660FFE100F01BE5 /* payment_success.m4a */; };
 		6BBFDE4D264908FD001AA9D9 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE49264908FD001AA9D9 /* Message.swift */; };
 		6BBFDE4E264908FD001AA9D9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE4A264908FD001AA9D9 /* User.swift */; };
 		6BBFDE4F264908FD001AA9D9 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFDE4B264908FD001AA9D9 /* Upload.swift */; };
@@ -197,6 +207,16 @@
 		6B8FF0752622024500F813C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B8FF0882622067A00F813C6 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		6BBE02BA265EA3AB00F01BE5 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		6BBE02FB2660CF3E00F01BE5 /* CacheData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheData.swift; sourceTree = "<group>"; };
+		6BBE02FE2660D44100F01BE5 /* AvatarViewerAndPickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarViewerAndPickerTableViewCell.swift; sourceTree = "<group>"; };
+		6BBE02FF2660D44100F01BE5 /* AvatarViewerAndPickerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AvatarViewerAndPickerTableViewCell.xib; sourceTree = "<group>"; };
+		6BBE03022660D5B400F01BE5 /* ProfileInfoDataTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoDataTableViewCell.swift; sourceTree = "<group>"; };
+		6BBE03032660D5B400F01BE5 /* ProfileInfoDataTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileInfoDataTableViewCell.xib; sourceTree = "<group>"; };
+		6BBE03062660ED6500F01BE5 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		6BBE03072660ED6500F01BE5 /* EditProfileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditProfileViewController.xib; sourceTree = "<group>"; };
+		6BBE030A2660FF2F00F01BE5 /* SoundFeedBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundFeedBack.swift; sourceTree = "<group>"; };
+		6BBE030D2660FFD800F01BE5 /* payment_failure.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = payment_failure.m4a; sourceTree = "<group>"; };
+		6BBE030E2660FFE100F01BE5 /* payment_success.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = payment_success.m4a; sourceTree = "<group>"; };
 		6BBFDE49264908FD001AA9D9 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		6BBFDE4A264908FD001AA9D9 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		6BBFDE4B264908FD001AA9D9 /* Upload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Upload.swift; sourceTree = "<group>"; };
@@ -424,6 +444,9 @@
 				C49176912624572D00253070 /* README.md */,
 				C49176842624553600253070 /* Docs */,
 				6B8FF05A2622024500F813C6 /* Assets.xcassets */,
+				6BBE030D2660FFD800F01BE5 /* payment_failure.m4a */,
+				6BBE030E2660FFE100F01BE5 /* payment_success.m4a */,
+				6BBE030C2660FFC500F01BE5 /* Sound */,
 				6B8FF05F2622024500F813C6 /* Info.plist */,
 				6B8FF05C2622024500F813C6 /* LaunchScreen.storyboard */,
 				C49176592624546D00253070 /* Core */,
@@ -454,6 +477,24 @@
 				6B8FF0752622024500F813C6 /* Info.plist */,
 			);
 			path = "Social MessagingUITests";
+			sourceTree = "<group>";
+		};
+		6BBE02FD2660D40C00F01BE5 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				6BBE02FE2660D44100F01BE5 /* AvatarViewerAndPickerTableViewCell.swift */,
+				6BBE02FF2660D44100F01BE5 /* AvatarViewerAndPickerTableViewCell.xib */,
+				6BBE03022660D5B400F01BE5 /* ProfileInfoDataTableViewCell.swift */,
+				6BBE03032660D5B400F01BE5 /* ProfileInfoDataTableViewCell.xib */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		6BBE030C2660FFC500F01BE5 /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Sound;
 			sourceTree = "<group>";
 		};
 		6BBFDE4226490497001AA9D9 /* WebSocket */ = {
@@ -705,6 +746,8 @@
 				C49176632624546D00253070 /* Time.swift */,
 				6B2FE949264C256B007CAA3D /* Key.swift */,
 				6B24891C26535DEC00D6F06F /* FeedbackGenerator.swift */,
+				6BBE02FB2660CF3E00F01BE5 /* CacheData.swift */,
+				6BBE030A2660FF2F00F01BE5 /* SoundFeedBack.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -774,12 +817,15 @@
 		C4936D20262AB4C30082CACC /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				6BBE02FD2660D40C00F01BE5 /* Cell */,
 				C4917641262451D100253070 /* ProfileViewController.swift */,
 				C491763C262451D100253070 /* ProfileViewController.xib */,
 				C4936D27262AB4E80082CACC /* Cell.swift */,
 				C4936D28262AB4E80082CACC /* Cell.xib */,
 				C4936D2E262AB5000082CACC /* HeaderTableViewCell.swift */,
 				C4936D2F262AB5000082CACC /* HeaderTableViewCell.xib */,
+				6BBE03062660ED6500F01BE5 /* EditProfileViewController.swift */,
+				6BBE03072660ED6500F01BE5 /* EditProfileViewController.xib */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -895,10 +941,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BBE03522661096F00F01BE5 /* payment_failure.m4a in Resources */,
+				6BBE03532661096F00F01BE5 /* payment_success.m4a in Resources */,
+				6BBE03012660D44100F01BE5 /* AvatarViewerAndPickerTableViewCell.xib in Resources */,
 				6B17BAB62654E9BD000FA92C /* SignupDatePickerInputTableViewCell.xib in Resources */,
 				C491766E2624546D00253070 /* Cities.json in Resources */,
 				6B24890F2652A09000D6F06F /* MainViewController.xib in Resources */,
 				C484983A264D2B3D00D35328 /* BoxTableViewCell.xib in Resources */,
+				6BBE03092660ED6500F01BE5 /* EditProfileViewController.xib in Resources */,
 				C4917643262451D100253070 /* ProfileViewController.xib in Resources */,
 				6B24890D2652A09000D6F06F /* VideoViewController.xib in Resources */,
 				6B89CAEF26306215007FCAE5 /* ChattingViewController.xib in Resources */,
@@ -916,6 +966,7 @@
 				6B8FF05B2622024500F813C6 /* Assets.xcassets in Resources */,
 				6B17BAAE2654DD31000FA92C /* SignupInputTableViewCell.xib in Resources */,
 				6B8FF0562622024000F813C6 /* Main.storyboard in Resources */,
+				6BBE03052660D5B400F01BE5 /* ProfileInfoDataTableViewCell.xib in Resources */,
 				C4849833264D29A000D35328 /* MessagingViewControllerTableView.xib in Resources */,
 				6BCCA268262B3A420075A2A3 /* Note2.txt in Resources */,
 				6B17BAB22654E5AA000FA92C /* SignupPickerInputTableViewCell.xib in Resources */,
@@ -949,11 +1000,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BBE02FC2660CF3E00F01BE5 /* CacheData.swift in Sources */,
 				6BBFDE4F264908FD001AA9D9 /* Upload.swift in Sources */,
 				C49176712624546D00253070 /* UIView.swift in Sources */,
 				6BBFDE6D2649205E001AA9D9 /* NVActivityIndicatorAnimationBallPulseSync.swift in Sources */,
 				C49176722624546D00253070 /* UIColor.swift in Sources */,
 				6B17BAB52654E9BD000FA92C /* SignupDatePickerInputTableViewCell.swift in Sources */,
+				6BBE030B2660FF2F00F01BE5 /* SoundFeedBack.swift in Sources */,
 				6B17BAA926542F3A000FA92C /* String.swift in Sources */,
 				6BBFDE6B2649205E001AA9D9 /* NVActivityIndicatorShape.swift in Sources */,
 				6B17BAAD2654DD31000FA92C /* SignupInputTableViewCell.swift in Sources */,
@@ -968,6 +1021,7 @@
 				C49176042624510600253070 /* SceneDelegate.swift in Sources */,
 				C4936D29262AB4E90082CACC /* Cell.swift in Sources */,
 				6B2FE94A264C256B007CAA3D /* Key.swift in Sources */,
+				6BBE03002660D44100F01BE5 /* AvatarViewerAndPickerTableViewCell.swift in Sources */,
 				6BBFDE5826491C32001AA9D9 /* UserAccessControlViewController.swift in Sources */,
 				6B8FF0532622024000F813C6 /* ViewController.swift in Sources */,
 				C49176702624546D00253070 /* WebServices.swift in Sources */,
@@ -998,6 +1052,7 @@
 				6B24890C2652A09000D6F06F /* Config.swift in Sources */,
 				6BBFDE50264908FD001AA9D9 /* Token.swift in Sources */,
 				C4849832264D29A000D35328 /* MessagingViewControllerTableView.swift in Sources */,
+				6BBE03042660D5B400F01BE5 /* ProfileInfoDataTableViewCell.swift in Sources */,
 				6B17BAB12654E5AA000FA92C /* SignupPickerInputTableViewCell.swift in Sources */,
 				6B24890E2652A09000D6F06F /* VideoViewController.swift in Sources */,
 				C4917645262451D100253070 /* TextCell.swift in Sources */,
@@ -1026,6 +1081,7 @@
 				6B2489042652A09000D6F06F /* WebSocketProvider.swift in Sources */,
 				6B89CAEE26306215007FCAE5 /* ChattingViewController.swift in Sources */,
 				6BBFDE682649205E001AA9D9 /* NVActivityIndicatorPresenter.swift in Sources */,
+				6BBE03082660ED6500F01BE5 /* EditProfileViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

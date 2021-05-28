@@ -27,7 +27,7 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     var messagePullThreadDelegate: MessagePullThread?
     var messagePushThreadDelegate: MessagePushThread?
     var userBoxData: [ResolvedBox] = Auth.userBoxData
-    var cacheImages: [String: UIImage] = [:]
+    
     
     
     // MARK: - Navbar components.
@@ -50,9 +50,6 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("Check userBoxData!")
-        print(userBoxData)
-        print(Auth.userBoxData)
 //        if MD5(userBoxData) != MD5(Auth.userBoxData) || userBoxData.count != Auth.userBoxData.count {
 //            userBoxData = Auth.userBoxData
 //            self.tableView.reloadData()
@@ -76,8 +73,8 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     */
     
     func fetchBoxesData(completion: @escaping () -> Void) {
-        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "messaging/boxes/data/\(Auth.userProfileData!._id!)")
-        request_box.getArray(token: Auth.token) { result in
+        let request_box = ResourceRequest<ResolvedBox, ResolvedBox>(resourcePath: "messaging/boxes/data/\(Auth.userProfileData!._id!)")
+        request_box.getArray(token: true) { result in
             switch result {
             case .success(let data):
                 let boxData = data.sorted(by: { $0.boxSpecification.lastestUpdate > $1.boxSpecification.lastestUpdate })
@@ -132,17 +129,16 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
                 }
             }
             for (index, userObjectId) in box.members_id.enumerated() {
-                if userObjectId == authUser._id {
-                    cell.boxImage.image = Auth.avatar
-                } else {
-                    if let image = self.cacheImages[userObjectId] {
+                if userObjectId != authUser._id {
+                    if let image = cacheImages[userObjectId] {
                         cell.boxImage.image = image
                     } else {
-                        let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(userObjectId)"
+                        let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(userObjectId)" // Constant.
                         DispatchQueue(label: "com.chat.getavatar.qos").async(qos: .userInitiated) {
                             if let image = imageURL.getImageWithThisURL() {
                                 DispatchQueue.main.async {
                                     cell.boxImage.image = image
+                                    cacheImages[userObjectId] = image
                                 }
                             } else {
                                 DispatchQueue.main.async {
@@ -169,6 +165,25 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
 //        }
         cell.timeStampButton.setTitle(box.boxSpecification.lastestUpdate.transformToShortTime(), for: .normal)
         return cell
+    }
+    
+    func getAvatar(for cell: BoxTableViewCell, of userObjectId: String) {
+        if let image = cacheImages[userObjectId] {
+            cell.boxImage.image = image
+        } else {
+            let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(userObjectId)" // Constant.
+            DispatchQueue(label: "com.chat.getavatar.qos").async(qos: .userInitiated) {
+                if let image = imageURL.getImageWithThisURL() {
+                    DispatchQueue.main.async {
+                        cell.boxImage.image = image
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        cell.boxImage.image = UIImage(named: "avatar_7")
+                    }
+                }
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

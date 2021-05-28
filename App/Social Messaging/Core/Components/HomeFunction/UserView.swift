@@ -26,6 +26,9 @@ class UserView: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        avatar.image = nil
     }
     
     @IBAction func followAction(_ sender: UIButton) {

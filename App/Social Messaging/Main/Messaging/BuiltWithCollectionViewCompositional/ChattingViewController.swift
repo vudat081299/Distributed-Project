@@ -29,7 +29,7 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     
     // MARK: - IBOutlet.
     // Views.
-    @IBOutlet weak var containChattingView: UIView!
+    @IBOutlet weak var containChattingView: UIVisualEffectView!
     @IBOutlet weak var sendingImageViewContainer: UIView!
     
     @IBOutlet weak var chatView: UICollectionView!
@@ -37,7 +37,7 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     @IBOutlet weak var sendingImage: UIImageView!
     @IBOutlet weak var removeSendingImageButton: UIButton!
     // Constraints.
-    @IBOutlet weak var textFieldBottomAlign: NSLayoutConstraint!
+    @IBOutlet weak var bottomAlignCollectionViewCS: NSLayoutConstraint!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var leadingOfTextFieldCS: NSLayoutConstraint!
     
@@ -52,7 +52,6 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     let authUser = Auth.userProfileData
     var delegate: MessagePushThread?
     var users: [String: User] = [:]
-    var cacheImages: [String: UIImage] = [:]
     
     
     
@@ -178,8 +177,8 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     
     // MARK: - Request API.
     func fetchBoxesData(completion: @escaping () -> Void) {
-        let request_mess = ResourceRequest<ResolvedMessage>(resourcePath: "messaging/data/\(boxObjectId)")
-        request_mess.getArray(token: Auth.token) { result in
+        let request_mess = ResourceRequest<ResolvedMessage, ResolvedMessage>(resourcePath: "messaging/data/\(boxObjectId)")
+        request_mess.getArray(token: true) { result in
             switch result {
             case .success(let data):
                 let sortMessages = data.sorted(by: { $0.creationDate < $1.creationDate })
@@ -192,8 +191,6 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
                     }
                     if messages[self.boxObjectId] != nil {
                         self.messagesOfBox = messages[self.boxObjectId]!
-                        let a = self.messagesOfBox
-                        print("")
                     }
                 }
                 completion()
@@ -264,17 +261,17 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
                                         members: boxData.members_id
         )
         var messageSendWSData = MessageSendWS(type: .newMess, majorData: majorData)
-        let request = ResourceRequest<MessageSendWS>(resourcePath: "messaging/send/mess")
+        let request = ResourceRequest<MessageSendWS, MessageSendWS>(resourcePath: "messaging/send/mess")
         
         if sendingImage.image != nil {
             let fileUploadData = FileUpload(file: sendingImage.image?.pngData())
-            let postImageRequest = ResourceRequest<FileUpload>(resourcePath: "messaging/postfile")
-            postImageRequest.postFile(token: Auth.token, fileUploadData) { result in
+            let postImageRequest = ResourceRequest<FileUpload, FileUpload>(resourcePath: "messaging/postfile")
+            postImageRequest.postFile(token: true, fileUploadData) { result in
                 switch result {
                 case .success(let data):
                     messageSendWSData.majorData.fileId = data.fileObjectId
                     messageSendWSData.majorData.type = .png
-                    request.post(token: Auth.token, messageSendWSData) { result in
+                    request.post(token: true, messageSendWSData) { result in
                         switch result {
                         case .success(let data):
                             self.hideSendingImageViewContainer()
@@ -290,7 +287,7 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
                 }
             }
         } else if (messageSendWSData.majorData.text != nil) {
-            request.post(token: Auth.token, messageSendWSData) { result in
+            request.post(token: true, messageSendWSData) { result in
                 switch result {
                 case .success(let data):
                     self.chatTextField.text = ""
@@ -398,7 +395,7 @@ extension ChattingViewController {
             alignment: .top)
         let sectionFooter = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(0)),
+                                              heightDimension: .estimated(30)),
             elementKind: ChattingViewController.sectionFooterElementKind,
             alignment: .bottom)
         sectionHeader.pinToVisibleBounds = true
@@ -434,8 +431,10 @@ extension ChattingViewController {
         chatView.delegate = self
         chatView.register(UINib(nibName: MessContentCell.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: MessContentCell.reuseIdentifier)
         chatView.register(UINib(nibName: FirstMessContentCellForSection.reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: FirstMessContentCellForSection.reuseIdentifier)
+        chatView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell_at_last_section")
         chatView.register(UINib(nibName: HeaderSessionChat.reuseIdentifier, bundle: nil), forSupplementaryViewOfKind: ChattingViewController.sectionHeaderElementKind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier)
-//        chatView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: ChattingViewController.sectionFooterElementKind, withReuseIdentifier: ChattingViewController.sectionFooterElementKind)
+        chatView.register(UINib(nibName: HeaderSessionChat.reuseIdentifier, bundle: nil), forSupplementaryViewOfKind: ChattingViewController.sectionFooterElementKind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier)
+        chatView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: ChattingViewController.sectionFooterElementKind, withReuseIdentifier: "footer")
         chatView.addGestureRecognizer(panGesture)
         view.bringSubviewToFront(containChattingView)
     }
@@ -470,6 +469,12 @@ extension ChattingViewController {
         dataSource = UICollectionViewDiffableDataSource<Int, Int>(collectionView: chatView) {
             (collectionView: UICollectionView, indexPath: IndexPath, identifier: Int) -> UICollectionViewCell? in
 //            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
+            if indexPath.section == self.messagesOfBox.count {
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "cell_at_last_section",
+                        for: indexPath)
+                return cell
+            }
             if indexPath.row == 0 {
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: FirstMessContentCellForSection.reuseIdentifier,
@@ -490,19 +495,17 @@ extension ChattingViewController {
                 
                 if let fileObjectId = message.fileId {
                     cell.contentImageView.image = nil
-                    cell.heightContentImageCS.constant = 270
-                    if let image = self.cacheImages[fileObjectId] {
+                    if let image = cacheImages[fileObjectId] {
                         cell.contentImageView.image = image
-                        for (key, value) in self.cacheImages {
-                           print("\(key)")
-                        }
+                        cell.heightContentImageCS.constant = 270
                     } else {
                         DispatchQueue(label: "com.sm.dispatch.qos").async(qos: .utility) {
-                            let imageURL = "\(basedURL)messaging/getfile/\(fileObjectId)"
+                            let imageURL = "\(basedURL)messaging/getfile/\(fileObjectId)" // Constant.
                             if let image = imageURL.getImageWithThisURL() {
                                 DispatchQueue.main.async {
                                     cell.contentImageView.image = image
-                                    self.cacheImages[fileObjectId] = image
+                                    cell.heightContentImageCS.constant = 270
+                                    cacheImages[fileObjectId] = image
                                 }
                             } else {
                                 DispatchQueue.main.async {
@@ -534,22 +537,29 @@ extension ChattingViewController {
 //            return self.chatView.dequeueConfiguredReusableSupplementary(
 //                using: headerRegistration, for: index)
             
+            if index.section == self.messagesOfBox.count {
+                guard let supplementaryView = view.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier, for: index) as? HeaderSessionChat else { fatalError("Cannot create new cell") }
+                supplementaryView.frame.size.height = 0
+                return supplementaryView
+            }
             if kind == ChattingViewController.sectionHeaderElementKind {
                 guard let supplementaryView = view.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSessionChat.reuseIdentifier, for: index) as? HeaderSessionChat else { fatalError("Cannot create new cell") }
                 
                 let message = self.messagesOfBox[index.section]
                 
+                supplementaryView.avatar.image = nil
                 if message.senderId == self.authUser?._id {
                     supplementaryView.avatar.image = Auth.avatar
                 } else {
-                    if let image = self.cacheImages[message.senderId] {
+                    if let image = cacheImages[message.senderId] {
                         supplementaryView.avatar.image = image
                     } else {
-                        let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(message.senderId)"
+                        let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(message.senderId)" // Constant.
                         DispatchQueue(label: "com.chat.getavatar.qos").async(qos: .userInitiated) {
                             if let image = imageURL.getImageWithThisURL() {
                                 DispatchQueue.main.async {
                                     supplementaryView.avatar.image = image
+                                    cacheImages[message.senderId] = image
                                 }
                             } else {
                                 DispatchQueue.main.async {
@@ -562,16 +572,19 @@ extension ChattingViewController {
                 
 //            supplementaryView.avatar.image = UIImage(named: "avatar_11")
                 supplementaryView.avatar.clipsToBounds = true
+//                supplementaryView.avatar.addDashedBorder()
                 supplementaryView.avatar.layer.cornerRadius = 8
                 supplementaryView.clipsToBounds = false
                 return supplementaryView
-            } else if (kind == ChattingViewController.sectionFooterElementKind &&
-                        index.section == self.messagesOfBox.count - 1) {
-                let supplementaryView = view.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ChattingViewController.sectionFooterElementKind, for: index)
-                supplementaryView.frame.size.height = 100
+            } else {
+                let supplementaryView = view.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: index)
+                if (index.section == self.messagesOfBox.count - 1) {
+                    supplementaryView.frame.size.height = 84
+                } else {
+                    supplementaryView.frame.size.height = 0
+                }
                 return supplementaryView
             }
-            return nil
         }
         setUpDataSource()
     }
@@ -652,7 +665,7 @@ extension ChattingViewController: UITextFieldDelegate {
         if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             leadingOfTextFieldCS.constant = 8
             keyboardHeight = keyboardRect.height
-            self.bottomConstraint.constant = keyboardHeight
+            self.bottomAlignCollectionViewCS.constant = keyboardHeight
             self.view.layoutIfNeeded()
             scrollToBottom(of: chatView)
         }
@@ -662,7 +675,7 @@ extension ChattingViewController: UITextFieldDelegate {
         if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             leadingOfTextFieldCS.constant = 120
             keyboardHeight = keyboardRect.height
-            self.bottomConstraint.constant = 0
+            self.bottomAlignCollectionViewCS.constant = 0
             self.view.layoutIfNeeded()
             scrollToBottom(of: chatView)
         }

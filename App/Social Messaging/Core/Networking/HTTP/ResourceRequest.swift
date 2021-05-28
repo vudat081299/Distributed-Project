@@ -90,21 +90,24 @@ enum SaveResultsCreateUser<ResponseType> {
 
 
 
-
-
-
 // Remake ResourcesRequest
-enum ResourcesRequest<ResourceType> {
-    case success(ResourceType)
+enum ResourcesRequest<ResolveType> {
+    case success(ResolveType)
     case failure
 }
 
-enum ResourcesRequestGetArray<ResourceType> {
-    case success([ResourceType])
+enum ResourcesRequestGetArray<ResolveType> {
+    case success([ResolveType])
     case failure
 }
 
-struct ResourceRequest<ResourceType> where ResourceType: Codable {
+enum PutRequest {
+    case success
+    case failure
+}
+
+
+struct ResourceRequest<PostType, ResolveType> where PostType: Codable, ResolveType: Codable {
     
     let resourceURL: URL
     
@@ -118,39 +121,12 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
     
     
     // MARK: - Get.
-    func get(token: String? = nil,
-             completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
-        var urlRequest = URLRequest(url: resourceURL)
-        if token != nil {
-            urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
-//            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        }
-        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            guard let httpResponse = response as? HTTPURLResponse,
-                  httpResponse.statusCode == 200,
-                  let jsonData = data
-            else {
-                completion(.failure)
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .secondsSince1970
-                let resources: ResourceType = try decoder.decode(ResourceType.self, from: jsonData)
-                completion(.success(resources))
-            } catch {
-                completion(.failure)
-            }
-        }
-        dataTask.resume()
-    }
-    
-    func getArray(token: String? = nil,
-                  completion: @escaping (ResourcesRequestGetArray<ResourceType>) -> Void) {
-        var urlRequest = URLRequest(url: resourceURL)
+    func get(token: Bool = false,
+             completion: @escaping (ResourcesRequest<PostType>) -> Void) {
         print(resourceURL)
-        if token != nil {
-            urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+        var urlRequest = URLRequest(url: resourceURL)
+        if token {
+            urlRequest.addValue("Bearer \(Auth.token!)", forHTTPHeaderField: "Authorization")
 //            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         }
         let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
@@ -164,7 +140,7 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
             do {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .secondsSince1970
-                let resources: [ResourceType] = try decoder.decode([ResourceType].self, from: jsonData)
+                let resources: PostType = try decoder.decode(PostType.self, from: jsonData)
                 completion(.success(resources))
             } catch {
                 completion(.failure)
@@ -173,14 +149,12 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
         dataTask.resume()
     }
     
-    
-    
-    
-    func getFile(token: String? = nil,
-                 completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+    func getArray(token: Bool = false,
+                  completion: @escaping (ResourcesRequestGetArray<PostType>) -> Void) {
+        print(resourceURL)
         var urlRequest = URLRequest(url: resourceURL)
-        if token != nil {
-            urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+        if token {
+            urlRequest.addValue("Bearer \(Auth.token!)", forHTTPHeaderField: "Authorization")
 //            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         }
         let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
@@ -193,7 +167,38 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
             }
             do {
                 let decoder = JSONDecoder()
-                let resources: ResourceType = try decoder.decode(ResourceType.self, from: jsonData)
+                decoder.dateDecodingStrategy = .secondsSince1970
+                let resources: [PostType] = try decoder.decode([PostType].self, from: jsonData)
+                completion(.success(resources))
+            } catch {
+                completion(.failure)
+            }
+        }
+        dataTask.resume()
+    }
+    
+    
+    
+    
+    func getFile(token: Bool = false,
+                 completion: @escaping (ResourcesRequest<PostType>) -> Void) {
+        print(resourceURL)
+        var urlRequest = URLRequest(url: resourceURL)
+        if token {
+            urlRequest.addValue("Bearer \(Auth.token!)", forHTTPHeaderField: "Authorization")
+//            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            guard let httpResponse = response as? HTTPURLResponse,
+                  httpResponse.statusCode == 200,
+                  let jsonData = data
+            else {
+                completion(.failure)
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let resources: PostType = try decoder.decode(PostType.self, from: jsonData)
                 completion(.success(resources))
             } catch {
                 completion(.failure)
@@ -205,13 +210,14 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
     
     
     // MARK: - Post.
-    func post(token: String? = nil,
-              _ resource: ResourceType,
-              completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+    func post(token: Bool = false,
+              _ resource: PostType,
+              completion: @escaping (ResourcesRequest<PostType>) -> Void) {
+        print(resourceURL)
         do {
             var urlRequest = URLRequest(url: resourceURL)
-            if token != nil {
-                urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+            if token {
+                urlRequest.addValue("Bearer \(Auth.token!)", forHTTPHeaderField: "Authorization")
             }
             urlRequest.httpMethod = "POST"
             urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -227,7 +233,7 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
                 }
                 do {
                     let decoder = JSONDecoder()
-                    let resource = try decoder.decode(ResourceType.self, from: jsonData)
+                    let resource = try decoder.decode(PostType.self, from: jsonData)
                     completion(.success(resource))
                 } catch {
                     completion(.failure)
@@ -238,13 +244,14 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
             completion(.failure)
         }
     }
-    func postFile(token: String? = nil,
-                  _ resource: ResourceType,
-                  completion: @escaping (ResourcesRequest<ResourceType>) -> Void) {
+    func postFile(token: Bool = false,
+                  _ resource: PostType,
+                  completion: @escaping (ResourcesRequest<PostType>) -> Void) {
+        print(resourceURL)
         do {
             var urlRequest = URLRequest(url: resourceURL)
-            if token != nil {
-                urlRequest.addValue("Bearer \(token!)", forHTTPHeaderField: "Authorization")
+            if token {
+                urlRequest.addValue("Bearer \(Auth.token!)", forHTTPHeaderField: "Authorization")
             }
             urlRequest.httpMethod = "POST"
             urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -260,7 +267,7 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
                 }
                 do {
                     let decoder = JSONDecoder()
-                    let resource = try decoder.decode(ResourceType.self, from: jsonData)
+                    let resource = try decoder.decode(PostType.self, from: jsonData)
                     completion(.success(resource))
                 } catch {
                     completion(.failure)
@@ -274,6 +281,39 @@ struct ResourceRequest<ResourceType> where ResourceType: Codable {
     
     
     
+    // MARK: - Put.
+    func put(token: Bool = false,
+                  _ resource: PostType,
+                  completion: @escaping (PutRequest) -> Void) {
+        print(resourceURL)
+        do {
+            var urlRequest = URLRequest(url: resourceURL)
+            if token {
+                urlRequest.addValue("Bearer \(Auth.token!)", forHTTPHeaderField: "Authorization")
+            }
+            urlRequest.httpMethod = "PUT"
+            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpBody = try JSONEncoder().encode(resource)
+            
+            let dataTask = URLSession.shared.dataTask(with: urlRequest) { data, response, _ in
+                guard let httpResponse = response as? HTTPURLResponse,
+                      httpResponse.statusCode == 200,
+                      let jsonData = data
+                else {
+                    completion(.failure)
+                    return
+                }
+                do {
+                    completion(.success)
+                } catch {
+                    completion(.failure)
+                }
+            }
+            dataTask.resume()
+        } catch {
+            completion(.failure)
+        }
+    }
     
     
     

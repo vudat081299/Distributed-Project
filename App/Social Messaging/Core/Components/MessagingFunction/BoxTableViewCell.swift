@@ -27,4 +27,10 @@ class BoxTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        boxImage.image = nil
+    }
+    
 }

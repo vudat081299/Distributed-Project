@@ -52,6 +52,7 @@ struct UsersControllerRSM: RouteCollection {
         tokenAuthGroup.post("postfile", use: postFile)
         
         tokenAuthGroup.put("editprofile", use: editProfile)
+        tokenAuthGroup.put("editprofile", "nosql", ":userObjectId", use: editProfileNoSQL) // Just on NoSQL
         tokenAuthGroup.put("updateavatar", ":userObjectId", use: updateAvatar)
         
         tokenAuthGroup.delete("logout", use: logout)
@@ -230,6 +231,18 @@ struct UsersControllerRSM: RouteCollection {
             CoreEngine.updateProfile(of: userNoSQL, inDatabase: req.mongoDB)
             return user.convertToPublic()
         }
+    }
+    
+    // Jus
+    func editProfileNoSQL(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        guard let userObjectId = req.parameters.get("userObjectId", as: ObjectId.self) else {
+            throw Abort(.notFound)
+        }
+        let updateData = try req.content.decode(UpdateAuthUserProfile.self)
+        guard let data = updateData.data, let field = updateData.field else {
+            throw Abort(.notFound)
+        }
+        return CoreEngine.updateAuthUserProfileNoSQL(of: userObjectId, with: data, of: field, inDatabase: req.mongoDB).transform(to: .ok)
     }
     
     ///
