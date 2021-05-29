@@ -14,11 +14,14 @@ class EditProfileViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var countCharacterLeftLabel: UILabel!
     
+    // MARK: - DataSource.
     var keyboardHeight: CGFloat = 0.0
     var contentTextView: String?
     var maxCharacter: Int = 100
     var field: String = ""
     
+    // MARK: - Init method.
+    /// init()
     public class func instantiate(title: String?, contentText: String?, maxCharacter: Int, field: String) -> EditProfileViewController {
         let vc = EditProfileViewController()
         vc.title = title
@@ -28,9 +31,7 @@ class EditProfileViewController: UIViewController {
         return vc
     }
     
-    
-    
-    
+    // MARK: - Set up NavigationBar.
     func setUpButtonItemNavigationBar() {
         let rightBarItem: UIBarButtonItem = {
             let bt = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(rightBarItemAction))
@@ -44,6 +45,7 @@ class EditProfileViewController: UIViewController {
         updateAuthUserProfile()
     }
     
+    // MARK: - Request.
     /// Update NoSQL data at server.
     func updateAuthUserProfile() {
         let updateAuthUserProfile = UpdateAuthUserProfile(data: textView.text, field: field)
@@ -57,21 +59,30 @@ class EditProfileViewController: UIViewController {
             case .success:
                 SoundFeedBack.success()
                 DispatchQueue.main.async {
-                    self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: "cloud.rain")
+                    self.navigationItem.rightBarButtonItem?.tintColor = .systemGreen
+                    self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: "checkmark.circle.fill")
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.navigationItem.rightBarButtonItem?.tintColor = .link
+                    self.navigationItem.rightBarButtonItem?.image = nil
+                    self.navigationItem.rightBarButtonItem?.title = "Save"
                     self.navigationController?.popViewController(animated: true)
                 }
                 break
             case .failure:
                 SoundFeedBack.fail()
+                DispatchQueue.main.async {
+                    self.navigationItem.rightBarButtonItem?.tintColor = .systemPink
+                    self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: "xmark.circle.fill")
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.navigationItem.rightBarButtonItem?.tintColor = .link
+                    self.navigationItem.rightBarButtonItem?.image = nil
+                    self.navigationItem.rightBarButtonItem?.title = "Save"
+                }
                 break
             }
         }
-    }
-    struct UpdateAuthUserProfile: Codable {
-        let data: String
-        let field: String
     }
 
     
@@ -113,8 +124,7 @@ class EditProfileViewController: UIViewController {
 
 }
 
-
-
+// MARK: - Extension.
 extension EditProfileViewController: UITextViewDelegate {
     func setUpTextView() {
         textView.delegate = self
@@ -137,10 +147,6 @@ extension EditProfileViewController: UITextViewDelegate {
         return updatedText.count <= maxCharacter
     }
 }
-
-
-
-
 
 // MARK: - Keyboard.
 extension EditProfileViewController: UITextFieldDelegate {

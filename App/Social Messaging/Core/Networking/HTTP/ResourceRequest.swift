@@ -10,7 +10,7 @@ import Foundation
 // MARK: - Specifications.
 var domain: String? {
     get {
-        return UserDefaults.standard.string(forKey: domain_key)
+        return UserDefaults.standard.string(forKey: domain_key) ?? "192.168.1.65:8080"
     }
     set {
         UserDefaults.standard.set(newValue, forKey: domain_key)
@@ -54,7 +54,9 @@ var chatPort: String? {
     }
 }
 
-let basedURL = "http://\(domain!)/api/"
+var basedURL: String {
+    return "http://\(domain!)/api/"
+}
 
 
 

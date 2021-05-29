@@ -250,7 +250,7 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     @IBAction func sendMessage(_ sender: UIButton) {
 //        push
 //        delegate?.sendMessage(data: data)
-        tapped(style: .medium)
+        FeedBackTapEngine.tapped(style: .medium)
         let majorData = MajorDataSendWS(boxId: boxData._id,
                                         creationDate: Time.iso8601String,
                                         text: chatTextField.text,
@@ -300,14 +300,14 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     }
     
     @IBAction func pickImage(_ sender: UIButton) {
-        tapped(style: .medium)
+        FeedBackTapEngine.tapped(style: .medium)
         imagePicker.allowsEditing = true
         imagePicker.sourceType = .photoLibrary
         self.present(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func removeSendingImageAction(_ sender: UIButton) {
-        tapped(style: .medium)
+        FeedBackTapEngine.tapped(style: .medium)
         hideSendingImageViewContainer()
     }
     

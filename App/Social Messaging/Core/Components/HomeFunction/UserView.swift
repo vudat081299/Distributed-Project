@@ -32,14 +32,14 @@ class UserView: UICollectionViewCell {
     }
     
     @IBAction func followAction(_ sender: UIButton) {
-        tapped(style: .medium)
+        FeedBackTapEngine.tapped(style: .medium)
         if let action = followActionClosure {
             action()
         }
     }
     
     @IBAction func messToUserAction(_ sender: UIButton) {
-        tapped(style: .medium)
+        FeedBackTapEngine.tapped(style: .medium)
         if let action = messToUserActionClosure {
             action()
         }

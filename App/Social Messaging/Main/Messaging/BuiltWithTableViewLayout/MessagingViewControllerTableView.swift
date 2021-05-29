@@ -27,6 +27,7 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     var messagePullThreadDelegate: MessagePullThread?
     var messagePushThreadDelegate: MessagePushThread?
     var userBoxData: [ResolvedBox] = Auth.userBoxData
+    let authUser: User? = Auth.userProfileData
     
     
     
@@ -73,7 +74,11 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     */
     
     func fetchBoxesData(completion: @escaping () -> Void) {
-        let request_box = ResourceRequest<ResolvedBox, ResolvedBox>(resourcePath: "messaging/boxes/data/\(Auth.userProfileData!._id!)")
+        guard let userObjectId = authUser?._id
+        else {
+            return
+        }
+        let request_box = ResourceRequest<ResolvedBox, ResolvedBox>(resourcePath: "messaging/boxes/data/\(userObjectId)")
         request_box.getArray(token: true) { result in
             switch result {
             case .success(let data):

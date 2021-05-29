@@ -55,7 +55,7 @@ class TabBarController: UITabBarController, MessagePushThread {
     func sendMessage(data: MessageSendWS) {
         let encoder = JSONEncoder()
         guard let data = try? encoder.encode(data) else { return }
-        let ws = WebSocketSM("ws://\(domain)/connectws/\(Auth.userProfileData?._id! ?? "")")
+        let ws = WebSocketSM("ws://\(domain!)/connectws/\(Auth.userProfileData?._id! ?? "")")
         ws.send(data)
     }
     
@@ -95,7 +95,8 @@ class TabBarController: UITabBarController, MessagePushThread {
     func startListenWebSocket() {
         let ws = WebSocketSM("ws://\(domain!)/connectws/\(Auth.userProfileData?._id! ?? "")")
         print("Connect ws: \(ws.url)")
-        ws.event.close = { [weak self] code, reason, clean in
+//        ws.event.close = { [weak self] code, reason, clean in
+        ws.event.close = { code, reason, clean in
             print("WebSocket did close!")
         }
         

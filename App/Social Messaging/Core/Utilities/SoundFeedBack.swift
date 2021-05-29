@@ -19,6 +19,7 @@ class SoundFeedBack {
     
     static func success() {
         print("Play successful sound!")
+        FeedBackTapEngine.tapped(style: .medium)
         guard let path = Bundle.main.path(forResource: successFilePath, ofType: fileExtension) else { return }
         let url = URL(fileURLWithPath: path)
         do {
@@ -31,6 +32,7 @@ class SoundFeedBack {
     
     static func fail() {
         print("Play failure sound!")
+        FeedBackTapEngine.tapped(style: .medium)
         guard let path = Bundle.main.path(forResource: failFilePath, ofType: fileExtension) else { return }
         let url = URL(fileURLWithPath: path)
         do {

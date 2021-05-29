@@ -52,6 +52,7 @@ class UserAccessControlViewController: UIViewController, UIScrollViewDelegate {
         
         usernameTextField.text = "vudat81299"
         passwordTextField.text = "vudat81299"
+        domainInput.text = domain
     }
     
     // MARK: - Common methods

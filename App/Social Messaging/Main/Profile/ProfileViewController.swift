@@ -12,10 +12,19 @@ class ProfileViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     let imagePicker = UIImagePickerController()
-    var avatar: UIImage = Auth.avatar
     
+    // MARK: - DataSource.
+    var avatar: UIImage? = Auth.avatar ?? nil {
+        didSet {
+            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        }
+    }
     var authUser: User? = Auth.userProfileData
-    var userProfileDataInArray = [String?]()
+    var userProfileDataInArray = [String?]() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     let listTitleLabel = [
         "Avatar",
         "User ID",
@@ -26,7 +35,7 @@ class ProfileViewController: UIViewController {
         "Phone",
         "Bio"
     ]
-    let uneditableRow = [1]
+    let uneditableRow = [0, 1, 4]
     let listPredictCharacterForTerm = [
         0,
         24,
@@ -50,6 +59,80 @@ class ProfileViewController: UIViewController {
         "bio"
     ]
     
+    // MARK: - Set up NavigationBar.
+    func setUpButtonItemNavigationBar() {
+        let rightBarItem: UIBarButtonItem = {
+            let bt = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(rightBarItemAction))
+            return bt
+        }()
+        let leftBarItem: UIBarButtonItem = {
+            let bt = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(leftBarItemAction))
+            return bt
+        }()
+        navigationItem.rightBarButtonItem = rightBarItem
+        navigationItem.leftBarButtonItem = leftBarItem
+        navigationItem.leftBarButtonItem?.tintColor = .systemPink
+    }
+    
+    @objc func rightBarItemAction() {
+        print("Right bar button was pressed!")
+        updateAuthUserAvatar()
+    }
+    
+    @objc func leftBarItemAction() {
+        print("Right bar button was pressed!")
+        Auth.logout(on: self)
+    }
+    
+    // MARK: - Request.
+    /// Update avatar at server.
+    func updateAuthUserAvatar() {
+        if avatar != nil {
+            guard let userObjectId = authUser?._id
+            else {
+                return
+            }
+            let fileUploadData = FileUpload(file: avatar!.pngData())
+            let updateAvatarRequest = ResourceRequest<FileUpload, FileUpload>(resourcePath: "users/updateavatar/\(userObjectId)")
+            updateAvatarRequest.put(token: true, fileUploadData) { result in
+                switch result {
+                case .success:
+                    SoundFeedBack.success()
+                    DispatchQueue.main.async {
+                        self.navigationItem.rightBarButtonItem?.tintColor = .systemGreen
+                        self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: "checkmark.circle.fill")
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.navigationItem.rightBarButtonItem?.tintColor = .link
+                        self.navigationItem.rightBarButtonItem?.image = nil
+                        self.navigationItem.rightBarButtonItem?.title = "Save"
+                    }
+                    Auth.prepareUserProfileData()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                        guard let self = self
+                        else {
+                            return
+                        }
+                        self.refreshData()
+                    }
+                    break
+                case .failure:
+                    SoundFeedBack.fail()
+                    DispatchQueue.main.async {
+                        self.navigationItem.rightBarButtonItem?.tintColor = .systemPink
+                        self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: "xmark.circle.fill")
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.navigationItem.rightBarButtonItem?.tintColor = .link
+                        self.navigationItem.rightBarButtonItem?.image = nil
+                        self.navigationItem.rightBarButtonItem?.title = "Save"
+                    }
+                    break
+                }
+            }
+        }
+    }
+    
     // MARK: - Life cycle.
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,31 +140,18 @@ class ProfileViewController: UIViewController {
         // Do any additional setup after loading the view.
         setupTableView()
         setUpImagePicker()
-        
-        do {
-            try passUserDataIntoArray()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func passUserDataIntoArray() throws {
-        if let user = authUser {
-            userProfileDataInArray = [
-                user.profilePicture ?? "\(user.defaultAvartar!)",
-                user._id,
-                user.lastName,
-                user.name,
-                user.username,
-                user.personalData.email,
-                user.personalData.phoneNumber,
-                user.bio,
-            ]
-        }
+        setUpButtonItemNavigationBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
+        refreshData()
+    }
+    
+    func refreshData() {
+        avatar = Auth.avatar
+        authUser = Auth.userProfileData
+        prepareUserDataInArray()
     }
 
 
@@ -95,14 +165,24 @@ class ProfileViewController: UIViewController {
     }
     */
     
-    
-    
-    
-    
+    // MARK: - Methods.
+    func prepareUserDataInArray() {
+        if let user = authUser {
+            userProfileDataInArray = [
+                user.profilePicture ?? "\(user.defaultAvartar!)",
+                user._id,
+                user.lastName,
+                user.name,
+                user.username,
+                user.personalData.email,
+                user.personalData.phoneNumber,
+                user.bio,
+            ]
+        }
+    }
 }
 
-
-
+// MARK: - Extension.
 extension ProfileViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     func setUpImagePicker() {
         imagePicker.delegate = self
@@ -115,8 +195,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate & UINavigationC
     }
 }
 
-
-
+// MARK: - Table view.
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func setupTableView() {
         tableView.register(UINib(nibName: AvatarViewerAndPickerTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: AvatarViewerAndPickerTableViewCell.reuseIdentifier)
@@ -132,7 +211,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: AvatarViewerAndPickerTableViewCell.reuseIdentifier) as! AvatarViewerAndPickerTableViewCell
             cell.avatar.image = avatar
             cell.changeProfilePhotoClosure = {
-                tapped(style: .medium)
+                FeedBackTapEngine.tapped(style: .medium)
                 self.imagePicker.allowsEditing = true
                 self.imagePicker.sourceType = .photoLibrary
                 self.present(self.imagePicker, animated: true, completion: nil)
@@ -153,6 +232,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             if uneditableRow.contains(indexPath.row) {
                 cell.detailLabel.textColor = .secondaryLabel
             } else {
+                cell.detailLabel.textColor = .label
             }
             return cell
         }
@@ -167,7 +247,6 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         if uneditableRow.contains(indexPath.row) {
             return
         } else {
-            
             let vc = EditProfileViewController.instantiate(title: listTitleLabel[indexPath.row], contentText: userProfileDataInArray[indexPath.row], maxCharacter: listPredictCharacterForTerm[indexPath.row], field: editField[indexPath.row])
             navigationController?.pushViewController(vc, animated: true)
         }

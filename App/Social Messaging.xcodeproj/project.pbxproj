@@ -446,7 +446,6 @@
 				6B8FF05A2622024500F813C6 /* Assets.xcassets */,
 				6BBE030D2660FFD800F01BE5 /* payment_failure.m4a */,
 				6BBE030E2660FFE100F01BE5 /* payment_success.m4a */,
-				6BBE030C2660FFC500F01BE5 /* Sound */,
 				6B8FF05F2622024500F813C6 /* Info.plist */,
 				6B8FF05C2622024500F813C6 /* LaunchScreen.storyboard */,
 				C49176592624546D00253070 /* Core */,
@@ -488,13 +487,6 @@
 				6BBE03032660D5B400F01BE5 /* ProfileInfoDataTableViewCell.xib */,
 			);
 			path = Cell;
-			sourceTree = "<group>";
-		};
-		6BBE030C2660FFC500F01BE5 /* Sound */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Sound;
 			sourceTree = "<group>";
 		};
 		6BBFDE4226490497001AA9D9 /* WebSocket */ = {
