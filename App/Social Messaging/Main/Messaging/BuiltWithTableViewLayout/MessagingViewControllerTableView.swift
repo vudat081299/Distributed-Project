@@ -6,15 +6,29 @@
 //
 
 import UIKit
+import CryptoKit
 
-
-var userBoxData: [ResolvedBox] = []
+func MD5<T: Encodable>(_ data: T) -> String {
+    do {
+        let encodedData = try JSONEncoder().encode(data)
+        let digest = Insecure.MD5.hash(data: encodedData)
+        return digest.map {
+            String(format: "%02hhx", $0)
+        }.joined()
+    } catch {
+        print("Cannot md5 object!")
+        return "error: true"
+    }
+}
 
 class MessagingViewControllerTableView: UIViewController, MessagePullThread, MessagePushThread {
     
     private var tableView: UITableView! = nil
     var messagePullThreadDelegate: MessagePullThread?
     var messagePushThreadDelegate: MessagePushThread?
+    var userBoxData: [ResolvedBox] = Auth.userBoxData
+    let authUser: User? = Auth.userProfileData
+    
     
     
     // MARK: - Navbar components.
@@ -37,6 +51,10 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+//        if MD5(userBoxData) != MD5(Auth.userBoxData) || userBoxData.count != Auth.userBoxData.count {
+//            userBoxData = Auth.userBoxData
+//            self.tableView.reloadData()
+//        }
         fetchBoxesData {
             DispatchQueue.main.async{
                 self.tableView.reloadData()
@@ -56,13 +74,17 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
     */
     
     func fetchBoxesData(completion: @escaping () -> Void) {
-        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "messaging/boxes/data/\(Auth.userProfileData!._id!)")
-        request_box.getArray(token: Auth.token) { result in
+        guard let userObjectId = authUser?._id
+        else {
+            return
+        }
+        let request_box = ResourceRequest<ResolvedBox, ResolvedBox>(resourcePath: "messaging/boxes/data/\(userObjectId)")
+        request_box.getArray(token: true) { result in
             switch result {
             case .success(let data):
                 let boxData = data.sorted(by: { $0.boxSpecification.lastestUpdate > $1.boxSpecification.lastestUpdate })
                 Auth.userBoxData = boxData
-                userBoxData = boxData
+                self.userBoxData = boxData
                 completion()
             case .failure:
                 break
@@ -101,15 +123,42 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
         let cell = tableView.dequeueReusableCell(withIdentifier: BoxTableViewCell.reuseIdentifier, for: indexPath) as! BoxTableViewCell
 //        cell.boxImage
         let box = userBoxData[indexPath.row]
-        let authUser = Auth.userProfileData
-        if box.type == .privateChat {
-            for name in box.membersName {
-                if name != authUser?.name {
+        if let authUser = Auth.userProfileData, box.type == .privateChat {
+            for (index, name) in box.membersName.enumerated() {
+                if name != authUser.name {
                     cell.name.text = name
+                    break
+                } else if (index == box.membersName.count - 1) {
+                    cell.name.text = authUser.name
                     break
                 }
             }
+            for (index, userObjectId) in box.members_id.enumerated() {
+                if userObjectId != authUser._id {
+                    if let image = cacheImages[userObjectId] {
+                        cell.boxImage.image = image
+                    } else {
+                        let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(userObjectId)" // Constant.
+                        DispatchQueue(label: "com.chat.getavatar.qos").async(qos: .userInitiated) {
+                            if let image = imageURL.getImageWithThisURL() {
+                                DispatchQueue.main.async {
+                                    cell.boxImage.image = image
+                                    cacheImages[userObjectId] = image
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    cell.boxImage.image = UIImage(named: "avatar_7")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+        
+        
+        
+        
         cell.idLabel.text = "@\(box._id)"
         cell.lastestMess.text = box.boxSpecification.lastestMess
 //        let dateFormatter = ISO8601DateFormatter()
@@ -123,6 +172,25 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
         return cell
     }
     
+    func getAvatar(for cell: BoxTableViewCell, of userObjectId: String) {
+        if let image = cacheImages[userObjectId] {
+            cell.boxImage.image = image
+        } else {
+            let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(userObjectId)" // Constant.
+            DispatchQueue(label: "com.chat.getavatar.qos").async(qos: .userInitiated) {
+                if let image = imageURL.getImageWithThisURL() {
+                    DispatchQueue.main.async {
+                        cell.boxImage.image = image
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        cell.boxImage.image = UIImage(named: "avatar_7")
+                    }
+                }
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -130,7 +198,7 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
         messagePullThreadDelegate = chattingViewController
         let box = userBoxData[indexPath.row]
         chattingViewController.boxObjectId = box._id
-        chattingViewController.boxData = userBoxData[indexPath.row]
+        chattingViewController.boxData = box
         chattingViewController.delegate = self
         chattingViewController.navigationItem.largeTitleDisplayMode = .never
         chattingViewController.tabBarController?.tabBar.isHidden = true

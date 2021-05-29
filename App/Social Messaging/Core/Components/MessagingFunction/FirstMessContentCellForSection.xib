@@ -11,20 +11,20 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="FirstMessContentCellForSection" customModule="Social_Messaging" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="430" height="95"/>
+            <rect key="frame" x="0.0" y="0.0" width="421" height="275"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="430" height="95"/>
+                <rect key="frame" x="0.0" y="0.0" width="421" height="275"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ujj-UE-xqP">
-                        <rect key="frame" x="0.0" y="-45" width="430" height="140"/>
+                        <rect key="frame" x="0.0" y="-45" width="421" height="320"/>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="voV-Ho-Jdq">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="95"/>
+                        <rect key="frame" x="0.0" y="0.0" width="421" height="275"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fSz-KO-0ba">
-                                <rect key="frame" x="65" y="0.0" width="345" height="95"/>
+                                <rect key="frame" x="65" y="0.0" width="336" height="275"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="10" id="tTt-3e-wrO"/>
                                 </constraints>
@@ -36,7 +36,7 @@ In a real app that you publish on the App Store, you would provide a user experi
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PV0-b7-Zaj">
-                                <rect key="frame" x="463" y="-2" width="42" height="21"/>
+                                <rect key="frame" x="454" y="-2" width="42" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="TY0-dG-9Sk"/>
                                     <constraint firstAttribute="width" constant="42" id="pnJ-cL-DrR"/>
@@ -45,27 +45,41 @@ In a real app that you publish on the App Store, you would provide a user experi
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="inX-YB-TBr">
-                                <rect key="frame" x="65" y="95" width="345" height="0.0"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="3" translatesAutoresizingMaskIntoConstraints="NO" id="nRq-9P-0wr">
+                                <rect key="frame" x="65" y="275" width="336" height="0.0"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="inX-YB-TBr">
+                                        <rect key="frame" x="0.0" y="0.0" width="336" height="0.0"/>
+                                    </imageView>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" id="ObB-YW-NkK"/>
+                                    <constraint firstItem="inX-YB-TBr" firstAttribute="centerX" secondItem="nRq-9P-0wr" secondAttribute="centerX" id="3yX-qs-Mny"/>
+                                    <constraint firstItem="inX-YB-TBr" firstAttribute="top" secondItem="nRq-9P-0wr" secondAttribute="top" id="LAt-6J-tGJ"/>
+                                    <constraint firstItem="inX-YB-TBr" firstAttribute="centerY" secondItem="nRq-9P-0wr" secondAttribute="centerY" id="Pdv-wx-DSL"/>
+                                    <constraint firstAttribute="bottom" secondItem="inX-YB-TBr" secondAttribute="bottom" id="bgn-k1-gJL"/>
+                                    <constraint firstAttribute="height" id="e8H-qm-0bB"/>
+                                    <constraint firstAttribute="trailing" secondItem="inX-YB-TBr" secondAttribute="trailing" id="h9r-57-k8c"/>
+                                    <constraint firstItem="inX-YB-TBr" firstAttribute="leading" secondItem="nRq-9P-0wr" secondAttribute="leading" id="k91-iY-QOV"/>
                                 </constraints>
-                            </imageView>
+                                <connections>
+                                    <outlet property="delegate" destination="-1" id="WtL-Fk-d2l"/>
+                                </connections>
+                            </scrollView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="fSz-KO-0ba" firstAttribute="leading" secondItem="voV-Ho-Jdq" secondAttribute="leading" constant="65" id="4hD-BX-pia"/>
                             <constraint firstAttribute="trailing" secondItem="fSz-KO-0ba" secondAttribute="trailing" constant="20" id="EoZ-lw-DHi"/>
-                            <constraint firstItem="inX-YB-TBr" firstAttribute="trailing" secondItem="fSz-KO-0ba" secondAttribute="trailing" id="FpQ-V9-FMI"/>
                             <constraint firstItem="PV0-b7-Zaj" firstAttribute="top" secondItem="fSz-KO-0ba" secondAttribute="top" constant="-2" id="N5Q-0r-JIC"/>
-                            <constraint firstAttribute="bottom" secondItem="inX-YB-TBr" secondAttribute="bottom" id="REV-yn-owu"/>
+                            <constraint firstAttribute="bottom" secondItem="nRq-9P-0wr" secondAttribute="bottom" id="RrC-eH-gPS"/>
                             <constraint firstAttribute="trailing" secondItem="PV0-b7-Zaj" secondAttribute="trailing" constant="-75" id="U5c-Dg-Dyp"/>
-                            <constraint firstItem="inX-YB-TBr" firstAttribute="top" secondItem="fSz-KO-0ba" secondAttribute="bottom" id="Vr8-9D-iDZ"/>
-                            <constraint firstItem="inX-YB-TBr" firstAttribute="leading" secondItem="fSz-KO-0ba" secondAttribute="leading" id="l38-al-QiK"/>
+                            <constraint firstItem="nRq-9P-0wr" firstAttribute="trailing" secondItem="fSz-KO-0ba" secondAttribute="trailing" id="bho-fR-5EE"/>
+                            <constraint firstItem="nRq-9P-0wr" firstAttribute="leading" secondItem="fSz-KO-0ba" secondAttribute="leading" id="cUu-Zj-Z4c"/>
+                            <constraint firstItem="nRq-9P-0wr" firstAttribute="top" secondItem="fSz-KO-0ba" secondAttribute="bottom" id="pQG-zA-RgZ"/>
                             <constraint firstItem="fSz-KO-0ba" firstAttribute="top" secondItem="voV-Ho-Jdq" secondAttribute="top" id="xEq-0V-gXI"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S4Q-u5-R8K">
-                        <rect key="frame" x="0.0" y="-45" width="430" height="45"/>
+                        <rect key="frame" x="0.0" y="-45" width="421" height="45"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Datvu" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gsJ-15-L8l">
                                 <rect key="frame" x="65" y="10" width="40" height="17"/>
@@ -80,7 +94,7 @@ In a real app that you publish on the App Store, you would provide a user experi
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="koq-8q-juk">
-                                <rect key="frame" x="463" y="15" width="42" height="12"/>
+                                <rect key="frame" x="454" y="15" width="42" height="12"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="42" id="PVz-Sz-fRN"/>
                                 </constraints>
@@ -127,18 +141,19 @@ In a real app that you publish on the App Store, you would provide a user experi
                 <constraint firstItem="voV-Ho-Jdq" firstAttribute="width" secondItem="gTV-IL-0wX" secondAttribute="width" id="z52-um-GAS"/>
                 <constraint firstItem="Ujj-UE-xqP" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="zPC-un-kx6"/>
             </constraints>
-            <size key="customSize" width="430" height="95"/>
+            <size key="customSize" width="421" height="275"/>
             <connections>
                 <outlet property="backGroundView" destination="Ujj-UE-xqP" id="SRs-hw-Ejw"/>
                 <outlet property="constraint" destination="OyS-mr-fAI" id="oD6-u3-5ux"/>
+                <outlet property="contentImageContainerScrollView" destination="nRq-9P-0wr" id="NNQ-km-GHY"/>
                 <outlet property="contentImageView" destination="inX-YB-TBr" id="59s-jj-j6J"/>
                 <outlet property="contentTextLabel" destination="fSz-KO-0ba" id="CJW-46-G0H"/>
                 <outlet property="creationDate" destination="hAA-qD-cTu" id="ygl-tx-DdI"/>
-                <outlet property="heightContentImageCS" destination="ObB-YW-NkK" id="PKW-m5-RpY"/>
+                <outlet property="heightContentImageCS" destination="e8H-qm-0bB" id="ySZ-E4-Kfw"/>
                 <outlet property="senderName" destination="gsJ-15-L8l" id="7ej-eA-miD"/>
                 <outlet property="timeLabel" destination="PV0-b7-Zaj" id="tPM-rZ-zjh"/>
             </connections>
-            <point key="canvasLocation" x="400.00000000000006" y="114.84375"/>
+            <point key="canvasLocation" x="393.47826086956525" y="175.11160714285714"/>
         </collectionViewCell>
     </objects>
     <resources>

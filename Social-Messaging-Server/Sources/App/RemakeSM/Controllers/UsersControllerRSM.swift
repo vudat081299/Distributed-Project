@@ -14,6 +14,9 @@ struct UsersControllerRSM: RouteCollection {
         let usersRoute = routes.grouped("api", "users")
         // Main
         usersRoute.post("signup", use: signUp)
+        usersRoute.get("getavatar", ":avatarObjectId", use: getAvatar)
+        usersRoute.get("getavatarwithuserobjectid", ":userObjectId", use: getavatarwithuserobjectid)
+        usersRoute.get("getfile", ":fileObjectId", use: getFile)
         
         
         
@@ -42,8 +45,6 @@ struct UsersControllerRSM: RouteCollection {
         tokenAuthGroup.get("data", "nosql", use: getAllUserData)
         tokenAuthGroup.get("getuserdatawithobjectid", ":userObjectId", use: getUserDataWithObjectId)
         tokenAuthGroup.get("authuser", "nosqldata", use: getAuthUserData)
-        tokenAuthGroup.get("getavatar", ":avatarObjectId", use: getAvatar)
-        tokenAuthGroup.get("getfile", ":fileObjectId", use: getFile)
         tokenAuthGroup.get("searchuserssql", ":term", use: searchUsersSQL)
         
         tokenAuthGroup.post(use: signUp)
@@ -51,6 +52,7 @@ struct UsersControllerRSM: RouteCollection {
         tokenAuthGroup.post("postfile", use: postFile)
         
         tokenAuthGroup.put("editprofile", use: editProfile)
+        tokenAuthGroup.put("editprofile", "nosql", ":userObjectId", use: editProfileNoSQL) // Just on NoSQL
         tokenAuthGroup.put("updateavatar", ":userObjectId", use: updateAvatar)
         
         tokenAuthGroup.delete("logout", use: logout)
@@ -231,12 +233,24 @@ struct UsersControllerRSM: RouteCollection {
         }
     }
     
-    ///
-    func updateAvatar(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+    // Jus
+    func editProfileNoSQL(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
         guard let userObjectId = req.parameters.get("userObjectId", as: ObjectId.self) else {
             throw Abort(.notFound)
         }
-        let data = try req.content.decode(Avatar.self)
+        let updateData = try req.content.decode(UpdateAuthUserProfile.self)
+        guard let data = updateData.data, let field = updateData.field else {
+            throw Abort(.notFound)
+        }
+        return CoreEngine.updateAuthUserProfileNoSQL(of: userObjectId, with: data, of: field, inDatabase: req.mongoDB).transform(to: .ok)
+    }
+    
+    ///
+    func updateAvatar(_ req: Request) throws -> EventLoopFuture<String> {
+        guard let userObjectId = req.parameters.get("userObjectId", as: ObjectId.self) else {
+            throw Abort(.notFound)
+        }
+        let data = try req.content.decode(FileUpload.self)
         let fileObjectId: EventLoopFuture<ObjectId?>
         if let file = data.file, !file.isEmpty {
             // Upload the attached file to GridFS
@@ -247,10 +261,35 @@ struct UsersControllerRSM: RouteCollection {
         } else {
             fileObjectId = req.eventLoop.makeSucceededFuture(nil)
         }
-        return fileObjectId.flatMap { id in
-            return CoreEngine.updateAvatar(of: userObjectId, with: id!, inDatabase: req.mongoDB)
-        }.transform(to: .ok)
+        return fileObjectId.flatMapThrowing { id in
+            guard let id = id else {
+                throw Abort(.badRequest)
+            }
+            _ = CoreEngine.updateAvatar(of: userObjectId, with: id, inDatabase: req.mongoDB)
+            return id.hexString
+        }
     }
+    
+//    func postFile(_ req: Request) throws -> EventLoopFuture<String> {
+//        let data = try req.content.decode(FileUpload.self)
+//        let fileObjectId: EventLoopFuture<ObjectId?>
+//
+//        if let file = data.file, !file.isEmpty {
+//            // Upload the attached file to GridFS
+//            fileObjectId = CoreEngine.uploadFile(file, inDatabase: req.mongoDB).map { fileObjectId in
+//                // This is needed to map the EventLoopFuture from `ObjectId` to `ObjectId?`
+//                return fileObjectId
+//            }
+//        } else {
+//            fileObjectId = req.eventLoop.makeSucceededFuture(nil)
+//        }
+//        return fileObjectId.flatMapThrowing { id in
+//            guard let id = id else {
+//                throw Abort(.badRequest)
+//            }
+//            return id.hexString
+//        }
+//    }
     
     
     func followUser(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
@@ -267,6 +306,7 @@ struct UsersControllerRSM: RouteCollection {
         }
         return CoreEngine.findUser(of: userObjectId, inDatabase: req.mongoDB)
     }
+    
     
     
     // MARK: - Get data.
@@ -330,6 +370,18 @@ struct UsersControllerRSM: RouteCollection {
         
         return CoreEngine.readFile(byId: fileObjectId, inDatabase: req.mongoDB).map { data in
             return Response(body: Response.Body(data: data))
+        }
+    }
+    
+    func getavatarwithuserobjectid(_ req: Request) throws -> EventLoopFuture<Response> {
+        guard let userObjectId = req.parameters.get("userObjectId", as: ObjectId.self) else {
+            throw Abort(.notFound)
+        }
+        let user = CoreEngine.findUser(of: userObjectId, inDatabase: req.mongoDB)
+        return user.flatMap { user in
+            return CoreEngine.readFile(byId: user.profilePicture ?? ObjectId(), inDatabase: req.mongoDB).map { data in
+                return Response(body: Response.Body(data: data))
+            }
         }
     }
     

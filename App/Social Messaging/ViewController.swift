@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     }
     
     
-    
     // MARK: - Collection view setting up.
     static let headerElementKind = "header-element-kind"
     
@@ -152,8 +151,6 @@ class ViewController: UIViewController {
     
     @objc func leftBarItemAction() {
         print("Left bar button was pressed!")
-        print(Auth.token)
-        print(Auth.userProfileData)
     }
     
     @objc func rightBarItemAction() {
@@ -208,11 +205,12 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchUsersData()
+        collectionView.reloadData()
     }
     
     func fetchUsersData() {
-        let request = ResourceRequest<User>(resourcePath: "users/data/nosql")
-        request.getArray(token: Auth.token) { [weak self] result in
+        let request = ResourceRequest<User, User>(resourcePath: "users/data/nosql")
+        request.getArray(token: true) { [weak self] result in
             switch result {
             case .success(let data):
                 DispatchQueue.main.async { [weak self] in
@@ -408,7 +406,7 @@ extension ViewController {
                 let user = self.resolvedUser[indexPath.row]
                 cell.userProfileData = user
                 cell.name.text = user.name
-                cell.username.text = "@\(user.username)"
+                cell.username.text = "@\(user.username!)"
                 cell.bio.text = user.bio
                 let existedBoxes = Auth.userProfileData?.boxes
                 if let boxes = existedBoxes, !boxes.contains(user._id!) {
@@ -416,6 +414,26 @@ extension ViewController {
                         createBox(withDataOf: cell)
                     }
                 }
+                
+                if let image = cacheImages[user._id!] {
+                    cell.avatar.image = image
+                } else {
+                    let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(user._id!)" // Constant.
+                    DispatchQueue(label: "com.chat.getavatar.qos").async(qos: .userInitiated) {
+                        if let image = imageURL.getImageWithThisURL() {
+                            DispatchQueue.main.async {
+                                cell.avatar.image = image
+                                cacheImages[user._id!] = image
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                cell.avatar.image = UIImage(named: "avatar_11")
+                            }
+                        }
+                    }
+                }
+                
+                
                 return cell
                 
 //                return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
@@ -446,8 +464,8 @@ extension ViewController {
                     creator_id: currentUser?._id,
                     createdAt: Date().iso8601String
                 )
-                let request = ResourceRequest<Box>(resourcePath: "messaging")
-                request.post(token: Auth.token, box) { result in
+                let request = ResourceRequest<Box, Box>(resourcePath: "messaging")
+                request.post(token: true, box) { result in
                     switch result {
                     case .success(let data):
                         break

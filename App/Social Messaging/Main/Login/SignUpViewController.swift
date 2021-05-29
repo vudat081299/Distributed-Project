@@ -159,8 +159,7 @@ class SignUpViewController: UIViewController, UIScrollViewDelegate, PassInputDat
     
     @objc func rightBarItemAction() {
         print("Right bar button was pressed!")
-        print(signUpUserListVar)
-        let request = ResourceRequest<SignUpUserPost>(resourcePath: "users/signup")
+        let request = ResourceRequest<SignUpUserPost, SignUpUserPost>(resourcePath: "users/signup")
         if (signUpUserListVar["name"] == nil ||
                 signUpUserListVar["username"] == nil ||
                 signUpUserListVar["password"] == nil
@@ -193,7 +192,7 @@ class SignUpViewController: UIViewController, UIScrollViewDelegate, PassInputDat
     }
     
     func setUpNavigationBar() {
-        navigationItem.title = "Regist"
+        navigationItem.title = "Regist Account"
         // BarButtonItem.
         let rightBarItem: UIBarButtonItem = {
             let bt = UIBarButtonItem(image: UIImage(systemName: "video.circle.fill"), style: .plain, target: self, action: #selector(rightBarItemAction))

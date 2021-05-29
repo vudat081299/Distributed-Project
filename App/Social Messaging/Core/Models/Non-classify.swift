@@ -44,3 +44,8 @@ struct BoxSpecification: Codable {
     let lastestMess: String?
     let lastestUpdate: String
 }
+
+struct UpdateAuthUserProfile: Codable {
+    let data: String
+    let field: String
+}

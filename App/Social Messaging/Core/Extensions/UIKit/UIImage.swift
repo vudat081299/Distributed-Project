@@ -80,6 +80,37 @@ extension UIImage {
 
         return newImage
     }
+    
+    // MARK: - File storage.
+    /// Save image to file with .png extension.
+    /// - The parameter filename doesn't need enter .png extension.
+    func saveToFileAsPNGEx(_ fileName: String) {
+        do {
+            let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let savingUrl = documents.appendingPathComponent("\(fileName).png")
+            if let pngData = self.pngData() {
+                try pngData.write(to: savingUrl)
+            }
+        } catch {
+            
+        }
+    }
+    
+    /// - The parameter filename doesn't need enter .png extension.
+    static func loadImageFromFileWithPNGEx(_ fileName: String) -> UIImage? {
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL = documentsURL.appendingPathComponent("\(fileName).png")
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            do {
+                let data = try Data.init(contentsOf: fileURL)
+                return UIImage(data: data)
+            } catch {
+                return nil
+            }
+        } else {
+            return nil
+        }
+    }
 }
 /*
  Usage:

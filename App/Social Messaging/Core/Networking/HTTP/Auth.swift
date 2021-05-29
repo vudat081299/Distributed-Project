@@ -17,7 +17,14 @@ class Auth {
     static let userIdKey = "userIdKey"
     static let _idKey = "_idKey"
     static let userDefaults = UserDefaults.standard
-    static var avatar: UIImage!
+    static var avatar: UIImage! {
+        get {
+            if let authUserData = userProfileData, let avatarObjectId = authUserData.profilePicture {
+                return UIImage.loadImageFromFileWithPNGEx(avatarObjectId)
+            }
+            return nil
+        }
+    }
     
     static var token: String? {
         get {
@@ -109,13 +116,14 @@ class Auth {
     }
     
     static func login(username: String, password: String, completion: @escaping (AuthResult) -> Void) {
-        let path = "http://\(ip)/api/users/login"
+        let path = "http://\(domain!)/api/users/login"
         guard let url = URL(string: path) else {
             fatalError()
         }
         guard let loginString = "\(username):\(password)".data(using: .utf8)?.base64EncodedString() else {
             fatalError()
         }
+        print("username: \(username) \npassword: \(password)")
         
         var loginRequest = URLRequest(url: url)
         loginRequest.addValue("Basic \(loginString)", forHTTPHeaderField: "Authorization")
@@ -130,12 +138,11 @@ class Auth {
             }
             
             do {
-                let token = try JSONDecoder()
-                    .decode(Token.self, from: jsonData)
+                let token = try JSONDecoder().decode(Token.self, from: jsonData)
                 Auth.token = token.value
                 Auth.userId = token.user.id.uuidString
                 Auth.currentUserID = token.user.id.uuidString
-                Auth.prepareUserProfileData()
+                prepareUserProfileData()
                 
                 completion(.success)
             } catch {
@@ -146,22 +153,32 @@ class Auth {
     }
     
     static func prepareUserProfileData() {
-        // method 1
-        let request_user = ResourceRequest<User>(resourcePath: "users/authuser/nosqldata")
-        request_user.get(token: Auth.token) { result in
+        //
+        let get_authuser_data_request = ResourceRequest<User, User>(resourcePath: "users/authuser/nosqldata")
+        get_authuser_data_request.get(token: true) { result in
             switch result {
-            case .success(let data):
-                Auth.userProfileData = data
+            case .success(let userData):
+                Auth.userProfileData = userData
                 do {
-                    avatar = UIImage(data: try Data(contentsOf: URL(string: "http://192.168.1.65:8080/api/users/getfiletest/60a09d19901feaeae8684069")!))
-                    
+                    // Convert to Data
+                    if let avatarObjectId = userData.profilePicture,
+                       let avatarURL = URL(string: "\(basedURL)users/getavatar/\(avatarObjectId)"),
+                       let image = UIImage(data: try Data(contentsOf: avatarURL)) {
+                        image.saveToFileAsPNGEx(avatarObjectId)
+                    }
                 } catch {
                     print(error.localizedDescription)
+                    print("Unable to Write Data to Disk (\(error))")
+                    print("Prepare user data goes wrong!")
                 }
+                prepareBoxesData()
             case .failure:
+                print("Fail to get auth user data!")
                 break
             }
         }
+        
+        
         
 //        let request_box = ResourceRequest<ResolvedBox>(resourcePath: "mess")
 //        request_box.getArray(token: Auth.token) { result in
@@ -203,5 +220,25 @@ class Auth {
 //            }
 //        }
 //        dataTask.resume()
+    }
+    
+    static func prepareBoxesData() {
+        //
+        if let userObjectId = Auth.userProfileData?._id {
+            let get_boxes_data_of_authuser_request =
+                ResourceRequest<ResolvedBox, ResolvedBox>(resourcePath: "messaging/boxes/data/\(userObjectId)")
+            get_boxes_data_of_authuser_request.getArray(token: true) { result in
+                switch result {
+                case .success(let data):
+                    let boxData = data.sorted(by: { $0.boxSpecification.lastestUpdate > $1.boxSpecification.lastestUpdate })
+                    Auth.userBoxData = boxData
+                case .failure:
+                    print("Fail to get boxes data of user!")
+                    break
+                }
+            }
+        } else {
+            print("Fail to get boxes data of user! - userObjectId is nil.")
+        }
     }
 }

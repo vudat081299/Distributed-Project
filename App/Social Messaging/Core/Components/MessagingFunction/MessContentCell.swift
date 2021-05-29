@@ -20,6 +20,8 @@ class MessContentCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
+        
         constraint.constant = 0
     }
 

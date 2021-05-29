@@ -149,14 +149,22 @@
                                                             <action selector="loginButtonTap:" destination="zms-hy-7Bx" eventType="touchUpInside" id="iph-gF-uqz"/>
                                                         </connections>
                                                     </button>
+                                                    <textField opaque="NO" alpha="0.59999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="192.168.1.65:8080" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2P9-1s-cli">
+                                                        <rect key="frame" x="117" y="190.5" width="197" height="34"/>
+                                                        <color key="textColor" systemColor="systemGray2Color"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="fBR-3n-KCi" firstAttribute="leading" secondItem="J8F-K9-jHV" secondAttribute="leading" id="0sT-nP-b1K"/>
                                                     <constraint firstItem="hBs-Xo-cOb" firstAttribute="leading" secondItem="J8F-K9-jHV" secondAttribute="leading" id="7XF-Nz-UdN"/>
                                                     <constraint firstItem="CQV-er-tXV" firstAttribute="trailing" secondItem="fBR-3n-KCi" secondAttribute="trailing" id="8GI-oN-UMj"/>
                                                     <constraint firstItem="HSN-5U-Hnk" firstAttribute="leading" secondItem="hBs-Xo-cOb" secondAttribute="leading" id="8Wq-46-kyf"/>
+                                                    <constraint firstItem="2P9-1s-cli" firstAttribute="centerY" secondItem="KOb-ef-3yg" secondAttribute="centerY" id="DpW-AS-heL"/>
                                                     <constraint firstItem="HSN-5U-Hnk" firstAttribute="height" secondItem="hBs-Xo-cOb" secondAttribute="height" id="Dyw-IQ-3On"/>
                                                     <constraint firstItem="KOb-ef-3yg" firstAttribute="leading" secondItem="J8F-K9-jHV" secondAttribute="leading" id="EhG-2n-4gf"/>
+                                                    <constraint firstAttribute="trailing" secondItem="2P9-1s-cli" secondAttribute="trailing" id="I51-us-tOn"/>
                                                     <constraint firstItem="hBs-Xo-cOb" firstAttribute="top" secondItem="J8F-K9-jHV" secondAttribute="top" constant="30" id="I83-s5-gsx"/>
                                                     <constraint firstItem="CQV-er-tXV" firstAttribute="centerY" secondItem="fBR-3n-KCi" secondAttribute="centerY" constant="2" id="P2u-db-0Of"/>
                                                     <constraint firstItem="CQV-er-tXV" firstAttribute="leading" secondItem="fBR-3n-KCi" secondAttribute="leading" id="Pf2-SS-CjV"/>
@@ -167,6 +175,7 @@
                                                     <constraint firstAttribute="trailing" secondItem="fBR-3n-KCi" secondAttribute="trailing" id="hdM-5l-RUA"/>
                                                     <constraint firstItem="fBR-3n-KCi" firstAttribute="top" secondItem="HSN-5U-Hnk" secondAttribute="bottom" constant="20" id="iDB-hH-vEY"/>
                                                     <constraint firstAttribute="bottom" secondItem="KOb-ef-3yg" secondAttribute="bottom" id="iWB-gL-XBr"/>
+                                                    <constraint firstItem="2P9-1s-cli" firstAttribute="leading" secondItem="KOb-ef-3yg" secondAttribute="trailing" constant="40" id="l3n-xt-8j1"/>
                                                     <constraint firstAttribute="trailing" secondItem="hBs-Xo-cOb" secondAttribute="trailing" id="nUr-Fs-YE4"/>
                                                     <constraint firstItem="HSN-5U-Hnk" firstAttribute="trailing" secondItem="hBs-Xo-cOb" secondAttribute="trailing" id="sxc-s7-GwC"/>
                                                 </constraints>
@@ -273,6 +282,7 @@
                         <outlet property="animationLoadingView" destination="yPk-07-hJK" id="Ihy-xP-qGp"/>
                         <outlet property="csTopContainerView" destination="TAo-fU-ewT" id="8Ei-8C-YpF"/>
                         <outlet property="csTopSigninView" destination="MNM-Xz-Id3" id="ZaC-ou-vyP"/>
+                        <outlet property="domainInput" destination="2P9-1s-cli" id="t6N-b1-1jp"/>
                         <outlet property="layerPasswordTextField" destination="CQV-er-tXV" id="FVw-HC-Cv5"/>
                         <outlet property="layerUsernameTextField" destination="HSN-5U-Hnk" id="rg0-5a-3u0"/>
                         <outlet property="loadingView" destination="5Oc-WZ-qP0" id="sTa-hU-C34"/>
@@ -292,7 +302,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-941" y="830"/>
+            <point key="canvasLocation" x="-942.02898550724649" y="829.6875"/>
         </scene>
         <!--Sign Up View Controller-->
         <scene sceneID="uPQ-U6-N4u">
@@ -364,6 +374,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGroupedBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

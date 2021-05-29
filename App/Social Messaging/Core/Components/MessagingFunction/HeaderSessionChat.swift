@@ -27,7 +27,10 @@ class HeaderSessionChat: UICollectionReusableView {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
+        
         constraint.constant = 0
+        avatar.image = nil
     }
 }
 

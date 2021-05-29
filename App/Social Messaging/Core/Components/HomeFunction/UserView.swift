@@ -26,15 +26,20 @@ class UserView: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        avatar.image = nil
     }
     
     @IBAction func followAction(_ sender: UIButton) {
+        FeedBackTapEngine.tapped(style: .medium)
         if let action = followActionClosure {
             action()
         }
     }
     
     @IBAction func messToUserAction(_ sender: UIButton) {
+        FeedBackTapEngine.tapped(style: .medium)
         if let action = messToUserActionClosure {
             action()
         }
