@@ -654,7 +654,6 @@ extension ChattingViewController: UIGestureRecognizerDelegate {
     @IBAction func hideKeyBoardTap(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
-    
 }
 
 
