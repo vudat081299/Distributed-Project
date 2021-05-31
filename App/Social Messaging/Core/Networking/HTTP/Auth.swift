@@ -102,17 +102,17 @@ class Auth {
         self.userBoxData = []
         self.currentUserID = nil
         
-        DispatchQueue.main.async {
+//        DispatchQueue.main.async {
 //      guard let applicationDelegate = UIApplication.shared.delegate as? SceneDelegate else {
 //        return
 //      }
 //      let rootController = UIStoryboard(name: "Login", bundle: Bundle.main).instantiateViewController(withIdentifier: "LoginNavigation")
 //      applicationDelegate.window?.rootViewController = rootController
-        
-            let vc = UIStoryboard(name: "Login", bundle: nil).instantiateInitialViewController()!
-            vc.modalPresentationStyle = .fullScreen
-            viewController!.present(vc, animated:true, completion:nil)
-        }
+//    }
+        TabBarController.closeWS()
+        let vc = UIStoryboard(name: "Login", bundle: nil).instantiateInitialViewController()!
+        vc.modalPresentationStyle = .fullScreen
+        viewController!.present(vc, animated:true, completion:nil)
     }
     
     static func login(username: String, password: String, completion: @escaping (AuthResult) -> Void) {
@@ -152,7 +152,7 @@ class Auth {
         dataTask.resume()
     }
     
-    static func prepareUserProfileData() {
+    static func prepareUserProfileData(_ completion: ((UIImage?, User?) -> Void)? = { _, _ in }) {
         //
         let get_authuser_data_request = ResourceRequest<User, User>(resourcePath: "users/authuser/nosqldata")
         get_authuser_data_request.get(token: true) { result in
@@ -171,7 +171,11 @@ class Auth {
                     print("Unable to Write Data to Disk (\(error))")
                     print("Prepare user data goes wrong!")
                 }
-                prepareBoxesData()
+                if let completion = completion {
+                    prepareBoxesData(completion)
+                } else {
+                    prepareBoxesData()
+                }
             case .failure:
                 print("Fail to get auth user data!")
                 break
@@ -222,7 +226,7 @@ class Auth {
 //        dataTask.resume()
     }
     
-    static func prepareBoxesData() {
+    static func prepareBoxesData(_ completion: ((UIImage?, User?) -> Void)? = { _, _ in }) {
         //
         if let userObjectId = Auth.userProfileData?._id {
             let get_boxes_data_of_authuser_request =
@@ -236,6 +240,9 @@ class Auth {
                     print("Fail to get boxes data of user!")
                     break
                 }
+            }
+            if let completion = completion {
+                completion(Auth.avatar, Auth.userProfileData)
             }
         } else {
             print("Fail to get boxes data of user! - userObjectId is nil.")

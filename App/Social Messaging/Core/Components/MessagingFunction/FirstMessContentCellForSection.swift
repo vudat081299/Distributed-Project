@@ -40,6 +40,7 @@ class FirstMessContentCellForSection: UICollectionViewCell, UIScrollViewDelegate
         constraint.constant = 0
         contentImageContainerScrollView.zoomScale = 1.0
         contentImageView.image = nil
+        heightContentImageCS.constant = 0
         contentTextLabel.text = ""
     }
     

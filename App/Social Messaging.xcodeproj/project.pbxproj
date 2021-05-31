@@ -98,6 +98,7 @@
 		C4849833264D29A000D35328 /* MessagingViewControllerTableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4849831264D29A000D35328 /* MessagingViewControllerTableView.xib */; };
 		C4849839264D2B3D00D35328 /* BoxTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4849837264D2B3D00D35328 /* BoxTableViewCell.swift */; };
 		C484983A264D2B3D00D35328 /* BoxTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4849838264D2B3D00D35328 /* BoxTableViewCell.xib */; };
+		C48A3B5F26647B9D0051B2B4 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48A3B5E26647B9D0051B2B4 /* TableView.swift */; };
 		C49176042624510600253070 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49176032624510600253070 /* SceneDelegate.swift */; };
 		C4917643262451D100253070 /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C491763C262451D100253070 /* ProfileViewController.xib */; };
 		C4917644262451D100253070 /* MessagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C491763D262451D100253070 /* MessagingViewController.swift */; };
@@ -244,6 +245,7 @@
 		C4849831264D29A000D35328 /* MessagingViewControllerTableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessagingViewControllerTableView.xib; sourceTree = "<group>"; };
 		C4849837264D2B3D00D35328 /* BoxTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxTableViewCell.swift; sourceTree = "<group>"; };
 		C4849838264D2B3D00D35328 /* BoxTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BoxTableViewCell.xib; sourceTree = "<group>"; };
+		C48A3B5E26647B9D0051B2B4 /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		C49176032624510600253070 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C491763C262451D100253070 /* ProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
 		C491763D262451D100253070 /* MessagingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagingViewController.swift; sourceTree = "<group>"; };
@@ -506,6 +508,7 @@
 				C491765E2624546D00253070 /* UIView.swift */,
 				6B0482262626D96E0031D15B /* CGColor.swift */,
 				6BCF0911263324CB00311C41 /* UICollectionViewCell.swift */,
+				C48A3B5E26647B9D0051B2B4 /* TableView.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -1033,6 +1036,7 @@
 				6B2489082652A09000D6F06F /* SignalingClient.swift in Sources */,
 				C491766D2624546D00253070 /* CitiesDataSource.swift in Sources */,
 				C49176742624546D00253070 /* UIImage.swift in Sources */,
+				C48A3B5F26647B9D0051B2B4 /* TableView.swift in Sources */,
 				6B89CB0D26306B3C007FCAE5 /* HeaderSessionChat.swift in Sources */,
 				6B2FE946264C18D2007CAA3D /* URLResponse+Extensions.swift in Sources */,
 				6BBFDE4D264908FD001AA9D9 /* Message.swift in Sources */,

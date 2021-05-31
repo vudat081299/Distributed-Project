@@ -30,7 +30,7 @@ struct ViewControllerData {
     static var viewControllerDatas: [ViewControllerData] = {
         let array = [
 //            ViewControllerData(title: "Notifications", iconNormal: "graduationcap", selectedIcon: "graduationcap.fill", viewController: UINavigationController(rootViewController: UITableViewController())),
-            ViewControllerData(title: "NewMessage", iconNormal: "message", selectedIcon: "message.fill", viewController: UINavigationController(rootViewController: MessagingViewControllerTableView())),
+            ViewControllerData(title: "Box", iconNormal: "message", selectedIcon: "message.fill", viewController: UINavigationController(rootViewController: MessagingViewControllerTableView())),
 //            ViewControllerData(title: "Message", iconNormal: "message", selectedIcon: "message.fill", viewController: UINavigationController(rootViewController: MessagingViewController())),
             ViewControllerData(title: "Profile", iconNormal: "person", selectedIcon: "person.fill", viewController: UINavigationController(rootViewController: ProfileViewController()))
         ]
@@ -50,6 +50,7 @@ struct ViewControllerData {
 
 class TabBarController: UITabBarController, MessagePushThread {
     var messagePullThreadDelegate: MessagePullThread?
+    static let ws = WebSocketSM("ws://\(domain!)/connectws/\(Auth.userProfileData?._id! ?? "")")
     
     // MARK: - Delegate methods.
     func sendMessage(data: MessageSendWS) {
@@ -92,15 +93,19 @@ class TabBarController: UITabBarController, MessagePushThread {
     }
     */
     
-    func startListenWebSocket() {
+    static func closeWS() {
         let ws = WebSocketSM("ws://\(domain!)/connectws/\(Auth.userProfileData?._id! ?? "")")
-        print("Connect ws: \(ws.url)")
+        ws.close()
+    }
+    
+    func startListenWebSocket() {
+        print("Connect ws: \(TabBarController.ws.url)")
 //        ws.event.close = { [weak self] code, reason, clean in
-        ws.event.close = { code, reason, clean in
+        TabBarController.ws.event.close = { code, reason, clean in
             print("WebSocket did close!")
         }
         
-        ws.event.message = { message in
+        TabBarController.ws.event.message = { message in
             let jsonData = (message as! String).data(using: .utf8)!
             
             do {

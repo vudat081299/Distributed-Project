@@ -67,7 +67,6 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
     
     // MARK: - Set up methods.
     func setUpNavigationBar() {
-        navigationItem.title = "Pinned"
         // BarButtonItem.
         let rightBarItem: UIBarButtonItem = {
             let bt = UIBarButtonItem(image: UIImage(systemName: "video.circle.fill"), style: .plain, target: self, action: #selector(rightBarItemAction))
@@ -520,7 +519,8 @@ extension ChattingViewController {
                 }
                 
 //                cell.creationDate.text = Time.getTypeWithFormat(of: message.creationDate, type: .date)
-                cell.creationDate.text = message.creationDate.iso8601String
+                cell.creationDate.text = message.creationDate.iso8601StringShortDateTime
+                cell.timeLabel.text = ""
                 cell.contentTextLabel.text = message.text
                 return cell
             }
