@@ -161,7 +161,7 @@ class ViewController: UIViewController {
         navigationController?.navigationBar.sizeToFit()
         
         navigationItem.largeTitleDisplayMode = .always
-        navigationItem.searchController = searchController
+//        navigationItem.searchController = searchController
 //        navigationItem.hidesSearchBarWhenScrolling = false
         
 //        self.searchController.hidesNavigationBarDuringPresentation = true

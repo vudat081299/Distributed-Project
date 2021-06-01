@@ -45,7 +45,7 @@ class MessagingViewControllerTableView: UIViewController, MessagePullThread, Mes
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        navigationItem.searchController = searchController
+//        navigationItem.searchController = searchController
         configureHierarchy()
     }
     
