@@ -19,12 +19,14 @@ class EditProfileViewController: UIViewController {
     var contentTextView: String?
     var maxCharacter: Int = 100
     var field: String = ""
+    var delegate: ReloadDataOfViewController?
     
     // MARK: - Init method.
     /// init()
-    public class func instantiate(title: String?, contentText: String?, maxCharacter: Int, field: String) -> EditProfileViewController {
+    public class func instantiate(title: String?, delegate: ReloadDataOfViewController?, contentText: String?, maxCharacter: Int, field: String) -> EditProfileViewController {
         let vc = EditProfileViewController()
         vc.title = title
+        vc.delegate = delegate
         vc.contentTextView = contentText
         vc.maxCharacter = maxCharacter
         vc.field = field
@@ -42,12 +44,17 @@ class EditProfileViewController: UIViewController {
     
     @objc func rightBarItemAction() {
         print("Right bar button was pressed!")
-        updateAuthUserProfile()
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
+        do {
+            try updateAuthUserProfile()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     // MARK: - Request.
     /// Update NoSQL data at server.
-    func updateAuthUserProfile() {
+    func updateAuthUserProfile() throws {
         let updateAuthUserProfile = UpdateAuthUserProfile(data: textView.text, field: field)
         guard let userObjectId = Auth.userProfileData?._id
         else {
@@ -55,6 +62,9 @@ class EditProfileViewController: UIViewController {
         }
         let updateAuthUserrNoSQLRequest = ResourceRequest<UpdateAuthUserProfile, UpdateAuthUserProfile>(resourcePath: "users/editprofile/nosql/\(userObjectId)")
         updateAuthUserrNoSQLRequest.put(token: true, updateAuthUserProfile) { result in
+            DispatchQueue.main.async {
+                self.navigationItem.rightBarButtonItem?.isEnabled = true
+            }
             switch result {
             case .success:
                 SoundFeedBack.success()
@@ -66,6 +76,7 @@ class EditProfileViewController: UIViewController {
                     self.navigationItem.rightBarButtonItem?.tintColor = .link
                     self.navigationItem.rightBarButtonItem?.image = nil
                     self.navigationItem.rightBarButtonItem?.title = "Save"
+                    self.delegate?.refreshDataOfViewController()
                     self.navigationController?.popViewController(animated: true)
                 }
                 break

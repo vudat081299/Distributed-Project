@@ -24,7 +24,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="421" height="275"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fSz-KO-0ba">
-                                <rect key="frame" x="65" y="0.0" width="336" height="275"/>
+                                <rect key="frame" x="65" y="0.0" width="336" height="267"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="10" id="tTt-3e-wrO"/>
                                 </constraints>
@@ -74,7 +74,7 @@ In a real app that you publish on the App Store, you would provide a user experi
                             <constraint firstAttribute="trailing" secondItem="PV0-b7-Zaj" secondAttribute="trailing" constant="-75" id="U5c-Dg-Dyp"/>
                             <constraint firstItem="nRq-9P-0wr" firstAttribute="trailing" secondItem="fSz-KO-0ba" secondAttribute="trailing" id="bho-fR-5EE"/>
                             <constraint firstItem="nRq-9P-0wr" firstAttribute="leading" secondItem="fSz-KO-0ba" secondAttribute="leading" id="cUu-Zj-Z4c"/>
-                            <constraint firstItem="nRq-9P-0wr" firstAttribute="top" secondItem="fSz-KO-0ba" secondAttribute="bottom" id="pQG-zA-RgZ"/>
+                            <constraint firstItem="nRq-9P-0wr" firstAttribute="top" secondItem="fSz-KO-0ba" secondAttribute="bottom" constant="8" id="pQG-zA-RgZ"/>
                             <constraint firstItem="fSz-KO-0ba" firstAttribute="top" secondItem="voV-Ho-Jdq" secondAttribute="top" id="xEq-0V-gXI"/>
                         </constraints>
                     </view>
@@ -93,8 +93,8 @@ In a real app that you publish on the App Store, you would provide a user experi
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="koq-8q-juk">
-                                <rect key="frame" x="454" y="15" width="42" height="12"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="koq-8q-juk">
+                                <rect key="frame" x="454" y="27" width="42" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="42" id="PVz-Sz-fRN"/>
                                 </constraints>

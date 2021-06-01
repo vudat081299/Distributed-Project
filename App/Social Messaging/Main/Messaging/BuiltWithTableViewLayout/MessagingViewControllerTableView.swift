@@ -200,6 +200,11 @@ extension MessagingViewControllerTableView: UITableViewDelegate, UITableViewData
         chattingViewController.boxObjectId = box._id
         chattingViewController.boxData = box
         chattingViewController.delegate = self
+        if box.type == .privateChat {
+            chattingViewController.title = box.membersName.first(where: { $0 != Auth.userProfileData?.name })
+        } else {
+            chattingViewController.title = "Group" 
+        }
         chattingViewController.navigationItem.largeTitleDisplayMode = .never
         chattingViewController.tabBarController?.tabBar.isHidden = true
         navigationController?.pushViewController(chattingViewController, animated: true)

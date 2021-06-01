@@ -155,8 +155,8 @@ struct ResourceRequest<PostType, ResolveType> where PostType: Codable, ResolveTy
                   completion: @escaping (ResourcesRequestGetArray<PostType>) -> Void) {
         print(resourceURL)
         var urlRequest = URLRequest(url: resourceURL)
-        if token {
-            urlRequest.addValue("Bearer \(Auth.token!)", forHTTPHeaderField: "Authorization")
+        if token, let authToken = Auth.token {
+            urlRequest.addValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
 //            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         }
         let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in

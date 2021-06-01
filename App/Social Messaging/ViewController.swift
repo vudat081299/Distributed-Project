@@ -12,10 +12,8 @@ class ViewController: UIViewController {
     var resolvedUser: [User] = [] {
         didSet {
             configureDataSource()
-            collectionView.reloadData()
         }
     }
-    
     
     // MARK: - Collection view setting up.
     static let headerElementKind = "header-element-kind"
@@ -197,15 +195,11 @@ class ViewController: UIViewController {
         
         // Setting up collection view.
         configureHierarchy()
-        configureDataSource()
-        
-        fetchUsersData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchUsersData()
-        collectionView.reloadData()
     }
     
     func fetchUsersData() {
@@ -415,9 +409,9 @@ extension ViewController {
                     }
                 }
                 
-                if let image = cacheImages[user._id!] {
-                    cell.avatar.image = image
-                } else {
+//                if let image = cacheImages[user._id!] {
+//                    cell.avatar.image = image
+//                } else {
                     let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(user._id!)" // Constant.
                     DispatchQueue(label: "com.chat.getavatar.qos").async(qos: .userInitiated) {
                         if let image = imageURL.getImageWithThisURL() {
@@ -431,7 +425,7 @@ extension ViewController {
                             }
                         }
                     }
-                }
+//                }
                 
                 
                 return cell

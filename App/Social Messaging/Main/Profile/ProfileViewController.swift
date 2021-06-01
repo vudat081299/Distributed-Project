@@ -7,19 +7,25 @@
 
 import UIKit
 
+// MARK: - Protocol.
+protocol ReloadDataOfViewController {
+    func refreshDataOfViewController()
+}
 
 class ProfileViewController: UIViewController {
+    
 
     @IBOutlet weak var tableView: UITableView!
     let imagePicker = UIImagePickerController()
     
     // MARK: - DataSource.
-    var avatar: UIImage? = Auth.avatar ?? nil {
-        didSet {
-            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-        }
-    }
-    var authUser: User? = Auth.userProfileData
+//    var avatar: UIImage? = Auth.avatar ?? nil {
+//        didSet {
+//            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+//        }
+//    }
+    var avatar: UIImage? = Auth.avatar ?? nil
+    var authUser: User? = Auth.userProfileData ?? nil
     var userProfileDataInArray = [String?]() {
         didSet {
             tableView.reloadData()
@@ -76,6 +82,7 @@ class ProfileViewController: UIViewController {
     
     @objc func rightBarItemAction() {
         print("Right bar button was pressed!")
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
         updateAuthUserAvatar()
     }
     
@@ -95,6 +102,9 @@ class ProfileViewController: UIViewController {
             let fileUploadData = FileUpload(file: avatar!.pngData())
             let updateAvatarRequest = ResourceRequest<FileUpload, FileUpload>(resourcePath: "users/updateavatar/\(userObjectId)")
             updateAvatarRequest.put(token: true, fileUploadData) { result in
+                DispatchQueue.main.async {
+                    self.navigationItem.rightBarButtonItem?.isEnabled = true
+                }
                 switch result {
                 case .success:
                     SoundFeedBack.success()
@@ -145,7 +155,17 @@ class ProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
-        refreshData()
+//        self.refreshData()
+        Auth.prepareUserProfileData() { [weak self] avatar, userProfileData in
+            if let self = self {
+                DispatchQueue.main.async {
+                    self.authUser = userProfileData
+                    self.prepareUserDataInArray()
+                    print(userProfileData)
+                    self.avatar = avatar
+                }
+            }
+        }
     }
     
     func refreshData() {
@@ -171,8 +191,8 @@ class ProfileViewController: UIViewController {
             userProfileDataInArray = [
                 user.profilePicture ?? "\(user.defaultAvartar!)",
                 user._id,
-                user.lastName,
                 user.name,
+                user.lastName,
                 user.username,
                 user.personalData.email,
                 user.personalData.phoneNumber,
@@ -183,6 +203,11 @@ class ProfileViewController: UIViewController {
 }
 
 // MARK: - Extension.
+extension ProfileViewController: ReloadDataOfViewController {
+    func refreshDataOfViewController() {
+        self.refreshData()
+    }
+}
 extension ProfileViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     func setUpImagePicker() {
         imagePicker.delegate = self
@@ -191,6 +216,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate & UINavigationC
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             avatar = pickedImage
         }
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         dismiss(animated: true, completion: nil)
     }
 }
@@ -247,7 +273,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         if uneditableRow.contains(indexPath.row) {
             return
         } else {
-            let vc = EditProfileViewController.instantiate(title: listTitleLabel[indexPath.row], contentText: userProfileDataInArray[indexPath.row], maxCharacter: listPredictCharacterForTerm[indexPath.row], field: editField[indexPath.row])
+            let vc = EditProfileViewController.instantiate(title: listTitleLabel[indexPath.row], delegate: self, contentText: userProfileDataInArray[indexPath.row], maxCharacter: listPredictCharacterForTerm[indexPath.row], field: editField[indexPath.row])
             navigationController?.pushViewController(vc, animated: true)
         }
     }
