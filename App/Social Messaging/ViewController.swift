@@ -402,6 +402,12 @@ extension ViewController {
                 if user._id == Auth.userProfileData?._id {
                     self.i = 1
                     user = self.resolvedUser[indexPath.row + self.i]
+                    let imageURL = "\(basedURL)users/getavatarwithuserobjectid/\(user._id!)"
+                    if let image = imageURL.getImageWithThisURL() {
+                        DispatchQueue.main.async {
+                            cacheImages[user._id!] = image
+                        }
+                    }
                 }
                 cell.userProfileData = user
                 cell.name.text = user.name
