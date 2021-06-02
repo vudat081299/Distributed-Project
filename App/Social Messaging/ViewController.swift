@@ -14,6 +14,7 @@ class ViewController: UIViewController {
             configureDataSource()
         }
     }
+    var i = 0
     
     // MARK: - Collection view setting up.
     static let headerElementKind = "header-element-kind"
@@ -397,7 +398,11 @@ extension ViewController {
                 guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: UserView.reuseIdentifier,
                         for: indexPath) as? UserView else { fatalError("Cannot create new cell") }
-                let user = self.resolvedUser[indexPath.row]
+                var user = self.resolvedUser[indexPath.row + self.i]
+                if user._id == Auth.userProfileData?._id {
+                    self.i = 1
+                    user = self.resolvedUser[indexPath.row + self.i]
+                }
                 cell.userProfileData = user
                 cell.name.text = user.name
                 cell.username.text = "@\(user.username!)"
@@ -515,7 +520,7 @@ extension ViewController {
 //        }
         
         snapshot.appendSections([0])
-        snapshot.appendItems(Array(0 ..< self.resolvedUser.count))
+        snapshot.appendItems(Array(0 ..< (self.resolvedUser.count > 1 ? self.resolvedUser.count - 1 : self.resolvedUser.count)))
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 }

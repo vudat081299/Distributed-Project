@@ -34,10 +34,11 @@
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qTs-cX-pA2">
-                                <rect key="frame" x="326" y="15" width="73" height="30"/>
+                                <rect key="frame" x="399" y="15" width="0.0" height="30"/>
                                 <color key="backgroundColor" systemColor="linkColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="hBB-v2-PEW"/>
+                                    <constraint firstAttribute="width" id="qYc-3D-cFk"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                 <state key="normal" title="    Follow    ">
@@ -81,7 +82,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JnE-Dn-9VV">
-                                <rect key="frame" x="278" y="10" width="40" height="40"/>
+                                <rect key="frame" x="351" y="10" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="7wl-tM-0W4"/>
                                     <constraint firstAttribute="width" constant="40" id="ObG-SH-crp"/>
