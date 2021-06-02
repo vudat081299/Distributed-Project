@@ -234,9 +234,10 @@ struct ResourceRequest<PostType, ResolveType> where PostType: Codable, ResolveTy
                     return
                 }
                 do {
-                    let decoder = JSONDecoder()
-                    let resource = try decoder.decode(PostType.self, from: jsonData)
                     completion(.success(resource))
+//                    let decoder = JSONDecoder()
+//                    let resource = try decoder.decode(PostType.self, from: jsonData)
+//                    completion(.success(resource))
                 } catch {
                     completion(.failure)
                 }

@@ -183,9 +183,30 @@ class SignUpViewController: UIViewController, UIScrollViewDelegate, PassInputDat
         )
         request.post(data) { result in
             switch result {
-            case .success(let data):
+            case .success:
+                SoundFeedBack.success()
+                DispatchQueue.main.async {
+                    self.navigationItem.rightBarButtonItem?.tintColor = .systemGreen
+                    self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: "checkmark.circle.fill")
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.navigationItem.rightBarButtonItem?.tintColor = .link
+                    self.navigationItem.rightBarButtonItem?.image = nil
+                    self.navigationItem.rightBarButtonItem?.title = "Regist"
+                    self.navigationController?.popViewController(animated: true)
+                }
                 break
             case .failure:
+                SoundFeedBack.fail()
+                DispatchQueue.main.async {
+                    self.navigationItem.rightBarButtonItem?.tintColor = .systemPink
+                    self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: "xmark.circle.fill")
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.navigationItem.rightBarButtonItem?.tintColor = .link
+                    self.navigationItem.rightBarButtonItem?.image = nil
+                    self.navigationItem.rightBarButtonItem?.title = "Regist"
+                }
                 break
             }
         }
@@ -195,7 +216,7 @@ class SignUpViewController: UIViewController, UIScrollViewDelegate, PassInputDat
         navigationItem.title = "Regist Account"
         // BarButtonItem.
         let rightBarItem: UIBarButtonItem = {
-            let bt = UIBarButtonItem(image: UIImage(systemName: "video.circle.fill"), style: .plain, target: self, action: #selector(rightBarItemAction))
+            let bt = UIBarButtonItem(title: "Regist", style: .plain, target: self, action: #selector(rightBarItemAction))
             return bt
         }()
         navigationItem.rightBarButtonItem = rightBarItem

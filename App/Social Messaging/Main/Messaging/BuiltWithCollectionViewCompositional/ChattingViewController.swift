@@ -273,8 +273,10 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
                     request.post(token: true, messageSendWSData) { result in
                         switch result {
                         case .success(let data):
-                            self.hideSendingImageViewContainer()
-                            self.chatTextField.text = ""
+                            DispatchQueue.main.async {
+                                self.hideSendingImageViewContainer()
+                                self.chatTextField.text = ""
+                            }
                             break
                         case .failure:
                             break
@@ -288,8 +290,10 @@ class ChattingViewController: UIViewController, MessagePullThread, UIImagePicker
         } else if (messageSendWSData.majorData.text != nil) {
             request.post(token: true, messageSendWSData) { result in
                 switch result {
-                case .success(let data):
-                    self.chatTextField.text = ""
+                case .success:
+                    DispatchQueue.main.async {
+                        self.chatTextField.text = ""
+                    }
                     break
                 case .failure:
                     break
